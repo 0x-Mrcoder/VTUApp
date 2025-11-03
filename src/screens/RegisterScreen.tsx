@@ -9,6 +9,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   ScrollView,
+  Alert,
 } from 'react-native';
 import type {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import type {RootStackParamList} from '../navigation/AppNavigator';
@@ -30,10 +31,45 @@ const RegisterScreen: React.FC<Props> = ({navigation}) => {
   const [confirmPassword, setConfirmPassword] = useState('');
 
   const handleRegister = () => {
-    // In a real app, you would create an account here
-    if (name && email && phone && password && password === confirmPassword) {
-      navigation.replace('Main');
+    // Validate name
+    if (!name || name.trim().length < 2) {
+      Alert.alert('Error', 'Please enter a valid name');
+      return;
     }
+    
+    // Validate email
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!email || !emailRegex.test(email)) {
+      Alert.alert('Error', 'Please enter a valid email address');
+      return;
+    }
+    
+    // Validate phone number (Nigerian format)
+    const phoneRegex = /^0[789][01]\d{8}$/;
+    if (!phone || !phoneRegex.test(phone)) {
+      Alert.alert('Error', 'Please enter a valid Nigerian phone number (e.g., 08012345678)');
+      return;
+    }
+    
+    // Validate password
+    if (!password || password.length < 6) {
+      Alert.alert('Error', 'Password must be at least 6 characters long');
+      return;
+    }
+    
+    // Validate password match
+    if (password !== confirmPassword) {
+      Alert.alert('Error', 'Passwords do not match');
+      return;
+    }
+    
+    // In a real app, you would create an account with a backend here
+    Alert.alert('Success', 'Account created successfully!', [
+      {
+        text: 'OK',
+        onPress: () => navigation.replace('Main'),
+      },
+    ]);
   };
 
   return (
@@ -53,6 +89,8 @@ const RegisterScreen: React.FC<Props> = ({navigation}) => {
                 placeholderTextColor="#999"
                 value={name}
                 onChangeText={setName}
+                accessibilityLabel="Full Name Input"
+                accessibilityHint="Enter your full name"
               />
 
               <TextInput
@@ -63,6 +101,8 @@ const RegisterScreen: React.FC<Props> = ({navigation}) => {
                 onChangeText={setEmail}
                 keyboardType="email-address"
                 autoCapitalize="none"
+                accessibilityLabel="Email Input"
+                accessibilityHint="Enter your email address"
               />
 
               <TextInput
@@ -72,6 +112,8 @@ const RegisterScreen: React.FC<Props> = ({navigation}) => {
                 value={phone}
                 onChangeText={setPhone}
                 keyboardType="phone-pad"
+                accessibilityLabel="Phone Number Input"
+                accessibilityHint="Enter your phone number"
               />
 
               <TextInput
@@ -81,6 +123,8 @@ const RegisterScreen: React.FC<Props> = ({navigation}) => {
                 value={password}
                 onChangeText={setPassword}
                 secureTextEntry
+                accessibilityLabel="Password Input"
+                accessibilityHint="Enter a secure password"
               />
 
               <TextInput
@@ -90,6 +134,8 @@ const RegisterScreen: React.FC<Props> = ({navigation}) => {
                 value={confirmPassword}
                 onChangeText={setConfirmPassword}
                 secureTextEntry
+                accessibilityLabel="Confirm Password Input"
+                accessibilityHint="Re-enter your password to confirm"
               />
 
               <TouchableOpacity

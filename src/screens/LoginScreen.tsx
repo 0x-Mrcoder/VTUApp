@@ -8,6 +8,7 @@ import {
   SafeAreaView,
   KeyboardAvoidingView,
   Platform,
+  Alert,
 } from 'react-native';
 import type {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import type {RootStackParamList} from '../navigation/AppNavigator';
@@ -26,10 +27,18 @@ const LoginScreen: React.FC<Props> = ({navigation}) => {
   const [password, setPassword] = useState('');
 
   const handleLogin = () => {
-    // In a real app, you would authenticate here
-    if (email && password) {
-      navigation.replace('Main');
+    // Basic validation
+    if (!email || !email.includes('@')) {
+      Alert.alert('Error', 'Please enter a valid email address');
+      return;
     }
+    if (!password || password.length < 6) {
+      Alert.alert('Error', 'Password must be at least 6 characters');
+      return;
+    }
+    
+    // In a real app, you would authenticate with a backend here
+    navigation.replace('Main');
   };
 
   return (
@@ -50,6 +59,8 @@ const LoginScreen: React.FC<Props> = ({navigation}) => {
               onChangeText={setEmail}
               keyboardType="email-address"
               autoCapitalize="none"
+              accessibilityLabel="Email Input"
+              accessibilityHint="Enter your email address"
             />
 
             <TextInput
@@ -59,6 +70,8 @@ const LoginScreen: React.FC<Props> = ({navigation}) => {
               value={password}
               onChangeText={setPassword}
               secureTextEntry
+              accessibilityLabel="Password Input"
+              accessibilityHint="Enter your password"
             />
 
             <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
