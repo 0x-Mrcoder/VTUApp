@@ -1,7 +1,8 @@
+/* eslint-env jest */
 import 'react-native-gesture-handler/jestSetup';
 
 jest.mock('react-native-gesture-handler', () => {
-  const View = require('react-native/Libraries/Components/View/View');
+  const {View} = require('react-native');
   return {
     GestureHandlerRootView: View,
     GestureDetector: View,
