@@ -70,7 +70,7 @@ const SignupScreen = () => {
           },
         ]);
       }
-    } catch (error: any) {
+    } catch (error) {
       Alert.alert('Error', error.message || 'Registration failed. Please try again.');
     } finally {
       setIsLoading(false);
