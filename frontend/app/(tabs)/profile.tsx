@@ -2,7 +2,7 @@ import { useProfile } from '@/components/ProfileContext';
 import { useTheme } from '@/components/ThemeContext';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Image,
   ScrollView,
@@ -10,13 +10,46 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  View
+  View,
+  Alert,
 } from 'react-native';
+import { authService } from '@/services/auth.service';
 
 export default function ProfileScreen() {
   const { isDark } = useTheme();
   const router = useRouter();
   const { profileData, getFullName } = useProfile();
+  const [user, setUser] = useState<any>(null);
+
+  useEffect(() => {
+    loadUserData();
+  }, []);
+
+  const loadUserData = async () => {
+    const userData = await authService.getCurrentUser();
+    setUser(userData);
+  };
+
+  const handleLogout = async () => {
+    Alert.alert(
+      'Logout',
+      'Are you sure you want to logout?',
+      [
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+        {
+          text: 'Logout',
+          style: 'destructive',
+          onPress: async () => {
+            await authService.logout();
+            router.replace('/login');
+          },
+        },
+      ]
+    );
+  };
 
   const theme = {
     primary: '#0A2540',
@@ -70,12 +103,16 @@ export default function ProfileScreen() {
         <View style={[styles.profileCard, { backgroundColor: cardBg }]}>
           <View style={styles.profilePic}>
             <Image
-              source={{ uri: profileData.profileImage }}
+              source={{ uri: profileData?.profileImage || user?.avatar }}
               style={styles.profileImage}
             />
           </View>
-          <Text style={[styles.profileName, { color: textColor }]}>{getFullName()}</Text>
-          <Text style={[styles.profileEmail, { color: textBodyColor }]}>{profileData.email}</Text>
+          <Text style={[styles.profileName, { color: textColor }]}>
+            {profileData ? getFullName() : (user ? `${user.first_name} ${user.last_name}` : 'Loading...')}
+          </Text>
+          <Text style={[styles.profileEmail, { color: textBodyColor }]}>
+            {profileData?.email || user?.email || ''}
+          </Text>
           <TouchableOpacity 
             style={[styles.editButton, { backgroundColor: theme.primary }]}
             onPress={() => router.push('/edit-profile')}
@@ -103,7 +140,10 @@ export default function ProfileScreen() {
         </View>
 
         {/* Logout Button */}
-        <TouchableOpacity style={[styles.logoutButton, { backgroundColor: '#EF4444' }]}>
+        <TouchableOpacity 
+          style={[styles.logoutButton, { backgroundColor: '#EF4444' }]}
+          onPress={handleLogout}
+        >
           <Ionicons name="log-out-outline" size={24} color="#FFFFFF" />
           <Text style={styles.logoutText}>Logout</Text>
         </TouchableOpacity>

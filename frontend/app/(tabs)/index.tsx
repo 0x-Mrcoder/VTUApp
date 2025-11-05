@@ -1,7 +1,7 @@
 import { useTheme } from '@/components/ThemeContext';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     Image,
     ScrollView,
@@ -10,19 +10,28 @@ import {
     Text,
     TextInput,
     TouchableOpacity,
-    useColorScheme,
     View,
 } from 'react-native';
+import { authService } from '@/services/auth.service';
 
 export default function HomeScreen() {
   const router = useRouter();
-  const colorScheme = useColorScheme();
   const { isDark } = useTheme();
   const [selectedTab, setSelectedTab] = useState<'airtime' | 'data'>('airtime');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [isBalanceHidden, setIsBalanceHidden] = useState(false);
   const [selectedAirtimeIndex, setSelectedAirtimeIndex] = useState<number | null>(null);
   const [selectedDataIndex, setSelectedDataIndex] = useState<number | null>(null);
+  const [user, setUser] = useState<any>(null);
+
+  useEffect(() => {
+    loadUserData();
+  }, []);
+
+  const loadUserData = async () => {
+    const userData = await authService.getCurrentUser();
+    setUser(userData);
+  };
 
   const theme = {
     primary: '#0A2540',
@@ -91,7 +100,7 @@ export default function HomeScreen() {
               style={styles.profileImage}
             />
           </View>
-          <Text style={[styles.welcomeText, { color: textColor }]}>Welcome, David</Text>
+          <Text style={[styles.welcomeText, { color: textColor }]}>Welcome, {user?.first_name || 'Guest'}</Text>
         </View>
         <TouchableOpacity 
           style={styles.notificationBtn}

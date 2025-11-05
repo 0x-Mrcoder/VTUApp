@@ -1,0 +1,135 @@
+import api from './api';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+export interface RegisterData {
+  email: string;
+  phone_number: string;
+  password: string;
+  first_name: string;
+  last_name: string;
+  referral_code?: string;
+}
+
+export interface LoginData {
+  email: string;
+  password: string;
+}
+
+export interface AuthResponse {
+  success: boolean;
+  data: {
+    user: {
+      _id: string;
+      email: string;
+      phone_number: string;
+      first_name: string;
+      last_name: string;
+      referral_code: string;
+      kyc_status: string;
+      status: string;
+      biometric_enabled: boolean;
+      country: string;
+      created_at: string;
+      updated_at: string;
+    };
+    token: string;
+  };
+  message: string;
+}
+
+export const authService = {
+  /**
+   * Register a new user
+   */
+  register: async (data: RegisterData): Promise<AuthResponse> => {
+    try {
+      const response = await api.post<AuthResponse>('/auth/register', data);
+      
+      // Save token and user data
+      if (response.data.success && response.data.data.token) {
+        await AsyncStorage.setItem('authToken', response.data.data.token);
+        await AsyncStorage.setItem('user', JSON.stringify(response.data.data.user));
+      }
+      
+      return response.data;
+    } catch (error: any) {
+      throw error.response?.data || { success: false, message: 'Registration failed' };
+    }
+  },
+
+  /**
+   * Login user
+   */
+  login: async (data: LoginData): Promise<AuthResponse> => {
+    try {
+      const response = await api.post<AuthResponse>('/auth/login', data);
+      
+      // Save token and user data
+      if (response.data.success && response.data.data.token) {
+        await AsyncStorage.setItem('authToken', response.data.data.token);
+        await AsyncStorage.setItem('user', JSON.stringify(response.data.data.user));
+      }
+      
+      return response.data;
+    } catch (error: any) {
+      throw error.response?.data || { success: false, message: 'Login failed' };
+    }
+  },
+
+  /**
+   * Verify OTP
+   */
+  verifyOTP: async (phone_number: string, otp_code: string): Promise<any> => {
+    try {
+      const response = await api.post('/auth/verify-otp', {
+        phone_number,
+        otp_code,
+      });
+      return response.data;
+    } catch (error: any) {
+      throw error.response?.data || { success: false, message: 'OTP verification failed' };
+    }
+  },
+
+  /**
+   * Resend OTP
+   */
+  resendOTP: async (phone_number: string): Promise<any> => {
+    try {
+      const response = await api.post('/auth/resend-otp', {
+        phone_number,
+      });
+      return response.data;
+    } catch (error: any) {
+      throw error.response?.data || { success: false, message: 'Failed to resend OTP' };
+    }
+  },
+
+  /**
+   * Logout user
+   */
+  logout: async (): Promise<void> => {
+    await AsyncStorage.removeItem('authToken');
+    await AsyncStorage.removeItem('user');
+  },
+
+  /**
+   * Get current user from storage
+   */
+  getCurrentUser: async (): Promise<any | null> => {
+    try {
+      const userString = await AsyncStorage.getItem('user');
+      return userString ? JSON.parse(userString) : null;
+    } catch (error) {
+      return null;
+    }
+  },
+
+  /**
+   * Check if user is authenticated
+   */
+  isAuthenticated: async (): Promise<boolean> => {
+    const token = await AsyncStorage.getItem('authToken');
+    return !!token;
+  },
+};

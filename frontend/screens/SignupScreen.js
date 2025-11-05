@@ -14,24 +14,28 @@ import {
 } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
+import { authService } from '../services/auth.service';
 
 const SignupScreen = () => {
   const [email, setEmail] = useState('');
-  const [phoneNumber, setPhoneNumber] = useState('');
+  const [phone_number, setPhoneNumber] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [fullName, setFullName] = useState('');
+  const [first_name, setFirstName] = useState('');
+  const [last_name, setLastName] = useState('');
+  const [referral_code, setReferralCode] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
-  const handleSignup = () => {
-    if (!email || !password || !confirmPassword || !fullName || !phoneNumber) {
-      Alert.alert('Error', 'Please fill in all fields');
+  const handleSignup = async () => {
+    // Validation
+    if (!email || !password || !confirmPassword || !first_name || !last_name || !phone_number) {
+      Alert.alert('Error', 'Please fill in all required fields');
       return;
     }
     
-    if (!/^[0-9]{10,15}$/.test(phoneNumber)) {
+    if (!/^[0-9]{10,15}$/.test(phone_number)) {
       Alert.alert('Error', 'Please enter a valid phone number (10-15 digits)');
       return;
     }
@@ -40,15 +44,37 @@ const SignupScreen = () => {
       Alert.alert('Error', 'Passwords do not match');
       return;
     }
+
+    if (password.length < 6) {
+      Alert.alert('Error', 'Password must be at least 6 characters');
+      return;
+    }
     
     setIsLoading(true);
-    // Simulate API call
-    setTimeout(() => {
-      console.log('Signup successful with:', { email, password, fullName, phoneNumber });
+    
+    try {
+      const response = await authService.register({
+        email,
+        phone_number,
+        password,
+        first_name,
+        last_name,
+        referral_code: referral_code || undefined,
+      });
+      
+      if (response.success) {
+        Alert.alert('Success', 'Registration successful!', [
+          {
+            text: 'OK',
+            onPress: () => router.replace('/(tabs)'),
+          },
+        ]);
+      }
+    } catch (error) {
+      Alert.alert('Error', error.message || 'Registration failed. Please try again.');
+    } finally {
       setIsLoading(false);
-      // Navigate to dashboard after successful signup
-      router.replace('/(tabs)');
-    }, 1500);
+    }
   };
 
   return (
@@ -71,14 +97,29 @@ const SignupScreen = () => {
 
         <View style={styles.formContainer}>
           <View style={styles.inputContainer}>
-            <Text style={styles.inputLabel}>Full Name</Text>
+            <Text style={styles.inputLabel}>First Name</Text>
             <View style={styles.inputWrapper}>
               <TextInput
                 style={styles.input}
-                placeholder="Enter your full name"
+                placeholder="Enter your first name"
                 placeholderTextColor="#9CA3AF"
-                value={fullName}
-                onChangeText={setFullName}
+                value={first_name}
+                onChangeText={setFirstName}
+                autoCapitalize="words"
+                selectionColor="#3B82F6"
+              />
+            </View>
+          </View>
+
+          <View style={styles.inputContainer}>
+            <Text style={styles.inputLabel}>Last Name</Text>
+            <View style={styles.inputWrapper}>
+              <TextInput
+                style={styles.input}
+                placeholder="Enter your last name"
+                placeholderTextColor="#9CA3AF"
+                value={last_name}
+                onChangeText={setLastName}
                 autoCapitalize="words"
                 selectionColor="#3B82F6"
               />
@@ -110,7 +151,7 @@ const SignupScreen = () => {
                 style={[styles.input, {marginLeft: 8}]}
                 placeholder="Enter your phone number"
                 placeholderTextColor="#9CA3AF"
-                value={phoneNumber}
+                value={phone_number}
                 onChangeText={setPhoneNumber}
                 keyboardType="phone-pad"
                 maxLength={15}
@@ -150,6 +191,21 @@ const SignupScreen = () => {
                 value={confirmPassword}
                 onChangeText={setConfirmPassword}
                 secureTextEntry={!showPassword}
+                selectionColor="#3B82F6"
+              />
+            </View>
+          </View>
+
+          <View style={styles.inputContainer}>
+            <Text style={styles.inputLabel}>Referral Code (Optional)</Text>
+            <View style={styles.inputWrapper}>
+              <TextInput
+                style={styles.input}
+                placeholder="Enter referral code"
+                placeholderTextColor="#9CA3AF"
+                value={referral_code}
+                onChangeText={setReferralCode}
+                autoCapitalize="characters"
                 selectionColor="#3B82F6"
               />
             </View>
