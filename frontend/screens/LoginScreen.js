@@ -1,58 +1,63 @@
-import React, { useState } from 'react';
+import { MaterialIcons } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
+import { useRouter } from 'expo-router';
+import { useState } from 'react';
 import {
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  StyleSheet,
+  ActivityIndicator,
+  Alert,
   Image,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
-  Dimensions,
-  ActivityIndicator,
-  Alert,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View
 } from 'react-native';
-import { MaterialIcons } from '@expo/vector-icons';
-import { useNavigation } from '@react-navigation/native';
-import { useRouter } from 'expo-router';
-import { useForm, Controller } from 'react-hook-form';
-import * as yup from 'yup';
-import { yupResolver } from '@hookform/resolvers/yup';
+import { authService } from '../services/auth.service';
 
 const LoginScreen = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [rememberMe, setRememberMe] = useState(false);
   const navigation = useNavigation();
   const router = useRouter();
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
+    // Validation
     if (!email || !password) {
       Alert.alert('Error', 'Please enter both email and password');
       return;
     }
+
+    if (password.length < 6) {
+      Alert.alert('Error', 'Password must be at least 6 characters');
+      return;
+    }
     
     setIsLoading(true);
-    // Simulate API call with mock validation
-    setTimeout(() => {
-      // Mock credentials: any email/phone and any password will work
-      // For demo: email: "demo@connecta.com" or phone: "08012345678", password: "password123"
-      const isValidEmail = email.includes('@') || email.length >= 10;
-      const isValidPassword = password.length >= 6;
+    
+    try {
+      const response = await authService.login({
+        email,
+        password,
+      });
       
-      if (isValidEmail && isValidPassword) {
-        console.log('Login successful with:', { email, password, rememberMe });
-        setIsLoading(false);
-        // Navigate to dashboard (tabs)
-        router.replace('/(tabs)');
-      } else {
-        setIsLoading(false);
-        Alert.alert('Login Failed', 'Invalid credentials. Please try:\nEmail: demo@connecta.com\nPassword: password123');
+      if (response.success) {
+        Alert.alert('Success', 'Login successful!', [
+          {
+            text: 'OK',
+            onPress: () => router.replace('/(tabs)'),
+          },
+        ]);
       }
-    }, 1500);
+    } catch (error) {
+      Alert.alert('Error', error.message || 'Login failed. Please check your credentials.');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -113,15 +118,7 @@ const LoginScreen = () => {
           </View>
 
           <View style={styles.optionsRow}>
-            <TouchableOpacity 
-              style={styles.rememberMe}
-              onPress={() => setRememberMe(!rememberMe)}
-            >
-              <View style={[styles.checkbox, rememberMe && styles.checkboxChecked]}>
-                {rememberMe && <MaterialIcons name="check" size={16} color="white" />}
-              </View>
-              <Text style={styles.rememberMeText}>Remember me</Text>
-            </TouchableOpacity>
+            <View style={{ flex: 1 }} />
             <TouchableOpacity>
               <Text style={styles.forgotPassword}>Forgot Password?</Text>
             </TouchableOpacity>
@@ -277,6 +274,17 @@ const styles = StyleSheet.create({
   },
   buttonDisabled: {
     opacity: 0.7,
+  },
+  optionsRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 24,
+  },
+  forgotPassword: {
+    fontSize: 14,
+    color: '#3B82F6',
+    fontWeight: '500',
   },
   dividerContainer: {
     flexDirection: 'row',

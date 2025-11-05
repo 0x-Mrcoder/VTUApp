@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -8,13 +8,48 @@ import {
   StatusBar,
   TouchableOpacity,
   Image,
+  Alert,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
 import BottomTabBar from '@/components/BottomTabBar';
+import { authService } from '@/services/auth.service';
 
 export default function ProfileScreen() {
   const colorScheme = useColorScheme();
   const isDark = colorScheme === 'dark';
+  const router = useRouter();
+  const [user, setUser] = useState<any>(null);
+
+  useEffect(() => {
+    loadUserData();
+  }, []);
+
+  const loadUserData = async () => {
+    const userData = await authService.getCurrentUser();
+    setUser(userData);
+  };
+
+  const handleLogout = async () => {
+    Alert.alert(
+      'Logout',
+      'Are you sure you want to logout?',
+      [
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+        {
+          text: 'Logout',
+          style: 'destructive',
+          onPress: async () => {
+            await authService.logout();
+            router.replace('/login');
+          },
+        },
+      ]
+    );
+  };
 
   const theme = {
     primary: '#0A2540',
@@ -64,8 +99,10 @@ export default function ProfileScreen() {
               style={styles.profileImage}
             />
           </View>
-          <Text style={[styles.profileName, { color: textColor }]}>David Johnson</Text>
-          <Text style={[styles.profileEmail, { color: textBodyColor }]}>david.johnson@email.com</Text>
+          <Text style={[styles.profileName, { color: textColor }]}>
+            {user ? `${user.first_name} ${user.last_name}` : 'Loading...'}
+          </Text>
+          <Text style={[styles.profileEmail, { color: textBodyColor }]}>{user?.email || ''}</Text>
           <TouchableOpacity style={[styles.editButton, { backgroundColor: theme.primary }]}>
             <Text style={styles.editButtonText}>Edit Profile</Text>
           </TouchableOpacity>
@@ -89,7 +126,10 @@ export default function ProfileScreen() {
         </View>
 
         {/* Logout Button */}
-        <TouchableOpacity style={[styles.logoutButton, { backgroundColor: '#EF4444' }]}>
+        <TouchableOpacity 
+          style={[styles.logoutButton, { backgroundColor: '#EF4444' }]}
+          onPress={handleLogout}
+        >
           <Ionicons name="log-out-outline" size={24} color="#FFFFFF" />
           <Text style={styles.logoutText}>Logout</Text>
         </TouchableOpacity>
