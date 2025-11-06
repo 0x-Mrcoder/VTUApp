@@ -1,14 +1,18 @@
 import { useAlert } from '@/components/AlertContext';
 import { authService } from '@/services/auth.service';
 import { paymentService } from '@/services/payment.service';
+import { payrantService, VirtualAccountResponse } from '@/services/payrant.service';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import * as WebBrowser from 'expo-web-browser';
 import React, { useEffect, useState } from 'react';
 import {
+  ActivityIndicator,
+  Alert,
   ScrollView,
   StyleSheet,
   Text,
+  TextInput,
   TouchableOpacity,
   useColorScheme,
   View
@@ -37,12 +41,9 @@ export default function AddMoneyScreen() {
   const [selectedMethod, setSelectedMethod] = useState<string | null>('payrant'); // Default to Payrant
   const [userName, setUserName] = useState('Loading...');
   const [isLoading, setIsLoading] = useState(false);
-  const [virtualAccount, setVirtualAccount] = useState({
-    bankName: 'WEMA BANK',
-    accountNumber: '7852 4693 10',
-    accountName: 'Loading...',
-    provider: 'virtual' // 'virtual', 'payrant', 'apystack', 'monnify'
-  });
+  const [virtualAccount, setVirtualAccount] = useState<VirtualAccountResponse | null>(null);
+  const [isLoadingVirtualAccount, setIsLoadingVirtualAccount] = useState(true);
+  const [isCreatingVirtualAccount, setIsCreatingVirtualAccount] = useState(false);
 
   useEffect(() => {
     const loadUserName = async () => {
@@ -55,67 +56,86 @@ export default function AddMoneyScreen() {
     loadUserName();
   }, []);
 
+  useEffect(() => {
+    loadVirtualAccount();
+  }, []);
+
+  const loadVirtualAccount = async () => {
+    try {
+      setIsLoadingVirtualAccount(true);
+      const account = await payrantService.getVirtualAccount();
+      setVirtualAccount(account);
+    } catch (error: any) {
+      console.error('Error loading virtual account:', error);
+    } finally {
+      setIsLoadingVirtualAccount(false);
+    }
+  };
+
+  const handleCreateVirtualAccount = async () => {
+    try {
+      setIsCreatingVirtualAccount(true);
+      showInfo('Creating your virtual account...');
+
+      const user = await authService.getCurrentUser();
+      if (!user) {
+        showError('User not found. Please login again.');
+        return;
+      }
+
+      // Generate unique account reference
+      const accountReference = `${user._id}-${Date.now().toString(36)}`;
+
+      // Use phone number as document number
+      const account = await payrantService.createVirtualAccount({
+        documentType: 'nin',
+        documentNumber: user.phone_number, // Using phone number as NIN
+        virtualAccountName: `${user.first_name} ${user.last_name}`,
+        customerName: `${user.first_name} ${user.last_name}`,
+        email: user.email,
+        accountReference,
+      });
+
+      setVirtualAccount(account);
+      showSuccess('Virtual account created successfully!');
+    } catch (error: any) {
+      console.error('Error creating virtual account:', error);
+      showError(error.message || 'Failed to create virtual account');
+    } finally {
+      setIsCreatingVirtualAccount(false);
+    }
+  };
+
+  const copyToClipboard = (text: string, label: string) => {
+    // Simple copy function - you can enhance this
+    Alert.alert('Copied', `${label} copied to clipboard`);
+  };
+
+  const quickAmounts = [1000, 2000, 5000, 10000, 20000, 50000];
+
   const paymentMethods = [
     {
+      id: 'virtual',
+      name: 'Virtual Account',
+      description: 'Your dedicated account number',
+      icon: 'wallet-outline',
+      color: '#06B6D4',
+    },
+    {
       id: 'payrant',
-      name: 'Payrant',
-      description: 'Pay with card, bank transfer',
-      icon: 'card-outline',
+      name: 'Payrant Checkout',
+      description: 'Quick checkout (Recommended)',
+      icon: 'flash-outline',
       color: '#10B981',
     },
     {
-      id: 'apystack',
-      name: 'Apystack Payran',
-      description: 'Pay with card, USSD, bank transfer',
-      icon: 'phone-portrait-outline',
+      id: 'monnify',
+      name: 'Card/Bank Transfer',
+      description: 'Pay with card or bank',
+      icon: 'card-outline',
       color: '#8B5CF6',
     },
-    {
-      id: 'monnify',
-      name: 'Monnify',
-      description: 'Pay with card or bank transfer',
-      icon: 'wallet-outline',
-      color: '#EC4899',
-    },
   ];
-
-  // Update virtual account details when payment method changes
-  useEffect(() => {
-    const updateVirtualAccount = async () => {
-      if (selectedMethod === 'virtual') {
-        setVirtualAccount({
-          bankName: 'WEMA BANK',
-          accountNumber: '7852 4693 10',
-          accountName: userName,
-          provider: 'virtual'
-        });
-      } else if (selectedMethod === 'payrant') {
-        // These would typically come from an API in a real app
-        setVirtualAccount({
-          bankName: 'PROVIDUS BANK',
-          accountNumber: '9999 1234 5678',
-          accountName: `${userName} (Payrant)`,
-          provider: 'payrant'
-        });
-      } else if (selectedMethod === 'apystack') {
-        setVirtualAccount({
-          bankName: 'APYSTACK PAYRAN',
-          accountNumber: '8888 5555 1111',
-          accountName: `${userName} (Apystack)`,
-          provider: 'apystack'
-        });
-      } else if (selectedMethod === 'monnify') {
-        setVirtualAccount({
-          bankName: 'MONIE POINT',
-          accountNumber: '7777 2222 3333',
-          accountName: `${userName} (Monnify)`,
-          provider: 'monnify'
-        });
-      }
-    };
-
-    updateVirtualAccount();
-  }, [selectedMethod, userName]);
 
   const handleAddMoney = async () => {
     // Validation
@@ -161,56 +181,6 @@ export default function AddMoneyScreen() {
           const paymentReference = response.data.transaction.reference;
 
           console.log('💳 Opening Payrant checkout:', checkoutUrl);
-
-          const result = await WebBrowser.openBrowserAsync(checkoutUrl);
-
-          if (result.type === 'cancel' || result.type === 'dismiss') {
-            showInfo('Verifying payment status...');
-            await new Promise(resolve => setTimeout(resolve, 2000));
-            
-            try {
-              const verifyResponse = await paymentService.verifyPayment(paymentReference);
-              
-              if (verifyResponse.success && verifyResponse.data.status === 'paid') {
-                showSuccess('Payment successful! Your wallet has been credited.');
-                setTimeout(() => router.push('/(tabs)'), 1500);
-              } else if (verifyResponse.data.status === 'pending') {
-                showInfo('Payment is being processed. We will credit your wallet once confirmed.');
-                setTimeout(() => router.back(), 2000);
-              } else {
-                showError('Payment was not completed. Please try again.');
-              }
-            } catch (verifyError: any) {
-              console.error('Verification error:', verifyError);
-              showInfo('We are verifying your payment. Please check your wallet in a few moments.');
-              setTimeout(() => router.back(), 2000);
-            }
-          }
-        }
-      } catch (error: any) {
-        console.error('Payment error:', error);
-        showError(error.message || 'Failed to initiate payment. Please try again.');
-      } finally {
-        setIsLoading(false);
-      }
-    }
-
-    // Handle Apystack Payran payment
-    if (selectedMethod === 'apystack') {
-      setIsLoading(true);
-      try {
-        showInfo('Initializing Apystack Payran checkout...');
-        
-        const response = await paymentService.initiatePayment({
-          amount: amountNum,
-          gateway: 'apystack',
-        });
-
-        if (response.success) {
-          const checkoutUrl = response.data.payment.checkoutUrl || '';
-          const paymentReference = response.data.payment.paymentReference || response.data.transaction.reference;
-
-          console.log('💳 Opening Apystack Payran checkout:', checkoutUrl);
 
           const result = await WebBrowser.openBrowserAsync(checkoutUrl);
 
@@ -316,24 +286,24 @@ export default function AddMoneyScreen() {
         contentContainerStyle={styles.scrollContent}
       >
         {/* Virtual Account ATM Card */}
-        <View style={styles.atmCard}>
-          {/* Card Background Gradient Effect */}
-          <View style={[
-            styles.atmCardGradient,
-            {
-              backgroundColor: 
-                selectedMethod === 'payrant' ? '#10B981' :
-                selectedMethod === 'apystack' ? '#8B5CF6' :
-                selectedMethod === 'monnify' ? '#EC4899' : '#1A1F71'
-            }
-          ]}>
-            {/* Card Header */}
-            <View style={styles.atmCardHeader}>
-              <View style={styles.atmCardChip}>
-                <Ionicons name="card" size={28} color="#FFD700" />
+        {isLoadingVirtualAccount ? (
+          <View style={[styles.atmCard, { backgroundColor: cardBgColor, padding: 40 }]}>
+            <ActivityIndicator size="large" color={theme.accent} />
+            <Text style={[styles.atmInfoText, { color: textBodyColor, marginTop: 16, textAlign: 'center' }]}>
+              Loading virtual account...
+            </Text>
+          </View>
+        ) : virtualAccount ? (
+          <View style={styles.atmCard}>
+            {/* Card Background Gradient Effect */}
+            <View style={styles.atmCardGradient}>
+              {/* Card Header */}
+              <View style={styles.atmCardHeader}>
+                <View style={styles.atmCardChip}>
+                  <Ionicons name="card" size={28} color="#FFD700" />
+                </View>
+                <Text style={styles.atmCardBank}>PALMPAY</Text>
               </View>
-              <Text style={styles.atmCardBank}>{virtualAccount.bankName}</Text>
-            </View>
 
             {/* Account Number */}
             <View style={styles.atmAccountSection}>
@@ -343,9 +313,10 @@ export default function AddMoneyScreen() {
                 <TouchableOpacity 
                   style={styles.atmCopyButton}
                   onPress={() => {
+                    // Copy to clipboard
                     // In a real app, you would use expo-clipboard here
-                    // For now, we'll show a custom alert
-                    showSuccess('Account number copied to clipboard!');
+                    // For now, we'll just show an alert
+                    alert('Account number copied to clipboard!');
                   }}
                 >
                   <Ionicons name="copy-outline" size={20} color="#FFFFFF" />
@@ -353,33 +324,119 @@ export default function AddMoneyScreen() {
               </View>
             </View>
 
-            {/* Account Name and Virtual Tag */}
-            <View style={styles.atmCardFooter}>
-              <View style={styles.atmNameSection}>
-                <Text style={styles.atmLabel}>ACCOUNT NAME</Text>
-                <Text style={styles.atmAccountName} numberOfLines={1} ellipsizeMode="tail">
-                  {virtualAccount.accountName}
-                </Text>
+              {/* Account Name and Virtual Tag */}
+              <View style={styles.atmCardFooter}>
+                <View style={styles.atmNameSection}>
+                  <Text style={styles.atmLabel}>ACCOUNT NAME</Text>
+                  <Text style={styles.atmAccountName}>{virtualAccount.account_name}</Text>
+                </View>
+                <View style={styles.virtualBadge}>
+                  <Ionicons name="shield-checkmark" size={12} color="#00D4AA" />
+                  <Text style={styles.virtualBadgeText}>
+                    {virtualAccount.status.toUpperCase()}
+                  </Text>
+                </View>
               </View>
-              <View style={styles.virtualBadge}>
-                <Ionicons name="shield-checkmark" size={12} color="#00D4AA" />
-                <Text style={styles.virtualBadgeText}>
-                  {virtualAccount.provider === 'virtual' ? 'VIRTUAL' : virtualAccount.provider.toUpperCase()}
-                </Text>
+
+              {/* Card Pattern/Design */}
+              <View style={styles.atmPattern}>
+                <View style={styles.atmCircle1} />
+                <View style={styles.atmCircle2} />
+                <View style={styles.atmCircle3} />
               </View>
             </View>
 
-            {/* Card Pattern/Design */}
-            <View style={styles.atmPattern}>
-              <View style={styles.atmCircle1} />
-              <View style={styles.atmCircle2} />
-              <View style={styles.atmCircle3} />
+            {/* Info Text */}
+            <View style={styles.atmInfoBox}>
+              <Ionicons name="information-circle" size={16} color={theme.accent} />
+              <Text style={styles.atmInfoText}>
+                Transfer to this account to fund your wallet instantly
+              </Text>
             </View>
           </View>
+        ) : (
+          <View style={[styles.noAccountCard, { backgroundColor: cardBgColor, borderColor }]}>
+            <Ionicons name="wallet-outline" size={64} color={textBodyColor} />
+            <Text style={[styles.noAccountTitle, { color: textColor }]}>
+              No Virtual Account Yet
+            </Text>
+            <Text style={[styles.noAccountText, { color: textBodyColor }]}>
+              Create a virtual account to receive instant deposits
+            </Text>
+            <TouchableOpacity
+              style={[styles.createAccountButton, { backgroundColor: theme.accent }]}
+              onPress={handleCreateVirtualAccount}
+              disabled={isCreatingVirtualAccount}
+            >
+              {isCreatingVirtualAccount ? (
+                <>
+                  <ActivityIndicator color="#FFFFFF" size="small" />
+                  <Text style={styles.createAccountButtonText}>Creating...</Text>
+                </>
+              ) : (
+                <>
+                  <Ionicons name="add-circle" size={20} color="#FFFFFF" />
+                  <Text style={styles.createAccountButtonText}>Generate Virtual Account</Text>
+                </>
+              )}
+            </TouchableOpacity>
+          </View>
+        )}
 
+        {/* Amount Input */}
+        <View style={styles.section}>
+          <Text style={[styles.sectionTitle, { color: textColor }]}>Enter Amount</Text>
+          <View style={[styles.amountInputContainer, { backgroundColor: cardBgColor, borderColor }]}>
+            <Text style={[styles.currencySymbol, { color: textColor }]}>₦</Text>
+            <TextInput
+              style={[styles.amountInput, { color: textColor }]}
+              placeholder="0.00"
+              placeholderTextColor={textBodyColor}
+              value={amount}
+              onChangeText={setAmount}
+              keyboardType="numeric"
+            />
+          </View>
+          <Text style={[styles.helperText, { color: textBodyColor }]}>
+            Minimum: ₦100 • Maximum: ₦500,000
+          </Text>
         </View>
 
-        {/* Amount Input - Removed as per request */}
+        {/* Quick Amounts */}
+        <View style={styles.section}>
+          <Text style={[styles.sectionTitle, { color: textColor }]}>Quick Amounts</Text>
+          <View style={styles.quickAmountsGrid}>
+            {quickAmounts.map((quickAmount) => (
+              <TouchableOpacity
+                key={quickAmount}
+                style={[
+                  styles.quickAmountCard,
+                  {
+                    backgroundColor: amount === quickAmount.toString()
+                      ? (isDark ? theme.primary : theme.primary)
+                      : cardBgColor,
+                    borderColor: amount === quickAmount.toString()
+                      ? theme.accent
+                      : borderColor,
+                  },
+                ]}
+                onPress={() => setAmount(quickAmount.toString())}
+                activeOpacity={0.7}
+              >
+                <Text
+                  style={[
+                    styles.quickAmountText,
+                    {
+                      color: amount === quickAmount.toString() ? '#FFFFFF' : textColor,
+                    },
+                  ]}
+                >
+                  ₦{quickAmount.toLocaleString()}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+        </View>
 
         {/* Payment Methods */}
         <View style={styles.section}>
@@ -430,6 +487,127 @@ export default function AddMoneyScreen() {
             ))}
           </View>
         </View>
+
+        {/* Virtual Account Details */}
+        {selectedMethod === 'virtual' && virtualAccount && (
+          <View style={[styles.accountDetailsCard, { backgroundColor: cardBgColor }]}>
+            <View style={styles.accountDetailsHeader}>
+              <Ionicons name="shield-checkmark-outline" size={24} color={theme.success} />
+              <Text style={[styles.accountDetailsTitle, { color: textColor }]}>
+                Your Virtual Account
+              </Text>
+            </View>
+            <Text style={[styles.accountDetailsSubtitle, { color: textBodyColor }]}>
+              Transfer to this account to fund your wallet instantly
+            </Text>
+
+            <View style={[styles.accountInfoBox, { backgroundColor: isDark ? '#0A2540' : '#EFF6FF' }]}>
+              <View style={styles.accountInfoRow}>
+                <Text style={[styles.accountInfoLabel, { color: textBodyColor }]}>Bank Name:</Text>
+                <View style={styles.accountInfoValueContainer}>
+                  <Text style={[styles.accountInfoValue, { color: textColor }]}>
+                    Payrant (PalmPay)
+                  </Text>
+                  <TouchableOpacity onPress={() => copyToClipboard('Payrant (PalmPay)', 'Bank name')}>
+                    <Ionicons name="copy-outline" size={18} color={theme.accent} />
+                  </TouchableOpacity>
+                </View>
+              </View>
+
+              <View style={styles.accountInfoRow}>
+                <Text style={[styles.accountInfoLabel, { color: textBodyColor }]}>Account Number:</Text>
+                <View style={styles.accountInfoValueContainer}>
+                  <Text style={[styles.accountInfoValue, { color: textColor, fontWeight: '700' }]}>
+                    {virtualAccount.account_number}
+                  </Text>
+                  <TouchableOpacity onPress={() => copyToClipboard(virtualAccount.account_number, 'Account number')}>
+                    <Ionicons name="copy-outline" size={18} color={theme.accent} />
+                  </TouchableOpacity>
+                </View>
+              </View>
+
+              <View style={styles.accountInfoRow}>
+                <Text style={[styles.accountInfoLabel, { color: textBodyColor }]}>Account Name:</Text>
+                <View style={styles.accountInfoValueContainer}>
+                  <Text style={[styles.accountInfoValue, { color: textColor }]}>
+                    {virtualAccount.account_name}
+                  </Text>
+                  <TouchableOpacity onPress={() => copyToClipboard(virtualAccount.account_name, 'Account name')}>
+                    <Ionicons name="copy-outline" size={18} color={theme.accent} />
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </View>
+
+            <View style={[styles.noticeBox, { backgroundColor: isDark ? '#1C1C1E' : '#FEF3C7' }]}>
+              <Ionicons 
+                name="information-circle" 
+                size={20} 
+                color={isDark ? theme.accent : '#D97706'} 
+              />
+              <Text style={[styles.noticeText, { color: isDark ? textBodyColor : '#92400E' }]}>
+                This account is unique to you. Funds sent here reflect instantly.
+              </Text>
+            </View>
+          </View>
+        )}
+
+        {/* Transaction Summary */}
+        {amount && selectedMethod && (
+          <View style={[styles.summaryCard, { backgroundColor: cardBgColor }]}>
+            <Text style={[styles.summaryTitle, { color: textColor }]}>Transaction Summary</Text>
+            
+            <View style={styles.summaryRow}>
+              <Text style={[styles.summaryLabel, { color: textBodyColor }]}>Amount:</Text>
+              <Text style={[styles.summaryValue, { color: textColor }]}>
+                ₦{parseFloat(amount || '0').toLocaleString()}
+              </Text>
+            </View>
+
+            <View style={styles.summaryRow}>
+              <Text style={[styles.summaryLabel, { color: textBodyColor }]}>Transaction Fee:</Text>
+              <Text style={[styles.summaryValue, { color: textColor }]}>₦0.00</Text>
+            </View>
+
+            <View style={[styles.divider, { backgroundColor: borderColor }]} />
+
+            <View style={styles.summaryRow}>
+              <Text style={[styles.summaryLabel, { color: textColor, fontWeight: '600' }]}>
+                Total:
+              </Text>
+              <Text style={[styles.totalAmount, { color: theme.accent }]}>
+                ₦{parseFloat(amount || '0').toLocaleString()}
+              </Text>
+            </View>
+          </View>
+        )}
+
+        {/* Add Money Button */}
+        <TouchableOpacity
+          style={[
+            styles.addMoneyButton,
+            {
+              backgroundColor: (!amount || !selectedMethod || isLoading)
+                ? (isDark ? '#374151' : '#D1D5DB')
+                : theme.accent,
+            },
+          ]}
+          onPress={handleAddMoney}
+          disabled={!amount || !selectedMethod || isLoading}
+          activeOpacity={0.8}
+        >
+          {isLoading ? (
+            <>
+              <ActivityIndicator color="#FFFFFF" size="small" />
+              <Text style={[styles.addMoneyButtonText, { marginLeft: 8 }]}>Processing...</Text>
+            </>
+          ) : (
+            <>
+              <Ionicons name="add-circle" size={20} color="#FFFFFF" />
+              <Text style={styles.addMoneyButtonText}>Add Money</Text>
+            </>
+          )}
+        </TouchableOpacity>
 
         {/* Info Card */}
         <View style={[styles.infoCard, { backgroundColor: isDark ? '#1C1C1E' : '#EFF6FF' }]}>
@@ -868,5 +1046,38 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 13,
     lineHeight: 18,
+  },
+  noAccountCard: {
+    padding: 40,
+    borderRadius: 20,
+    alignItems: 'center',
+    marginBottom: 24,
+    borderWidth: 2,
+    borderStyle: 'dashed',
+  },
+  noAccountTitle: {
+    fontSize: 20,
+    fontWeight: '600',
+    marginTop: 16,
+    marginBottom: 8,
+  },
+  noAccountText: {
+    fontSize: 14,
+    textAlign: 'center',
+    marginBottom: 24,
+    lineHeight: 20,
+  },
+  createAccountButton: {
+    flexDirection: 'row',
+    paddingVertical: 14,
+    paddingHorizontal: 24,
+    borderRadius: 12,
+    alignItems: 'center',
+    gap: 8,
+  },
+  createAccountButtonText: {
+    color: '#FFFFFF',
+    fontSize: 15,
+    fontWeight: '600',
   },
 });

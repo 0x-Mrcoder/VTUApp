@@ -3,23 +3,30 @@ import { useNavigation } from '@react-navigation/native';
 import { useRouter } from 'expo-router';
 import { useState, useEffect } from 'react';
 import {
-  ActivityIndicator,
-  Image,
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View
+    ActivityIndicator,
+    Alert,
+    Image,
+    KeyboardAvoidingView,
+    Platform,
+    ScrollView,
+    StyleSheet,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    View
 } from 'react-native';
+<<<<<<< HEAD
 import { useAlert } from '../components/AlertContext';
 import { useAuth } from '../context/AuthContext';
 
 const LoginScreen = () => {
   const { showSuccess, showError } = useAlert();
   const { login, isLoading, isAuthenticated } = useAuth();
+=======
+import { authService } from '../services/auth.service';
+
+const LoginScreen = () => {
+>>>>>>> 683de394bfae02dd696fb0d1e185f41b6998b45c
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -36,22 +43,32 @@ const LoginScreen = () => {
   const handleLogin = async () => {
     // Validation
     if (!email || !password) {
-      showError('Please enter both email and password');
+      Alert.alert('❌ Validation Error', 'Please enter both email and password');
       return;
     }
 
     if (password.length < 6) {
-      showError('Password must be at least 6 characters');
+      Alert.alert('❌ Validation Error', 'Password must be at least 6 characters');
       return;
     }
     
     try {
+<<<<<<< HEAD
       const response = await login({
         email,
+=======
+      console.log('🔐 Starting login process...');
+      
+      const response = await authService.login({
+        email: email.trim().toLowerCase(),
+>>>>>>> 683de394bfae02dd696fb0d1e185f41b6998b45c
         password,
       });
       
+      console.log('✅ Login successful:', response);
+      
       if (response.success) {
+<<<<<<< HEAD
         showSuccess('Login successful! Welcome back!');
         // Navigation is handled by the useEffect above
       } else {
@@ -59,6 +76,49 @@ const LoginScreen = () => {
       }
     } catch (error) {
       showError(error.message || 'Login failed. Please try again.');
+=======
+        console.log('🎉 About to show success alert and navigate...');
+        
+        // Show success alert
+        Alert.alert(
+          '✅ Welcome Back!', 
+          `Login successful! Welcome ${response.data.user.first_name}!`,
+          [
+            {
+              text: 'Continue to Dashboard',
+              onPress: () => {
+                console.log('🏠 Navigating to dashboard...');
+                router.replace('/(tabs)');
+              },
+            },
+          ]
+        );
+        
+        // Also navigate automatically after a short delay as backup
+        setTimeout(() => {
+          console.log('🏠 Auto-navigating to dashboard (backup)...');
+          router.replace('/(tabs)');
+        }, 2000);
+        
+      } else {
+        console.log('❌ Login failed with response:', response);
+        Alert.alert('❌ Login Failed', response.message || 'Login failed');
+      }
+    } catch (error) {
+      console.error('❌ Login failed:', error);
+      
+      let errorMessage = 'Login failed. Please try again.';
+      
+      if (error.message) {
+        errorMessage = error.message;
+      } else if (typeof error === 'string') {
+        errorMessage = error;
+      }
+      
+      Alert.alert('❌ Login Failed', errorMessage);
+    } finally {
+      setIsLoading(false);
+>>>>>>> 683de394bfae02dd696fb0d1e185f41b6998b45c
     }
   };
 
