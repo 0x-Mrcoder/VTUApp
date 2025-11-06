@@ -1,24 +1,22 @@
-import React, { useState, useEffect } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  ScrollView,
-  TouchableOpacity,
-  TextInput,
-  useColorScheme,
-  Image,
-  ActivityIndicator,
-  Linking,
-  Alert,
-} from 'react-native';
-import { useRouter } from 'expo-router';
-import { Ionicons } from '@expo/vector-icons';
+import { useAlert } from '@/components/AlertContext';
 import { authService } from '@/services/auth.service';
 import { paymentService } from '@/services/payment.service';
 import { payrantService, VirtualAccountResponse } from '@/services/payrant.service';
-import { useAlert } from '@/components/AlertContext';
+import { Ionicons } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
 import * as WebBrowser from 'expo-web-browser';
+import React, { useEffect, useState } from 'react';
+import {
+  ActivityIndicator,
+  Alert,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  useColorScheme,
+  View
+} from 'react-native';
 
 const theme = {
   primary: '#0A2540',
@@ -304,7 +302,7 @@ export default function AddMoneyScreen() {
                 <View style={styles.atmCardChip}>
                   <Ionicons name="card" size={28} color="#FFD700" />
                 </View>
-                <Text style={styles.atmCardBank}>PAYRANT (PALMPAY)</Text>
+                <Text style={styles.atmCardBank}>PALMPAY</Text>
               </View>
 
               {/* Account Number */}
@@ -312,11 +310,11 @@ export default function AddMoneyScreen() {
                 <Text style={styles.atmLabel}>ACCOUNT NUMBER</Text>
                 <View style={styles.atmAccountNumberRow}>
                   <Text style={styles.atmAccountNumber}>
-                    {virtualAccount.virtualAccountNo.replace(/(\d{4})(?=\d)/g, '$1 ')}
+                    {virtualAccount.account_number.replace(/(\d{4})(?=\d)/g, '$1 ')}
                   </Text>
                   <TouchableOpacity 
                     style={styles.atmCopyButton}
-                    onPress={() => copyToClipboard(virtualAccount.virtualAccountNo, 'Account number')}
+                    onPress={() => copyToClipboard(virtualAccount.account_number, 'Account number')}
                   >
                     <Ionicons name="copy-outline" size={20} color="#FFFFFF" />
                   </TouchableOpacity>
@@ -327,7 +325,7 @@ export default function AddMoneyScreen() {
               <View style={styles.atmCardFooter}>
                 <View style={styles.atmNameSection}>
                   <Text style={styles.atmLabel}>ACCOUNT NAME</Text>
-                  <Text style={styles.atmAccountName}>{virtualAccount.virtualAccountName}</Text>
+                  <Text style={styles.atmAccountName}>{virtualAccount.account_name}</Text>
                 </View>
                 <View style={styles.virtualBadge}>
                   <Ionicons name="shield-checkmark" size={12} color="#00D4AA" />
@@ -517,9 +515,9 @@ export default function AddMoneyScreen() {
                 <Text style={[styles.accountInfoLabel, { color: textBodyColor }]}>Account Number:</Text>
                 <View style={styles.accountInfoValueContainer}>
                   <Text style={[styles.accountInfoValue, { color: textColor, fontWeight: '700' }]}>
-                    {virtualAccount.virtualAccountNo}
+                    {virtualAccount.account_number}
                   </Text>
-                  <TouchableOpacity onPress={() => copyToClipboard(virtualAccount.virtualAccountNo, 'Account number')}>
+                  <TouchableOpacity onPress={() => copyToClipboard(virtualAccount.account_number, 'Account number')}>
                     <Ionicons name="copy-outline" size={18} color={theme.accent} />
                   </TouchableOpacity>
                 </View>
@@ -529,9 +527,9 @@ export default function AddMoneyScreen() {
                 <Text style={[styles.accountInfoLabel, { color: textBodyColor }]}>Account Name:</Text>
                 <View style={styles.accountInfoValueContainer}>
                   <Text style={[styles.accountInfoValue, { color: textColor }]}>
-                    {virtualAccount.virtualAccountName}
+                    {virtualAccount.account_name}
                   </Text>
-                  <TouchableOpacity onPress={() => copyToClipboard(virtualAccount.virtualAccountName, 'Account name')}>
+                  <TouchableOpacity onPress={() => copyToClipboard(virtualAccount.account_name, 'Account name')}>
                     <Ionicons name="copy-outline" size={18} color={theme.accent} />
                   </TouchableOpacity>
                 </View>

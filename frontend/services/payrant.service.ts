@@ -10,14 +10,12 @@ export interface CreateVirtualAccountData {
 }
 
 export interface VirtualAccountResponse {
+  account_number: string;
+  account_name: string;
+  bank_name: string;
+  account_reference: string;
+  provider: string;
   status: string;
-  account_no: string;
-  virtualAccountName: string;
-  virtualAccountNo: string;
-  identityType: string;
-  licenseNumber: string;
-  customerName: string;
-  accountReference: string;
 }
 
 export interface PayrantWebhookPayload {
@@ -98,17 +96,5 @@ export const payrantService = {
         message: error.message || 'Failed to fetch virtual account.',
       };
     }
-  },
-
-  /**
-   * Verify webhook signature
-   */
-  verifyWebhookSignature: (payload: string, signature: string, secret: string): boolean => {
-    const crypto = require('crypto');
-    const hmac = crypto.createHmac('sha256', secret);
-    hmac.update(payload);
-    const calculatedSignature = hmac.digest('hex');
-    
-    return calculatedSignature === signature;
   },
 };

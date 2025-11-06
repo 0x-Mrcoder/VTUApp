@@ -1,12 +1,10 @@
 // controllers/payment.controller.ts
-import { Response, Request } from 'express';
-import { Types } from 'mongoose';
-import { WalletService } from '../services/wallet.service.js';
+import { Request, Response } from 'express';
 import { Transaction, User, Wallet } from '../models/index.js';
-import { ApiResponse } from '../utils/response.js';
-import { AuthRequest } from '../types/index.js';
 import { MonnifyService } from '../services/monnify.service.js';
 import { PaystackService } from '../services/paystack.service.js';
+import { AuthRequest } from '../types/index.js';
+import { ApiResponse } from '../utils/response.js';
 
 // Initialize services
 const monnifyService = new MonnifyService();
@@ -314,7 +312,7 @@ export class PaymentController {
       }
 
       // Import Payrant service
-      const { default: PayrantService } = await import('../services/payrant.service.js');
+      const { PayrantService } = await import('../services/payrant.service.js');
       const payrantService = new PayrantService();
 
       // Generate account reference
@@ -384,7 +382,7 @@ export class PaymentController {
       const signature = req.headers['x-payrant-signature'] as string;
 
       // Import Payrant service
-      const { default: PayrantService } = await import('../services/payrant.service.js');
+      const { PayrantService } = await import('../services/payrant.service.js');
       const payrantService = new PayrantService();
 
       // Verify webhook signature

@@ -276,6 +276,23 @@ export class PayrantService {
       throw new Error(error.response?.data?.message || 'Failed to initiate transfer');
     }
   }
+
+  /**
+   * Verify webhook signature from Payrant
+   */
+  verifyWebhookSignature(payload: string, signature: string): boolean {
+    try {
+      const expectedSignature = crypto
+        .createHmac('sha256', this.config.webhookSecret)
+        .update(payload)
+        .digest('hex');
+      
+      return expectedSignature === signature;
+    } catch (error) {
+      console.error('❌ Webhook signature verification error:', error);
+      return false;
+    }
+  }
 }
 
 export const payrantService = new PayrantService();
