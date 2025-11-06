@@ -1,7 +1,7 @@
 import { MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { useRouter } from 'expo-router';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   ActivityIndicator,
   Image,
@@ -14,17 +14,24 @@ import {
   TouchableOpacity,
   View
 } from 'react-native';
-import { authService } from '../services/auth.service';
 import { useAlert } from '../components/AlertContext';
+import { useAuth } from '../context/AuthContext';
 
 const LoginScreen = () => {
   const { showSuccess, showError } = useAlert();
+  const { login, isLoading, isAuthenticated } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
   const navigation = useNavigation();
   const router = useRouter();
+
+  // Redirect if already authenticated
+  useEffect(() => {
+    if (isAuthenticated) {
+      router.replace('/(tabs)');
+    }
+  }, [isAuthenticated]);
 
   const handleLogin = async () => {
     // Validation
@@ -38,25 +45,20 @@ const LoginScreen = () => {
       return;
     }
     
-    setIsLoading(true);
-    
     try {
-      const response = await authService.login({
+      const response = await login({
         email,
         password,
       });
       
       if (response.success) {
         showSuccess('Login successful! Welcome back!');
-        // Navigate after showing success message
-        setTimeout(() => {
-          router.replace('/(tabs)');
-        }, 1500);
+        // Navigation is handled by the useEffect above
+      } else {
+        showError(response.message || 'Login failed. Please check your credentials.');
       }
     } catch (error) {
-      showError(error.message || 'Login failed. Please check your credentials.');
-    } finally {
-      setIsLoading(false);
+      showError(error.message || 'Login failed. Please try again.');
     }
   };
 

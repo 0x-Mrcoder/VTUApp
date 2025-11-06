@@ -343,10 +343,9 @@ export default function AddMoneyScreen() {
                 <TouchableOpacity 
                   style={styles.atmCopyButton}
                   onPress={() => {
-                    // Copy to clipboard
                     // In a real app, you would use expo-clipboard here
-                    // For now, we'll just show an alert
-                    alert('Account number copied to clipboard!');
+                    // For now, we'll show a custom alert
+                    showSuccess('Account number copied to clipboard!');
                   }}
                 >
                   <Ionicons name="copy-outline" size={20} color="#FFFFFF" />
