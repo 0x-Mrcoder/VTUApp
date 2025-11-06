@@ -318,7 +318,15 @@ export default function AddMoneyScreen() {
         {/* Virtual Account ATM Card */}
         <View style={styles.atmCard}>
           {/* Card Background Gradient Effect */}
-          <View style={styles.atmCardGradient}>
+          <View style={[
+            styles.atmCardGradient,
+            {
+              backgroundColor: 
+                selectedMethod === 'payrant' ? '#10B981' :
+                selectedMethod === 'apystack' ? '#8B5CF6' :
+                selectedMethod === 'monnify' ? '#EC4899' : '#1A1F71'
+            }
+          ]}>
             {/* Card Header */}
             <View style={styles.atmCardHeader}>
               <View style={styles.atmCardChip}>
