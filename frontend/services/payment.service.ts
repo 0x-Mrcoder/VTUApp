@@ -3,7 +3,7 @@ import api from './api';
 
 export interface PaymentInitiateData {
   amount: number;
-  gateway?: 'payrant' | 'monnify'; // Default: payrant
+  gateway?: 'payrant' | 'monnify' | 'apystack'; // Supported payment gateways
 }
 
 export interface PaymentInitiateResponse {
