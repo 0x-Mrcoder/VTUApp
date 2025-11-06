@@ -6,7 +6,6 @@ import { useRouter } from 'expo-router';
 import * as WebBrowser from 'expo-web-browser';
 import React, { useEffect, useState } from 'react';
 import {
-  ActivityIndicator,
   ScrollView,
   StyleSheet,
   Text,
@@ -57,13 +56,6 @@ export default function AddMoneyScreen() {
   }, []);
 
   const paymentMethods = [
-    {
-      id: 'virtual',
-      name: 'Virtual Account',
-      description: 'Your dedicated account number',
-      icon: 'wallet-outline',
-      color: '#06B6D4',
-    },
     {
       id: 'payrant',
       name: 'Payrant',
@@ -378,15 +370,6 @@ export default function AddMoneyScreen() {
             </View>
           </View>
 
-          {/* Info Text */}
-          <View style={styles.atmInfoBox}>
-            <Ionicons name="information-circle" size={16} color={theme.accent} />
-            <Text style={styles.atmInfoText}>
-              {selectedMethod === 'virtual' 
-                ? 'Transfer to this account to fund your wallet instantly'
-                : `This is your ${virtualAccount.provider} virtual account. Transfer to fund your wallet.`}
-            </Text>
-          </View>
         </View>
 
         {/* Amount Input - Removed as per request */}
@@ -440,97 +423,6 @@ export default function AddMoneyScreen() {
             ))}
           </View>
         </View>
-
-        {/* Virtual Account Details */}
-        {selectedMethod === 'virtual' && (
-          <View style={[styles.accountDetailsCard, { backgroundColor: cardBgColor }]}>
-            <View style={styles.accountDetailsHeader}>
-              <Ionicons name="shield-checkmark-outline" size={24} color={theme.success} />
-              <Text style={[styles.accountDetailsTitle, { color: textColor }]}>
-                Your Virtual Account
-              </Text>
-            </View>
-            <Text style={[styles.accountDetailsSubtitle, { color: textBodyColor }]}>
-              Transfer to this account to fund your wallet instantly
-            </Text>
-
-            <View style={[styles.accountInfoBox, { backgroundColor: isDark ? '#0A2540' : '#EFF6FF' }]}>
-              <View style={styles.accountInfoRow}>
-                <Text style={[styles.accountInfoLabel, { color: textBodyColor }]}>Bank Name:</Text>
-                <View style={styles.accountInfoValueContainer}>
-                  <Text style={[styles.accountInfoValue, { color: textColor }]}>
-                    Wema Bank
-                  </Text>
-                  <TouchableOpacity onPress={() => alert('Copied!')}>
-                    <Ionicons name="copy-outline" size={18} color={theme.accent} />
-                  </TouchableOpacity>
-                </View>
-              </View>
-
-              <View style={styles.accountInfoRow}>
-                <Text style={[styles.accountInfoLabel, { color: textBodyColor }]}>Account Number:</Text>
-                <View style={styles.accountInfoValueContainer}>
-                  <Text style={[styles.accountInfoValue, { color: textColor, fontWeight: '700' }]}>
-                    7852469310
-                  </Text>
-                  <TouchableOpacity onPress={() => alert('Account number copied!')}>
-                    <Ionicons name="copy-outline" size={18} color={theme.accent} />
-                  </TouchableOpacity>
-                </View>
-              </View>
-
-              <View style={styles.accountInfoRow}>
-                <Text style={[styles.accountInfoLabel, { color: textBodyColor }]}>Account Name:</Text>
-                <View style={styles.accountInfoValueContainer}>
-                  <Text style={[styles.accountInfoValue, { color: textColor }]}>
-                    {userName}
-                  </Text>
-                  <TouchableOpacity onPress={() => alert('Copied!')}>
-                    <Ionicons name="copy-outline" size={18} color={theme.accent} />
-                  </TouchableOpacity>
-                </View>
-              </View>
-            </View>
-
-            <View style={[styles.noticeBox, { backgroundColor: isDark ? '#1C1C1E' : '#FEF3C7' }]}>
-              <Ionicons 
-                name="information-circle" 
-                size={20} 
-                color={isDark ? theme.accent : '#D97706'} 
-              />
-              <Text style={[styles.noticeText, { color: isDark ? textBodyColor : '#92400E' }]}>
-                This account is unique to you. Funds sent here reflect instantly.
-              </Text>
-            </View>
-          </View>
-        )}
-
-        {/* Add Money Button */}
-        <TouchableOpacity
-          style={[
-            styles.addMoneyButton,
-            {
-              backgroundColor: (!amount || !selectedMethod || isLoading)
-                ? (isDark ? '#374151' : '#D1D5DB')
-                : theme.accent,
-            },
-          ]}
-          onPress={handleAddMoney}
-          disabled={!amount || !selectedMethod || isLoading}
-          activeOpacity={0.8}
-        >
-          {isLoading ? (
-            <>
-              <ActivityIndicator color="#FFFFFF" size="small" />
-              <Text style={[styles.addMoneyButtonText, { marginLeft: 8 }]}>Processing...</Text>
-            </>
-          ) : (
-            <>
-              <Ionicons name="add-circle" size={20} color="#FFFFFF" />
-              <Text style={styles.addMoneyButtonText}>Add Money</Text>
-            </>
-          )}
-        </TouchableOpacity>
 
         {/* Info Card */}
         <View style={[styles.infoCard, { backgroundColor: isDark ? '#1C1C1E' : '#EFF6FF' }]}>
