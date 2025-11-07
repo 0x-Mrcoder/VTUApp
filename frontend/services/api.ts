@@ -1,6 +1,8 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 import { Alert, Platform } from 'react-native';
+// import * as Network from "expo-network";
+
 import {
   AdminService,
   AdminUser,
@@ -21,12 +23,19 @@ const getApiUrl = () => {
   // Check for environment variable first
   const fromEnv = process.env.EXPO_PUBLIC_API_URL;
   if (fromEnv && typeof fromEnv === 'string') {
-    const trimmed = fromEnv.replace(/\/$/, '');
-    if (!/^https?:\/\//i.test(trimmed)) {
-      console.warn('⚠️ EXPO_PUBLIC_API_URL is not a valid URL. Current:', trimmed);
+    // Ensure the URL doesn't end with a slash
+    let baseUrl = fromEnv.replace(/\/$/, '');
+    
+    // Add /api prefix if not already present
+    if (!baseUrl.endsWith('/api')) {
+      baseUrl = `${baseUrl}/api`;
+    }
+    
+    if (!/^https?:\/\//i.test(baseUrl)) {
+      console.warn('⚠️ EXPO_PUBLIC_API_URL is not a valid URL. Current:', baseUrl);
     } else {
-      console.log('🔧 Using environment API URL:', trimmed);
-      return trimmed;
+      console.log('🔧 Using environment API URL:', baseUrl);
+      return baseUrl;
     }
   }
 
@@ -36,7 +45,7 @@ const getApiUrl = () => {
     if (Platform.OS === 'web') {
       const hostname = window.location.hostname;
       // Use the current hostname for web, which works for Expo web and local development
-      const webUrl = `http://${hostname}:5000`;
+      const webUrl = `http://${hostname}:5000/api`;
       console.log('🌍 Using web API URL:', webUrl);
       return webUrl;
     }
@@ -44,12 +53,12 @@ const getApiUrl = () => {
     // For Android emulator
     if (Platform.OS === 'android') {
       console.log('🤖 Using Android emulator API URL');
-      return 'http://10.0.2.2:5000';
+      return 'http://10.0.2.2:5000/api';
     }
     
     // For iOS simulator and other platforms
     console.log('🍏 Using localhost API URL');
-    return 'http://localhost:5000';
+    return 'http://localhost:5000/api';
   }
 
   // Production URL - update this with your production URL
@@ -57,7 +66,9 @@ const getApiUrl = () => {
   return 'https://your-production-api.com';
 };
 
-const API_BASE_URL = getApiUrl();
+// const API_BASE_URL = getApiUrl();
+export const API_BASE_URL = `${process.env.EXPO_PUBLIC_API_URL}/api`;
+
 
 // Log the API URL being used
 console.log('🌐 API Base URL:', API_BASE_URL);
@@ -75,44 +86,30 @@ const api = axios.create({
 // Request interceptor for API calls
 api.interceptors.request.use(
   async (config) => {
-    const token = await AsyncStorage.getItem('authToken');
-    const requestDetails = {
-      url: config.url,
-      method: config.method,
-      baseURL: config.baseURL,
-      headers: { ...config.headers },
-      params: config.params,
-      data: config.data,
-      timeout: config.timeout,
-      hasAuthHeader: !!config.headers?.Authorization,
-      tokenPresent: !!token,
-    };
-    
-    // Don't log sensitive data in production
-    if (__DEV__) {
-      console.log('🔵 API Request:', {
-        method: requestDetails.method?.toUpperCase(),
-        url: requestDetails.url,
-        baseURL: requestDetails.baseURL,
-        headers: Object.keys(requestDetails.headers),
-        hasAuth: requestDetails.hasAuthHeader || requestDetails.tokenPresent,
-        hasData: !!requestDetails.data,
-        hasParams: !!requestDetails.params,
-      });
+    try {
+      const token = await AsyncStorage.getItem('authToken');
+      
+      // Add auth header if token exists
+      if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+      }
+      
+      // Log request details in development
+      if (__DEV__) {
+        console.log(`🚀 API Request: ${config.method?.toUpperCase()} ${config.url}`, {
+          baseURL: config.baseURL,
+          headers: Object.keys(config.headers),
+          hasAuth: !!token,
+          hasData: !!config.data,
+          hasParams: !!config.params,
+        });
+      }
+      
+      return config;
+    } catch (error) {
+      console.error('Error in request interceptor:', error);
+      return Promise.reject(error);
     }
-
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-    
-    console.log(`🚀 API Request: ${config.method?.toUpperCase()} ${config.url}`, {
-      baseURL: config.baseURL,
-      params: config.params,
-      data: config.data,
-      headers: config.headers
-    });
-    
-    return config;
   },
   (error) => {
     console.error('❌ API Request Error:', error);
@@ -132,87 +129,93 @@ api.interceptors.response.use(
     }
     return response;
   },
-  (error) => {
-    // Enhanced error handling with user-friendly messages
-    if (error.response) {
-      // Server responded with a status code outside 2xx
-      const { status, data } = error.response;
-      let errorMessage = data?.message || 'An error occurred';
-
-      // Handle specific status codes
-      if (status === 401) {
-        // Token expired or invalid
-        AsyncStorage.multiRemove(['authToken', 'user']).catch(console.error);
-        errorMessage = 'Your session has expired. Please log in again.';
-        // Optional: Redirect to login screen
-        // navigation.navigate('Login');
-      } else if (status === 400 && data?.errors) {
-        // Handle validation errors
-        errorMessage = Object.values(data.errors).flat().join('\n');
-      }
-
-      // Log the error
-      const errorDetails = {
-        url: error.config?.url,
-        method: error.config?.method,
-        message: errorMessage,
-        response: data,
-      };
-      
-      console.error(`❌ API Error [${status}]:`, errorDetails);
-
-      // Show user-friendly alert for non-401 errors
-      if (status !== 401 && error.config?.url !== '/auth/check') {
-        Alert.alert('Error', errorMessage);
-      }
-
-      return Promise.reject({
-        message: errorMessage,
-        status,
-        data,
-        isApiError: true,
-        details: errorDetails,
-      });
-    } else if (error.request) {
-      // Request was made but no response received
-      const errorMessage = 'Unable to connect to the server. Please check your internet connection.';
-      const errorDetails = {
-        status: 0,
-        message: errorMessage,
-        url: error.config?.url,
-        method: error.config?.method,
-      };
-      
-      console.error('❌ API Network Error:', errorDetails);
-      
-      // Only show alert for non-background requests
-      if (error.config?.url !== '/auth/check') {
-        Alert.alert('Connection Error', errorMessage);
-      }
-      
-      return Promise.reject({
-        message: errorMessage,
-        isNetworkError: true,
-        originalError: error,
-        details: errorDetails,
-      });
-    } else {
-      // Something happened in setting up the request
-      const errorMessage = 'An error occurred while processing your request.';
+  async (error) => {
+    // Handle network errors or request setup errors
+    if (!error.response) {
+      const errorMessage = error.message || 'Network error. Please check your internet connection.';
       const errorDetails = {
         message: error.message,
         stack: error.stack,
         config: error.config,
       };
       
-      console.error('❌ Request Setup Error:', errorDetails);
+      console.error('❌ Request Error:', errorDetails);
       
       return Promise.reject({
+        success: false,
         message: errorMessage,
-        originalError: error,
-        details: errorDetails,
+        isNetworkError: true,
+        details: errorDetails
       });
     }
+
+    // Handle API response errors
+    const { status, data } = error.response;
+    let errorMessage = data?.message || 'An error occurred';
+
+    // Handle specific status codes
+    if (status === 401) {
+      // Clear auth data on 401
+      try {
+        // Get current route before clearing storage
+        const currentRoute = window.location.pathname;
+        const isAuthPage = ['/login', '/register', '/forgot-password', '/auth/'].some(path => 
+          currentRoute.includes(path)
+        );
+        
+        // Clear auth data
+        await AsyncStorage.multiRemove(['authToken', 'user', 'walletData', 'transactions', 'profileData']);
+        
+        // Clear API auth header
+        if (api.defaults.headers.common['Authorization']) {
+          delete api.defaults.headers.common['Authorization'];
+        }
+        
+        // Only redirect if not already on an auth page
+        if (!isAuthPage) {
+          errorMessage = 'Your session has expired. Please log in again.';
+          // Use router to navigate to login page
+          const router = require('expo-router');
+          router.replace('/login');
+        }
+      } catch (storageError) {
+        console.error('Error during logout:', storageError);
+      }
+    } else if (status === 400 && data?.errors) {
+      // Handle validation errors
+      errorMessage = Object.values(data.errors)
+        .flat()
+        .filter(Boolean)
+        .join('\n');
+    } else if (status >= 500) {
+      errorMessage = 'Server error. Please try again later.';
+    }
+
+    // Log error details in development
+    if (__DEV__) {
+      console.error(`❌ API Error [${status}]:`, {
+        url: error.config?.url,
+        method: error.config?.method,
+        message: errorMessage,
+        response: data,
+      });
+    }
+
+    // Show user-friendly alert for non-401 errors and non-auth pages
+    const isAuthRequest = error.config?.url?.startsWith('/auth/');
+    if (status !== 401 && !isAuthRequest) {
+      Alert.alert('Error', errorMessage);
+    }
+
+    return Promise.reject({
+      success: false,
+      message: errorMessage,
+      status,
+      data,
+      isApiError: true,
+      originalError: error,
+      details: error.response?.data || error.message
+    });
   }
 );
 
