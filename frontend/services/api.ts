@@ -171,13 +171,13 @@ api.interceptors.response.use(
           delete api.defaults.headers.common['Authorization'];
         }
         
-        // Only redirect if not already on an auth page
+        // Update error message for user
         if (!isAuthPage) {
           errorMessage = 'Your session has expired. Please log in again.';
-          // Use router to navigate to login page
-          const router = require('expo-router');
-          router.replace('/login');
         }
+        
+        // Note: Navigation should be handled by the app's auth state management
+        // The app will automatically redirect to login when it detects no token
       } catch (storageError) {
         console.error('Error during logout:', storageError);
       }

@@ -30,17 +30,63 @@ export const walletService = {
   },
 
   /**
-   * Top up wallet
+   * Fund wallet (initiate payment)
    */
-  topUp: async (amount: number, payment_method: string): Promise<any> => {
+  fundWallet: async (amount: number, gateway?: string): Promise<any> => {
     try {
-      const response = await api.post('/wallet/topup', {
+      const response = await api.post('/wallet/fund', {
         amount,
-        payment_method,
+        gateway,
       });
       return response.data;
     } catch (error: any) {
-      throw error.response?.data || { success: false, message: 'Wallet top-up failed' };
+      throw error.response?.data || { success: false, message: 'Wallet funding failed' };
+    }
+  },
+
+  /**
+   * Get wallet transactions
+   */
+  getWalletTransactions: async (page: number = 1, limit: number = 20): Promise<any> => {
+    try {
+      const response = await api.get('/wallet/transactions', {
+        params: { page, limit },
+      });
+      return response.data;
+    } catch (error: any) {
+      throw error.response?.data || { success: false, message: 'Failed to fetch wallet transactions' };
+    }
+  },
+
+  /**
+   * Transfer funds to another user
+   */
+  transferFunds: async (recipient: string, amount: number, note?: string): Promise<any> => {
+    try {
+      const response = await api.post('/wallet/transfer', {
+        recipient,
+        amount,
+        note,
+      });
+      return response.data;
+    } catch (error: any) {
+      throw error.response?.data || { success: false, message: 'Transfer failed' };
+    }
+  },
+
+  /**
+   * Adjust balance (admin only)
+   */
+  adjustBalance: async (userId: string, amount: number, reason: string): Promise<any> => {
+    try {
+      const response = await api.put('/wallet/adjust', {
+        user_id: userId,
+        amount,
+        reason,
+      });
+      return response.data;
+    } catch (error: any) {
+      throw error.response?.data || { success: false, message: 'Balance adjustment failed' };
     }
   },
 };

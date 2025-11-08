@@ -133,8 +133,9 @@ export default function AddMoneyScreen() {
       console.log('📥 [AddMoney] Virtual account response:', response);
       
       if (!response || (typeof response === 'object' && 'exists' in response && !response.exists)) {
-        console.log('ℹ️ [AddMoney] No virtual account found');
+        console.log('ℹ️ [AddMoney] No virtual account found - will show create button');
         setVirtualAccount(null);
+        setIsLoadingVirtualAccount(false);
         return;
       }
       
@@ -163,20 +164,22 @@ export default function AddMoneyScreen() {
   }, [showError]);
 
   // Format virtual account data
-  const formatVirtualAccount = (va: VirtualAccountResponse) => {
+  const formatVirtualAccount = (va: any) => {
+    // Handle nested data structure from API
+    const accountData = va?.data?.data || va?.data || va;
+    
     return {
-      ...va,
-      account_number: va.account_number,
-      account_name: va.account_name,
-      bank_name: va.bank_name || 'PALMPAY',
-      account_reference: va.account_reference || va.reference,
-      status: va.status || 'active',
-      provider: va.provider || 'payrant',
-      customerName: va.customerName || va.account_name,
-      virtualAccountName: va.virtualAccountName || va.account_name,
-      virtualAccountNo: va.virtualAccountNo || va.account_number,
-      isActive: (va.status || '').toLowerCase() === 'active',
-      reference: va.account_reference || va.reference
+      account_number: accountData.account_number || accountData.virtualAccountNo,
+      account_name: accountData.account_name || accountData.virtualAccountName || accountData.customerName,
+      bank_name: accountData.bank_name || 'PALMPAY',
+      account_reference: accountData.account_reference || accountData.reference,
+      status: accountData.status || 'active',
+      provider: accountData.provider || 'payrant',
+      customerName: accountData.customerName || accountData.account_name,
+      virtualAccountName: accountData.virtualAccountName || accountData.account_name,
+      virtualAccountNo: accountData.virtualAccountNo || accountData.account_number,
+      isActive: (accountData.status || 'active').toLowerCase() === 'active',
+      reference: accountData.account_reference || accountData.reference
     };
   };
 
@@ -217,6 +220,12 @@ export default function AddMoneyScreen() {
           console.log('✅ Virtual account created:', formattedAccount);
           setVirtualAccount(formattedAccount);
           showSuccess('Virtual account created successfully!');
+          
+          // Reload virtual account after short delay to ensure backend is updated
+          setTimeout(() => {
+            loadVirtualAccount();
+          }, 2000);
+          
           return;
         } catch (error: any) {
           lastError = error;

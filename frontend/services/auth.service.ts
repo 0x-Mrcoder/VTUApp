@@ -98,10 +98,11 @@ export const authService = {
   /**
    * Resend OTP
    */
-  resendOTP: async (phone_number: string): Promise<any> => {
+  resendOTP: async (phone_number: string, email?: string): Promise<any> => {
     try {
       const response = await api.post('/auth/resend-otp', {
         phone_number,
+        email,
       });
       return response.data;
     } catch (error: any) {

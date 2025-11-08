@@ -4,8 +4,8 @@ import { Transaction, transactionService } from '@/services/transaction.service'
 import { userService } from '@/services/user.service';
 import { WalletData, walletService } from '@/services/wallet.service';
 import { Ionicons } from '@expo/vector-icons';
-import { useRouter } from 'expo-router';
-import React, { useEffect, useState } from 'react';
+import { useRouter, useFocusEffect } from 'expo-router';
+import React, { useEffect, useState, useCallback } from 'react';
 import {
   ActivityIndicator,
   Alert,
@@ -19,6 +19,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function HomeScreen() {
   const router = useRouter();
@@ -34,9 +35,30 @@ export default function HomeScreen() {
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
 
-  useEffect(() => {
-    loadAllData();
-  }, []);
+  // Load data when screen comes into focus (e.g., after login)
+  useFocusEffect(
+    useCallback(() => {
+      checkAuthAndLoadData();
+    }, [])
+  );
+
+  const checkAuthAndLoadData = async () => {
+    try {
+      // Check if user is authenticated before loading data
+      const token = await AsyncStorage.getItem('authToken');
+      if (token) {
+        await loadAllData();
+      } else {
+        // No token, just load cached user data
+        const userData = await authService.getCurrentUser();
+        setUser(userData);
+        setLoading(false);
+      }
+    } catch (error) {
+      console.log('Auth check error:', error);
+      setLoading(false);
+    }
+  };
 
   const loadAllData = async () => {
     try {
@@ -57,14 +79,21 @@ export default function HomeScreen() {
 
   const loadUserProfile = async () => {
     try {
+      // Check authentication before making request
+      const token = await AsyncStorage.getItem('authToken');
+      if (!token) {
+        console.log('Failed to load profile from server, using cached data');
+        const userData = await authService.getCurrentUser();
+        setUser(userData);
+        return;
+      }
+
       const response = await userService.getProfile();
       if (response.success) {
         setUser(response.data);
-        // Update local storage
-        await authService.getCurrentUser();
       }
     } catch (error: any) {
-      console.error('Error loading profile:', error);
+      console.log('Error loading profile:', error);
       // Fallback to local storage
       const userData = await authService.getCurrentUser();
       setUser(userData);
@@ -73,22 +102,34 @@ export default function HomeScreen() {
 
   const loadWalletData = async () => {
     try {
+      // Check authentication before making request
+      const token = await AsyncStorage.getItem('authToken');
+      if (!token) {
+        setWallet(null);
+        return;
+      }
+
       const response = await walletService.getWallet();
       if (response.success && response.data) {
         setWallet(response.data);
       } else {
-        // Set null if no wallet data
         setWallet(null);
       }
     } catch (error: any) {
-      console.error('Error loading wallet:', error);
-      // Set null on error - will show 0 balance
+      console.log('Error loading wallet:', error);
       setWallet(null);
     }
   };
 
   const loadTransactions = async () => {
     try {
+      // Check authentication before making request
+      const token = await AsyncStorage.getItem('authToken');
+      if (!token) {
+        setTransactions([]);
+        return;
+      }
+
       const response = await transactionService.getTransactions(1, 5);
       if (response.success && response.data) {
         // Backend returns transactions directly in data array
@@ -98,8 +139,7 @@ export default function HomeScreen() {
         setTransactions([]);
       }
     } catch (error: any) {
-      console.error('Error loading transactions:', error);
-      // Set empty transactions on error
+      console.log('Error loading transactions:', error);
       setTransactions([]);
     }
   };
