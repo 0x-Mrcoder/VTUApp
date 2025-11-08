@@ -875,3 +875,7 @@
 {"headers":{"authorization":"Bearer ***"},"ip":"::ffff:192.168.0.112","level":"info","message":"📥 Incoming Request","method":"GET","path":"/api/transactions","query":{"limit":"5","page":"1"},"timestamp":"2025-11-08 18:58:40","url":"/api/transactions?page=1&limit=5","userAgent":"okhttp/4.12.0","userId":"anonymous"}
 {"duration":"23ms","ip":"::ffff:192.168.0.112","level":"info","message":"📤 Response Success","method":"GET","statusCode":200,"timestamp":"2025-11-08 18:58:40","url":"/api/transactions?page=1&limit=5","userId":"690c7de84d4df744806907b2"}
 {"level":"info","message":"::ffff:192.168.0.112 - 690c7de84d4df744806907b2 [08/Nov/2025:17:58:40 +0000] \"GET /api/transactions?page=1&limit=5 HTTP/1.1\" 304 - \"-\" \"okhttp/4.12.0\" 23.730 ms","timestamp":"2025-11-08 18:58:40"}
+{"environment":"development","level":"info","message":"🚀 VTU App Backend Starting...","nodeVersion":"v22.18.0","timestamp":"2025-11-08 19:01:49"}
+{"level":"info","message":"MongoDB connected successfully","timestamp":"2025-11-08 19:01:49"}
+{"environment":"development","level":"info","message":"🚀 VTU App Backend Starting...","nodeVersion":"v22.18.0","timestamp":"2025-11-08 19:03:06"}
+{"level":"info","message":"MongoDB connected successfully","timestamp":"2025-11-08 19:03:06"}
