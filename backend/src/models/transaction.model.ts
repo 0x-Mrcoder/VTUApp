@@ -15,7 +15,7 @@ const transactionSchema = new Schema<ITransaction>({
   total_charged: { type: Number, required: true },
   status: { 
     type: String, 
-    enum: ['pending', 'successful', 'failed', 'refunded'],
+    enum: ['pending', 'completed', 'successful', 'failed', 'refunded', 'cancelled'],
     default: 'pending' 
   },
   reference_number: { type: String, unique: true, required: true },

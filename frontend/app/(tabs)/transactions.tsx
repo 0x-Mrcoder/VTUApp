@@ -65,18 +65,27 @@ export default function TransactionsScreen() {
   const loadTransactions = async () => {
     try {
       setLoading(true);
+      console.log('🔄 Loading transactions...');
       const response = await transactionService.getTransactions(1, 50);
+      console.log('📦 Transaction response:', JSON.stringify(response, null, 2));
+      console.log('✅ Success:', response.success);
+      console.log('📊 Data type:', typeof response.data, Array.isArray(response.data) ? 'Array' : 'Not Array');
+      console.log('📈 Data length:', Array.isArray(response.data) ? response.data.length : 'N/A');
+      
       if (response.success && response.data) {
-        // Backend returns transactions directly in data array, not in data.transactions
+        // Backend returns transactions directly in data array
         const transactionsArray = Array.isArray(response.data) ? response.data : [];
+        console.log('🎯 Transactions to map:', transactionsArray.length);
         const mappedTransactions = transactionsArray.map(mapApiTransactionToLocal);
+        console.log('✨ Mapped transactions:', mappedTransactions.length);
         setAllTransactions(mappedTransactions);
       } else {
         // If no transactions or invalid response, set empty array
+        console.warn('⚠️ No transactions or invalid response');
         setAllTransactions([]);
       }
     } catch (error: any) {
-      console.error('Error loading transactions:', error);
+      console.error('❌ Error loading transactions:', error);
       setAllTransactions([]);
     } finally {
       setLoading(false);
