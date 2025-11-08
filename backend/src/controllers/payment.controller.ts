@@ -1,6 +1,6 @@
 // controllers/payment.controller.ts
 import { Request, Response } from 'express';
-import { Transaction, User, Wallet, VirtualAccount } from '../models/index.js';
+import { Transaction, User, VirtualAccount, Wallet } from '../models/index.js';
 import { MonnifyService } from '../services/monnify.service.js';
 import { PaystackService } from '../services/paystack.service.js';
 import { AuthRequest } from '../types/index.js';

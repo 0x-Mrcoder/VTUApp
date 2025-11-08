@@ -7,6 +7,22 @@ import { ApiResponse } from '../utils/response.js';
 import { logger } from '../config/logger.js';
 import { AuthRequest } from '../types/index.js';
 
+// Network mapping helper
+const networkMap: Record<string, string> = {
+  'mtn': '1',
+  'airtel': '2',
+  'glo': '3',
+  '9mobile': '4',
+  'MTN': '1',
+  'AIRTEL': '2',
+  'GLO': '3',
+  '9MOBILE': '4',
+};
+
+function getNetworkId(network: string): string {
+  return networkMap[network.toLowerCase()] || network;
+}
+
 export class BillPaymentController {
   // Get networks
   async getNetworks(req: Request, res: Response, next: NextFunction) {
@@ -64,6 +80,11 @@ export class BillPaymentController {
       const { network, phone, amount, airtime_type = 'VTU', ported_number = true } = req.body;
       const userId = req.user?.id;
 
+      // Validate phone number
+      if (!phone || phone.length !== 11 || !phone.match(/^0[789][01]\d{8}$/)) {
+        return ApiResponse.error(res, 'Please enter a valid 11-digit Nigerian phone number (e.g., 08012345678)', 400);
+      }
+
       // Validate user balance
       const wallet = await WalletService.getWalletByUserId(userId);
       if (wallet.balance < parseFloat(amount)) {
@@ -79,17 +100,22 @@ export class BillPaymentController {
       // Create transaction record
       const transaction = await Transaction.create({
         user_id: userId,
-        type: 'airtime',
+        wallet_id: wallet._id,
+        type: 'airtime_topup',
         amount: parseFloat(amount),
-        reference: ref,
+        fee: 0,
+        total_charged: parseFloat(amount),
+        reference_number: ref,
+        payment_method: 'wallet',
+        destination_account: phone,
         status: 'pending',
-        metadata: { network, phone, airtime_type },
+        description: `Airtime purchase for ${phone}`,
       });
 
       try {
         // Purchase airtime
         const result = await topupmateService.purchaseAirtime({
-          network,
+          network: getNetworkId(network),
           phone,
           ref,
           airtime_type,
@@ -136,13 +162,35 @@ export class BillPaymentController {
       const { network, phone, plan, ported_number = true } = req.body;
       const userId = req.user?.id;
 
+      // Validate phone number
+      if (!phone || phone.length !== 11 || !phone.match(/^0[789][01]\d{8}$/)) {
+        return ApiResponse.error(res, 'Please enter a valid 11-digit Nigerian phone number (e.g., 08012345678)', 400);
+      }
+
       // Get plan details to determine amount
       const plans = await topupmateService.getDataPlans();
-      const selectedPlan = plans.response?.find((p: any) => p.id === plan);
+      logger.info('Data plans response status:', plans.status);
+      logger.info('Searching for plan ID:', plan, 'Type:', typeof plan);
+      
+      // TopupMate returns plans as an object with IDs as keys, not an array
+      let selectedPlan: any = null;
+      if (plans.response && typeof plans.response === 'object') {
+        // If response is an object with plan IDs as keys
+        selectedPlan = plans.response[String(plan)];
+        logger.info('Found plan in object:', selectedPlan);
+      } else if (Array.isArray(plans.response)) {
+        // If response is an array
+        selectedPlan = plans.response.find((p: any) => String(p.id) === String(plan) || String(p.planid) === String(plan));
+        logger.info('Found plan in array:', selectedPlan);
+      }
       
       if (!selectedPlan) {
+        logger.error('Plan not found. Plan ID:', plan);
+        logger.error('Available plans structure:', typeof plans.response);
+        logger.error('Sample plan keys:', plans.response ? Object.keys(plans.response).slice(0, 5) : 'none');
         return ApiResponse.error(res, 'Invalid plan selected', 400);
       }
+      logger.info('Selected plan:', selectedPlan);
 
       const amount = parseFloat(selectedPlan.price);
 
@@ -161,17 +209,22 @@ export class BillPaymentController {
       // Create transaction record
       const transaction = await Transaction.create({
         user_id: userId,
-        type: 'data',
+        wallet_id: wallet._id,
+        type: 'data_purchase',
         amount,
-        reference: ref,
+        fee: 0,
+        total_charged: amount,
+        reference_number: ref,
+        payment_method: 'wallet',
+        destination_account: phone,
         status: 'pending',
-        metadata: { network, phone, plan: selectedPlan },
+        description: `Data purchase for ${phone} - ${selectedPlan.name}`,
       });
 
       try {
         // Purchase data
         const result = await topupmateService.purchaseData({
-          network,
+          network: getNetworkId(network),
           phone,
           ref,
           plan,
@@ -242,11 +295,15 @@ export class BillPaymentController {
 
       // Get plan details
       const plans = await topupmateService.getCableTVPlans();
-      const selectedPlan = plans.response?.find((p: any) => p.id === plan);
+      logger.info('Available cable plans:', plans.response);
+      logger.info('Searching for plan:', plan);
+      const selectedPlan = plans.response?.find((p: any) => String(p.id) === String(plan));
       
       if (!selectedPlan) {
+        logger.error('Cable plan not found. Available plan IDs:', plans.response?.map((p: any) => p.id));
         return ApiResponse.error(res, 'Invalid plan selected', 400);
       }
+      logger.info('Selected cable plan:', selectedPlan);
 
       const amount = parseFloat(selectedPlan.price);
 
@@ -421,11 +478,15 @@ export class BillPaymentController {
 
       // Get provider details
       const providers = await topupmateService.getExamPinProviders();
-      const selectedProvider = providers.response?.find((p: any) => p.id === provider);
+      logger.info('Available exam pin providers:', providers.response);
+      logger.info('Searching for provider:', provider);
+      const selectedProvider = providers.response?.find((p: any) => String(p.id) === String(provider));
       
       if (!selectedProvider) {
+        logger.error('Provider not found. Available provider IDs:', providers.response?.map((p: any) => p.id));
         return ApiResponse.error(res, 'Invalid provider selected', 400);
       }
+      logger.info('Selected provider:', selectedProvider);
 
       const amount = parseFloat(selectedProvider.price) * parseInt(quantity);
 
