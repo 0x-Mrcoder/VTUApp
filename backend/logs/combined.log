@@ -644,3 +644,27 @@
 {"level":"info","message":"MongoDB connected successfully","timestamp":"2025-11-09 11:46:53"}
 {"environment":"development","level":"info","message":"🚀 VTU App Backend Starting...","nodeVersion":"v22.18.0","timestamp":"2025-11-09 11:47:37"}
 {"level":"info","message":"MongoDB connected successfully","timestamp":"2025-11-09 11:47:37"}
+{"environment":"development","level":"info","message":"🚀 VTU App Backend Starting...","nodeVersion":"v22.18.0","timestamp":"2025-11-09 11:53:57"}
+{"level":"info","message":"MongoDB connected successfully","timestamp":"2025-11-09 11:53:58"}
+{"environment":"development","level":"info","message":"🚀 VTU App Backend Starting...","nodeVersion":"v22.18.0","timestamp":"2025-11-09 11:54:48"}
+{"environment":"development","level":"info","message":"🚀 VTU App Backend Starting...","nodeVersion":"v22.18.0","timestamp":"2025-11-09 11:56:16"}
+{"level":"info","message":"MongoDB connected successfully","timestamp":"2025-11-09 11:56:16"}
+{"environment":"development","level":"info","message":"🚀 VTU App Backend Starting...","nodeVersion":"v22.18.0","timestamp":"2025-11-09 11:58:47"}
+{"level":"info","message":"MongoDB connected successfully","timestamp":"2025-11-09 11:58:47"}
+{"headers":{},"ip":"::1","level":"info","message":"📥 Incoming Request","method":"GET","path":"/","query":{},"timestamp":"2025-11-09 11:59:00","url":"/","userAgent":"curl/8.5.0","userId":"anonymous"}
+{"duration":"5ms","ip":"::1","level":"info","message":"📤 Response Success","method":"GET","statusCode":200,"timestamp":"2025-11-09 11:59:00","url":"/","userId":"anonymous"}
+{"level":"info","message":"::1 - anonymous [09/Nov/2025:10:59:00 +0000] \"GET / HTTP/1.1\" 200 44 \"-\" \"curl/8.5.0\" 4.985 ms","timestamp":"2025-11-09 11:59:00"}
+{"headers":{},"ip":"::1","level":"info","message":"📥 Incoming Request","method":"GET","path":"/health","query":{},"timestamp":"2025-11-09 11:59:07","url":"/health","userAgent":"curl/8.5.0","userId":"anonymous"}
+{"duration":"3ms","ip":"::1","level":"info","message":"📤 Response Success","method":"GET","statusCode":200,"timestamp":"2025-11-09 11:59:07","url":"/health","userId":"anonymous"}
+{"level":"info","message":"::1 - anonymous [09/Nov/2025:10:59:07 +0000] \"GET /health HTTP/1.1\" 200 45 \"-\" \"curl/8.5.0\" 21.522 ms","timestamp":"2025-11-09 11:59:07"}
+{"headers":{},"ip":"::1","level":"info","message":"📥 Incoming Request","method":"GET","path":"/health","query":{},"timestamp":"2025-11-09 11:59:16","url":"/health","userAgent":"curl/8.5.0","userId":"anonymous"}
+{"duration":"4ms","ip":"::1","level":"info","message":"📤 Response Success","method":"GET","statusCode":200,"timestamp":"2025-11-09 11:59:16","url":"/health","userId":"anonymous"}
+{"level":"info","message":"::1 - anonymous [09/Nov/2025:10:59:16 +0000] \"GET /health HTTP/1.1\" 200 45 \"-\" \"curl/8.5.0\" 2.529 ms","timestamp":"2025-11-09 11:59:16"}
+{"headers":{},"ip":"::1","level":"info","message":"📥 Incoming Request","method":"GET","path":"/health","query":{},"timestamp":"2025-11-09 11:59:24","url":"/health","userAgent":"curl/8.5.0","userId":"anonymous"}
+{"duration":"2ms","ip":"::1","level":"info","message":"📤 Response Success","method":"GET","statusCode":200,"timestamp":"2025-11-09 11:59:24","url":"/health","userId":"anonymous"}
+{"level":"info","message":"::1 - anonymous [09/Nov/2025:10:59:24 +0000] \"GET /health HTTP/1.1\" 200 45 \"-\" \"curl/8.5.0\" 1.028 ms","timestamp":"2025-11-09 11:59:24"}
+{"body":{"email":"test+api@example.com","first_name":"Api","last_name":"Tester","password":"***","phone_number":"+2348123456789"},"headers":{"contentType":"application/json"},"ip":"::1","level":"info","message":"📥 Incoming Request","method":"POST","path":"/api/auth/register","query":{},"timestamp":"2025-11-09 11:59:34","url":"/api/auth/register","userAgent":"curl/8.5.0","userId":"anonymous"}
+{"duration":"1024ms","ip":"::1","level":"info","message":"📤 Response Success","method":"POST","statusCode":201,"timestamp":"2025-11-09 11:59:35","url":"/api/auth/register","userId":"anonymous"}
+{"level":"info","message":"::1 - anonymous [09/Nov/2025:10:59:35 +0000] \"POST /api/auth/register HTTP/1.1\" 201 669 \"-\" \"curl/8.5.0\" 1027.305 ms","timestamp":"2025-11-09 11:59:35"}
+{"environment":"development","level":"info","message":"🚀 VTU App Backend Starting...","nodeVersion":"v22.18.0","timestamp":"2025-11-09 11:59:49"}
+{"level":"info","message":"MongoDB connected successfully","timestamp":"2025-11-09 11:59:49"}

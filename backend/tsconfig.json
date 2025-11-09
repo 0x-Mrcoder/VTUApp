@@ -15,11 +15,11 @@
     "noImplicitAny": false,
     "allowJs": true,
     "checkJs": false,
-    "noEmitOnError": true,
+  "noEmitOnError": false,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "isolatedModules": true,
-    "noEmit": true,
+  "noEmit": false,
     "baseUrl": "./src",
     "paths": {
       "*": ["*", "types/*"]
