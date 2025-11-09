@@ -668,3 +668,23 @@
 {"level":"info","message":"::1 - anonymous [09/Nov/2025:10:59:35 +0000] \"POST /api/auth/register HTTP/1.1\" 201 669 \"-\" \"curl/8.5.0\" 1027.305 ms","timestamp":"2025-11-09 11:59:35"}
 {"environment":"development","level":"info","message":"🚀 VTU App Backend Starting...","nodeVersion":"v22.18.0","timestamp":"2025-11-09 11:59:49"}
 {"level":"info","message":"MongoDB connected successfully","timestamp":"2025-11-09 11:59:49"}
+{"body":{"email":"test+api@example.com","password":"***"},"headers":{"contentType":"application/json"},"ip":"::1","level":"info","message":"📥 Incoming Request","method":"POST","path":"/api/auth/login","query":{},"timestamp":"2025-11-09 12:00:57","url":"/api/auth/login","userAgent":"curl/8.5.0","userId":"anonymous"}
+{"duration":"156ms","ip":"::1","level":"info","message":"📤 Response Success","method":"POST","statusCode":200,"timestamp":"2025-11-09 12:00:57","url":"/api/auth/login","userId":"anonymous"}
+{"level":"info","message":"::1 - anonymous [09/Nov/2025:11:00:57 +0000] \"POST /api/auth/login HTTP/1.1\" 200 662 \"-\" \"curl/8.5.0\" 156.483 ms","timestamp":"2025-11-09 12:00:57"}
+{"headers":{"authorization":"Bearer ***"},"ip":"::1","level":"info","message":"📥 Incoming Request","method":"GET","path":"/api/promotions","query":{},"timestamp":"2025-11-09 12:00:57","url":"/api/promotions","userAgent":"curl/8.5.0","userId":"anonymous"}
+{"duration":"67ms","ip":"::1","level":"info","message":"📤 Response Success","method":"GET","statusCode":200,"timestamp":"2025-11-09 12:00:58","url":"/api/promotions","userId":"69107416e87e70976b69dac8"}
+{"level":"info","message":"::1 - 69107416e87e70976b69dac8 [09/Nov/2025:11:00:58 +0000] \"GET /api/promotions HTTP/1.1\" 200 72 \"-\" \"curl/8.5.0\" 68.034 ms","timestamp":"2025-11-09 12:00:58"}
+{"headers":{"authorization":"Bearer ***"},"ip":"::1","level":"info","message":"📥 Incoming Request","method":"GET","path":"/api/wallet","query":{},"timestamp":"2025-11-09 12:00:58","url":"/api/wallet","userAgent":"curl/8.5.0","userId":"anonymous"}
+{"duration":"7ms","ip":"::1","level":"info","message":"📤 Response Success","method":"GET","statusCode":200,"timestamp":"2025-11-09 12:00:58","url":"/api/wallet","userId":"69107416e87e70976b69dac8"}
+{"level":"info","message":"::1 - 69107416e87e70976b69dac8 [09/Nov/2025:11:00:58 +0000] \"GET /api/wallet HTTP/1.1\" 200 254 \"-\" \"curl/8.5.0\" 7.548 ms","timestamp":"2025-11-09 12:00:58"}
+{"headers":{"authorization":"Bearer ***"},"ip":"::1","level":"info","message":"📥 Incoming Request","method":"GET","path":"/api/transactions","query":{},"timestamp":"2025-11-09 12:00:58","url":"/api/transactions","userAgent":"curl/8.5.0","userId":"anonymous"}
+{"duration":"76ms","ip":"::1","level":"info","message":"📤 Response Success","method":"GET","statusCode":200,"timestamp":"2025-11-09 12:00:58","url":"/api/transactions","userId":"69107416e87e70976b69dac8"}
+{"level":"info","message":"::1 - 69107416e87e70976b69dac8 [09/Nov/2025:11:00:58 +0000] \"GET /api/transactions HTTP/1.1\" 200 129 \"-\" \"curl/8.5.0\" 81.373 ms","timestamp":"2025-11-09 12:00:58"}
+{"body":{"description":"Testing support create","subject":"API test"},"headers":{"authorization":"Bearer ***","contentType":"application/json"},"ip":"::1","level":"info","message":"📥 Incoming Request","method":"POST","path":"/api/support","query":{},"timestamp":"2025-11-09 12:00:58","url":"/api/support","userAgent":"curl/8.5.0","userId":"anonymous"}
+{"duration":"95ms","ip":"::1","level":"info","message":"📤 Response Success","method":"POST","statusCode":201,"timestamp":"2025-11-09 12:00:58","url":"/api/support","userId":"69107416e87e70976b69dac8"}
+{"level":"info","message":"::1 - 69107416e87e70976b69dac8 [09/Nov/2025:11:00:58 +0000] \"POST /api/support HTTP/1.1\" 201 326 \"-\" \"curl/8.5.0\" 95.079 ms","timestamp":"2025-11-09 12:00:58"}
+{"headers":{"authorization":"Bearer ***"},"ip":"::1","level":"info","message":"📥 Incoming Request","method":"GET","path":"/api/notifications","query":{},"timestamp":"2025-11-09 12:00:58","url":"/api/notifications","userAgent":"curl/8.5.0","userId":"anonymous"}
+{"duration":"109ms","ip":"::1","level":"info","message":"📤 Response Success","method":"GET","statusCode":200,"timestamp":"2025-11-09 12:00:58","url":"/api/notifications","userId":"69107416e87e70976b69dac8"}
+{"level":"info","message":"::1 - 69107416e87e70976b69dac8 [09/Nov/2025:11:00:58 +0000] \"GET /api/notifications HTTP/1.1\" 200 141 \"-\" \"curl/8.5.0\" 104.217 ms","timestamp":"2025-11-09 12:00:58"}
+{"environment":"development","level":"info","message":"🚀 VTU App Backend Starting...","nodeVersion":"v22.18.0","timestamp":"2025-11-09 12:17:03"}
+{"level":"info","message":"MongoDB connected successfully","timestamp":"2025-11-09 12:17:03"}
