@@ -1,10 +1,10 @@
 {
   "expo": {
-    "name": "vtu-app",
-    "slug": "vtu-app",
+    "name": "ibdata",
+    "slug": "ibdatasub",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
+    "icon": "./assets/images/ibdatalogo.jpg",
     "scheme": "vtuapp",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
