@@ -1,9 +1,9 @@
 // middleware/auth.middleware.ts
-import { Response, NextFunction } from 'express';
+import { NextFunction, Response } from 'express';
 import jwt from 'jsonwebtoken';
-import { config } from '../config/env.js';
-import { ApiResponse } from '../utils/response.js';
+import { config } from '../config/bootstrap.js';
 import { AuthRequest } from '../types/index.js';
+import { ApiResponse } from '../utils/response.js';
 
 export const authMiddleware = (req: AuthRequest, res: Response, next: NextFunction) => {
   try {

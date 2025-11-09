@@ -1,13 +1,13 @@
 
 // controllers/auth.controller.ts
-import { Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
+import { Request, Response } from 'express';
 import jwt, { SignOptions } from 'jsonwebtoken';
+import { config } from '../config/bootstrap.js';
 import { User } from '../models/index.js';
-import { WalletService } from '../services/wallet.service.js';
 import { OTPService } from '../services/otp.service.js';
+import { WalletService } from '../services/wallet.service.js';
 import { ApiResponse } from '../utils/response.js';
-import { config } from '../config/env.js';
 import { userValidation } from '../utils/validators.js';
 
 export class AuthController {

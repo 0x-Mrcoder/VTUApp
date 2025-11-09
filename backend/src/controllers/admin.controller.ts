@@ -1,12 +1,12 @@
 // controllers/admin.controller.ts
-import { Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
+import { Request, Response } from 'express';
 import jwt, { SignOptions } from 'jsonwebtoken';
-import { AdminUser, User, AuditLog, Transaction } from '../models/index.js';
+import { config } from '../config/bootstrap.js';
+import { AdminUser, AuditLog, Transaction, User } from '../models/index.js';
 import { AdminService } from '../services/admin.service.js';
-import { ApiResponse } from '../utils/response.js';
 import { AuthRequest } from '../types/index.js';
-import { config } from '../config/env.js';
+import { ApiResponse } from '../utils/response.js';
 
 export class AdminController {
   static async login(req: Request, res: Response) {

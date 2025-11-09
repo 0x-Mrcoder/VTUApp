@@ -14,8 +14,8 @@ import walletRoutes from "./routes/wallet.routes.js";
 // import billpaymentRoutes from "./routes/billpayment.routes.js";
 
 // Import logging middleware
-import { requestLogger, detailedRequestLogger, errorLogger } from "./middleware/logger.middleware.js";
-import { logger } from "./config/logger.js";
+import { logger } from "./config/bootstrap.js";
+import { detailedRequestLogger, errorLogger, requestLogger } from "./middleware/logger.middleware.js";
 
 dotenv.config();
 

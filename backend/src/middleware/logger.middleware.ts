@@ -1,7 +1,7 @@
 // middleware/logger.middleware.ts
-import { Request, Response, NextFunction } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import morgan from 'morgan';
-import { logger } from '../config/logger.js';
+import { logger } from '../config/bootstrap.js';
 
 // Extend Request interface to include custom properties
 interface CustomRequest extends Request {

@@ -688,3 +688,5 @@
 {"level":"info","message":"::1 - 69107416e87e70976b69dac8 [09/Nov/2025:11:00:58 +0000] \"GET /api/notifications HTTP/1.1\" 200 141 \"-\" \"curl/8.5.0\" 104.217 ms","timestamp":"2025-11-09 12:00:58"}
 {"environment":"development","level":"info","message":"🚀 VTU App Backend Starting...","nodeVersion":"v22.18.0","timestamp":"2025-11-09 12:17:03"}
 {"level":"info","message":"MongoDB connected successfully","timestamp":"2025-11-09 12:17:03"}
+{"environment":"development","level":"info","message":"🚀 VTU App Backend Starting...","nodeVersion":"v22.18.0","timestamp":"2025-11-09 13:14:23"}
+{"level":"info","message":"MongoDB connected successfully","timestamp":"2025-11-09 13:14:23"}

@@ -1,11 +1,10 @@
 // controllers/billpayment.controller.ts
-import { Request, Response, NextFunction } from 'express';
+import { NextFunction, Request, Response } from 'express';
+import { Transaction } from '../models/index.js';
 import topupmateService from '../services/topupmate.service.js';
 import { WalletService } from '../services/wallet.service.js';
-import { Transaction } from '../models/index.js';
-import { ApiResponse } from '../utils/response.js';
-import { logger } from '../config/logger.js';
 import { AuthRequest } from '../types/index.js';
+import { ApiResponse } from '../utils/response.js';
 
 export class BillPaymentController {
   // Get networks

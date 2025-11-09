@@ -1,7 +1,6 @@
 // services/topupmate.service.ts
 import axios, { AxiosInstance } from 'axios';
-import { logger } from '../config/logger.js';
-import { config } from '../config/env.js';
+import { config, logger } from '../config/bootstrap.js';
 
 interface TopupmateResponse {
   status: string;
