@@ -28,7 +28,7 @@ export class BillPaymentController {
   async getNetworks(req: Request, res: Response, next: NextFunction) {
     try {
       const networks = await topupmateService.getNetworks();
-      return ApiResponse.success(res, 'Networks retrieved successfully', networks.response);
+      return ApiResponse.success(res, networks.response, 'Networks retrieved successfully');
     } catch (error) {
       next(error);
     }
@@ -38,7 +38,7 @@ export class BillPaymentController {
   async getDataPlans(req: Request, res: Response, next: NextFunction) {
     try {
       const plans = await topupmateService.getDataPlans();
-      return ApiResponse.success(res, 'Data plans retrieved successfully', plans.response);
+      return ApiResponse.success(res, plans.response, 'Data plans retrieved successfully');
     } catch (error) {
       next(error);
     }
@@ -48,7 +48,7 @@ export class BillPaymentController {
   async getCableProviders(req: Request, res: Response, next: NextFunction) {
     try {
       const providers = await topupmateService.getCableProviders();
-      return ApiResponse.success(res, 'Cable providers retrieved successfully', providers.response);
+      return ApiResponse.success(res, providers.response, 'Cable providers retrieved successfully');
     } catch (error) {
       next(error);
     }
@@ -58,7 +58,7 @@ export class BillPaymentController {
   async getElectricityProviders(req: Request, res: Response, next: NextFunction) {
     try {
       const providers = await topupmateService.getElectricityProviders();
-      return ApiResponse.success(res, 'Electricity providers retrieved successfully', providers.response);
+      return ApiResponse.success(res, providers.response, 'Electricity providers retrieved successfully');
     } catch (error) {
       next(error);
     }
@@ -68,7 +68,7 @@ export class BillPaymentController {
   async getExamPinProviders(req: Request, res: Response, next: NextFunction) {
     try {
       const providers = await topupmateService.getExamPinProviders();
-      return ApiResponse.success(res, 'Exam pin providers retrieved successfully', providers.response);
+      return ApiResponse.success(res, providers.response, 'Exam pin providers retrieved successfully');
     } catch (error) {
       next(error);
     }
@@ -129,10 +129,10 @@ export class BillPaymentController {
             status: 'completed', 
             response: result 
           });
-          return ApiResponse.success(res, 'Airtime purchase successful', {
+          return ApiResponse.success(res, {
             transaction,
             provider_response: result,
-          });
+          }, 'Airtime purchase successful');
         } else {
           // Refund user if failed
           await WalletService.credit(userId, parseFloat(amount), 'Airtime purchase refund');
@@ -237,10 +237,10 @@ export class BillPaymentController {
             status: 'completed', 
             response: result 
           });
-          return ApiResponse.success(res, 'Data purchase successful', {
+          return ApiResponse.success(res, {
             transaction,
             provider_response: result,
-          });
+          }, 'Data purchase successful');
         } else {
           // Refund user if failed
           await WalletService.credit(userId, amount, 'Data purchase refund');
@@ -275,10 +275,10 @@ export class BillPaymentController {
       });
 
       if (result.status === 'success') {
-        return ApiResponse.success(res, 'Account verification successful', {
+        return ApiResponse.success(res, {
           customer_name: result.Customer_Name,
           iucnumber,
-        });
+        }, 'Account verification successful');
       } else {
         return ApiResponse.error(res, 'Account verification failed', 400);
       }
@@ -346,10 +346,10 @@ export class BillPaymentController {
             status: 'completed', 
             response: result 
           });
-          return ApiResponse.success(res, 'Cable TV purchase successful', {
+          return ApiResponse.success(res, {
             transaction,
             provider_response: result,
-          });
+          }, 'Cable TV purchase successful');
         } else {
           // Refund user if failed
           await WalletService.credit(userId, amount, 'Cable TV purchase refund');
@@ -385,10 +385,10 @@ export class BillPaymentController {
       });
 
       if (result.status === 'success') {
-        return ApiResponse.success(res, 'Meter verification successful', {
+        return ApiResponse.success(res, {
           customer_name: result.Customer_Name,
           meternumber,
-        });
+        }, 'Meter verification successful');
       } else {
         return ApiResponse.error(res, 'Meter verification failed', 400);
       }
@@ -442,11 +442,11 @@ export class BillPaymentController {
             status: 'completed', 
             response: result 
           });
-          return ApiResponse.success(res, 'Electricity purchase successful', {
+          return ApiResponse.success(res, {
             transaction,
             token: result.token,
             provider_response: result,
-          });
+          }, 'Electricity purchase successful');
         } else {
           // Refund user if failed
           await WalletService.credit(userId, parseFloat(amount), 'Electricity purchase refund');
@@ -526,11 +526,11 @@ export class BillPaymentController {
             status: 'completed', 
             response: result 
           });
-          return ApiResponse.success(res, 'Exam pin purchase successful', {
+          return ApiResponse.success(res, {
             transaction,
             pins: result.pins || result.pin,
             provider_response: result,
-          });
+          }, 'Exam pin purchase successful');
         } else {
           // Refund user if failed
           await WalletService.credit(userId, amount, 'Exam pin purchase refund');
@@ -562,7 +562,7 @@ export class BillPaymentController {
       const result = await topupmateService.getTransactionStatus(reference);
 
       if (result.status === 'success') {
-        return ApiResponse.success(res, 'Transaction status retrieved', result.response);
+        return ApiResponse.success(res, result.response, 'Transaction status retrieved');
       } else {
         return ApiResponse.error(res, 'Failed to retrieve transaction status', 400);
       }

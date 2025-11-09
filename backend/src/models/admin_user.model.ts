@@ -1,6 +1,6 @@
 // modelsadmin_user.model.ts
-import mongoose, { Schema } from 'mongoose';
-import { IAdminUser } from '../types';
+import { Schema, model } from 'mongoose';
+import { IAdminUser } from '../types/index.js';
 
 const adminUserSchema = new Schema<IAdminUser>({
   email: { type: String, required: true, unique: true },
@@ -14,4 +14,4 @@ const adminUserSchema = new Schema<IAdminUser>({
   updated_at: { type: Date, default: Date.now }
 });
 
-export const AdminUser = mongoose.model<IAdminUser>('AdminUser', adminUserSchema);
+export const AdminUser = model<IAdminUser>('AdminUser', adminUserSchema);

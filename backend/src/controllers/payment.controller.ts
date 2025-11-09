@@ -77,13 +77,17 @@ export class PaymentController {
           
           // Record transaction
           await Transaction.create({
-            userId: wallet.userId,
+            user_id: wallet.user_id,
+            wallet_id: wallet._id,
             amount,
             type: 'credit',
             status: 'completed',
-            reference: paymentReference,
+            reference_number: paymentReference,
+            payment_method: 'monnify',
             description: 'Wallet funding via Monnify',
-            metadata: { gateway: 'monnify' }
+            metadata: { gateway: 'monnify' },
+            fee: 0,
+            total_charged: amount
           });
         }
       }
@@ -102,7 +106,7 @@ export class PaymentController {
   static async getBanks(_req: Request, res: Response) {
     try {
       const banks = await paystackService.listBanks();
-      return ApiResponse.success(res, 'Banks retrieved successfully', banks);
+      return ApiResponse.success(res, banks, 'Banks retrieved successfully');
     } catch (error: any) {
       console.error('Error fetching banks:', error);
       return ApiResponse.error(res, error.message || 'Failed to fetch banks', 500);
@@ -252,22 +256,22 @@ export class PaymentController {
         case 'monnify':
           // For Monnify, we'll just return the transaction status
           // since we don't have a verification endpoint in the service yet
-          return ApiResponse.success(res, 'Payment status retrieved', JSON.stringify({
+          return ApiResponse.success(res, {
             status: transaction.status,
             reference: transaction.reference_number,
             amount: transaction.amount,
             gateway: transaction.gateway
-          }));
+          }, 'Payment status retrieved');
           
         case 'payrant':
           // For Payrant, we'll just return the transaction status
           // since we don't have a direct verification endpoint
-          return ApiResponse.success(res, 'Payment status retrieved', JSON.stringify({
+          return ApiResponse.success(res, {
             status: transaction.status,
             reference: transaction.reference_number,
             amount: transaction.amount,
             gateway: transaction.gateway
-          }));
+          }, 'Payment status retrieved');
           
         default:
           return ApiResponse.error(res, 'Unsupported payment gateway', 400);

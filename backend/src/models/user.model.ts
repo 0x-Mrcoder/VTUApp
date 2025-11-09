@@ -1,5 +1,5 @@
-import mongoose, { Schema } from 'mongoose';
-import { IUser } from '../types';
+import { Schema, model } from 'mongoose';
+import { IUser } from '../types/index.js';
 
 const userSchema = new Schema<IUser>({
   email: { type: String, required: true, unique: true },
@@ -33,4 +33,4 @@ const userSchema = new Schema<IUser>({
   updated_at: { type: Date, default: Date.now }
 });
 
-export const User = mongoose.model<IUser>('User', userSchema);
+export const User = model<IUser>('User', userSchema);

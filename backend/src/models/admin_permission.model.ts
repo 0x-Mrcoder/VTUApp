@@ -1,6 +1,6 @@
 // models/admin_permission.model.ts
-import mongoose, { Schema } from 'mongoose';
-import { IAdminPermission } from '../types';
+import { Schema, model } from 'mongoose';
+import { IAdminPermission } from '../types/index.js';
 
 const adminPermissionSchema = new Schema<IAdminPermission>({
   name: { type: String, required: true, unique: true },
@@ -9,4 +9,4 @@ const adminPermissionSchema = new Schema<IAdminPermission>({
   updated_at: { type: Date, default: Date.now }
 });
 
-export const AdminPermission = mongoose.model<IAdminPermission>('AdminPermission', adminPermissionSchema);
+export const AdminPermission = model<IAdminPermission>('AdminPermission', adminPermissionSchema);
