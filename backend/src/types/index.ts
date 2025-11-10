@@ -149,6 +149,8 @@ export interface IAdminRole extends Document {
   _id: Types.ObjectId;
   name: string;
   description?: string;
+  permissions?: string[];
+  status?: 'active' | 'inactive';
   created_at: Date;
   updated_at: Date;
 }
