@@ -426,9 +426,11 @@ export class PaymentController {
     try {
       const webhookData = req.body;
       const signature = req.headers['x-payrant-signature'] as string;
+      const eventType = req.headers['x-payrant-event'] as string;
 
       // Log incoming webhook for debugging
       console.log('🔔 Payrant webhook received:');
+      console.log('Event Type:', eventType);
       console.log('Headers:', JSON.stringify(req.headers, null, 2));
       console.log('Body:', JSON.stringify(webhookData, null, 2));
 
@@ -452,40 +454,36 @@ export class PaymentController {
         console.warn('⚠️ No signature provided in webhook');
       }
 
-      // Handle different webhook formats from Payrant
-      let transaction, accountReference, amount, reference;
+      // Check if status is success
+      if (webhookData.status !== 'success') {
+        console.log('⚠️ Webhook status is not success:', webhookData.status);
+        return res.status(200).json({ status: true, message: 'Webhook received but status not success' });
+      }
 
-      // Format 1: Direct transaction object
-      if (webhookData.transaction) {
-        transaction = webhookData.transaction;
-        accountReference = transaction.metadata?.account_reference || transaction.accountReference;
-        amount = transaction.net_amount || transaction.amount;
-        reference = transaction.reference;
+      // Extract transaction data (Payrant format)
+      const transaction = webhookData.transaction;
+      
+      if (!transaction) {
+        console.error('❌ No transaction data in webhook');
+        return res.status(400).json({ status: false, message: 'Missing transaction data' });
       }
-      // Format 2: Data nested in 'data' property
-      else if (webhookData.data) {
-        transaction = webhookData.data;
-        accountReference = transaction.metadata?.accountReference || transaction.accountReference;
-        amount = transaction.netAmount || transaction.amount;
-        reference = transaction.reference;
-      }
-      // Format 3: Direct properties
-      else {
-        accountReference = webhookData.accountReference || webhookData.account_reference;
-        amount = webhookData.amount || webhookData.net_amount || webhookData.netAmount;
-        reference = webhookData.reference || webhookData.transactionReference;
-        transaction = webhookData;
-      }
+
+      const accountReference = transaction.metadata?.account_reference;
+      const amount = transaction.net_amount || transaction.amount;
+      const reference = transaction.reference;
+      const payerDetails = transaction.payer_details;
+      const accountDetails = transaction.account_details;
 
       console.log('📝 Extracted data:', {
         accountReference,
         amount,
         reference,
-        status: webhookData.status || webhookData.transaction_status
+        accountNumber: accountDetails?.account_number,
+        payerName: payerDetails?.account_name
       });
 
       if (!accountReference) {
-        console.error('❌ No account reference in webhook');
+        console.error('❌ No account reference in webhook metadata');
         return res.status(400).json({ status: false, message: 'Missing account reference' });
       }
 
@@ -525,7 +523,7 @@ export class PaymentController {
       wallet.balance += amount;
       await wallet.save();
 
-      console.log(`💰 Wallet updated: ${oldBalance} -> ${wallet.balance}`);
+      console.log(`💰 Wallet updated: ₦${oldBalance} -> ₦${wallet.balance}`);
 
       // Create transaction record
       await Transaction.create({
@@ -534,23 +532,29 @@ export class PaymentController {
         type: 'deposit',
         status: 'completed',
         reference_number: reference,
-        description: `Virtual account deposit from ${transaction.payer_details?.account_name || transaction.payerName || 'Unknown'}`,
+        description: `Virtual account deposit from ${payerDetails?.account_name || 'Unknown'}`,
         gateway: 'payrant',
         metadata: {
-          payer_account: transaction.payer_details?.account_number || transaction.payerAccount,
-          payer_name: transaction.payer_details?.account_name || transaction.payerName,
-          payer_bank: transaction.payer_details?.bank_name || transaction.payerBank,
+          payer_account: payerDetails?.account_number,
+          payer_name: payerDetails?.account_name,
+          payer_bank: payerDetails?.bank_name,
           fee: transaction.fee || 0,
-          gross_amount: transaction.amount || amount,
-          webhook_data: webhookData,
+          gross_amount: transaction.amount,
+          net_amount: transaction.net_amount,
+          account_number: accountDetails?.account_number,
+          account_name: accountDetails?.account_name,
+          session_id: transaction.metadata?.session_id,
+          timestamp: transaction.timestamp,
+          webhook_event: eventType,
         },
       });
 
-      console.log(`✅ Wallet credited: User ${user.email}, Amount: ₦${amount}`);
+      console.log(`✅ Wallet credited: User ${user.email}, Amount: ₦${amount}, New Balance: ₦${wallet.balance}`);
 
       return res.status(200).json({ status: true, message: 'Webhook processed successfully' });
     } catch (error: any) {
-      console.error('❌ Payrant webhook error:', error);
+      console.error('❌ Payrant webhook error:', error.message);
+      console.error('Stack:', error.stack);
       return res.status(500).json({ status: false, message: 'Webhook processing failed', error: error.message });
     }
   }
