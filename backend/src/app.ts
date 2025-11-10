@@ -60,6 +60,11 @@ const app = express();
 app.use(cors({
   origin: "*", // or restrict later to your Expo dev IP if you want
 }));
+
+// For webhook routes, we need to capture the raw body for signature verification
+app.use('/api/payment/webhook', express.raw({ type: 'application/json' }));
+
+// Parse JSON for all other routes
 app.use(express.json());
 
 // ============================================

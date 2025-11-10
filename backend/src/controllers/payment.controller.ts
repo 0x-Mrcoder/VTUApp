@@ -424,7 +424,10 @@ export class PaymentController {
    */
   static async handlePayrantWebhook(req: Request, res: Response) {
     try {
-      const webhookData = req.body;
+      // Get the raw body for signature verification
+      const rawBody = req.body instanceof Buffer ? req.body.toString('utf8') : JSON.stringify(req.body);
+      const webhookData = req.body instanceof Buffer ? JSON.parse(rawBody) : req.body;
+      
       const signature = req.headers['x-payrant-signature'] as string;
       const eventType = req.headers['x-payrant-event'] as string;
 
@@ -433,6 +436,7 @@ export class PaymentController {
       console.log('Event Type:', eventType);
       console.log('Headers:', JSON.stringify(req.headers, null, 2));
       console.log('Body:', JSON.stringify(webhookData, null, 2));
+      console.log('Raw Body Length:', rawBody.length);
 
       // Import Payrant service
       const { PayrantService } = await import('../services/payrant.service.js');
@@ -441,17 +445,19 @@ export class PaymentController {
       // Verify webhook signature if provided
       if (signature) {
         const isValid = payrantService.verifyWebhookSignature(
-          JSON.stringify(webhookData),
+          rawBody,  // Use raw body string for verification
           signature
         );
 
         if (!isValid) {
           console.error('❌ Invalid Payrant webhook signature');
+          console.error('   Raw body used:', rawBody.substring(0, 100) + '...');
+          console.error('   Signature received:', signature);
           return res.status(400).json({ status: false, message: 'Invalid signature' });
         }
-        console.log('✅ Webhook signature verified');
+        console.log('✅ Webhook signature verified successfully');
       } else {
-        console.warn('⚠️ No signature provided in webhook');
+        console.warn('⚠️ No signature provided in webhook - processing anyway for testing');
       }
 
       // Check if status is success
