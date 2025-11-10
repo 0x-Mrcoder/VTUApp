@@ -219,4 +219,57 @@ export class AdminController {
       return ApiResponse.error(res, error.message, 500);
     }
   }
+
+  /**
+   * Manually credit user wallet (for testing/admin purposes)
+   */
+  static async creditUserWallet(req: AuthRequest, res: Response) {
+    try {
+      const { userId, amount, description } = req.body;
+
+      if (!userId || !amount) {
+        return ApiResponse.error(res, 'User ID and amount are required', 400);
+      }
+
+      const user = await User.findById(userId);
+      if (!user) {
+        return ApiResponse.error(res, 'User not found', 404);
+      }
+
+      // Import WalletService
+      const { WalletService } = await import('../services/wallet.service.js');
+      
+      // Get wallet before credit
+      const walletBefore = await WalletService.getWalletByUserId(userId);
+      if (!walletBefore) {
+        return ApiResponse.error(res, 'Wallet not found', 404);
+      }
+      const oldBalance = walletBefore.balance;
+      
+      // Credit wallet
+      await WalletService.credit(
+        userId, 
+        parseFloat(amount), 
+        description || 'Admin manual credit'
+      );
+
+      // Get updated wallet
+      const walletAfter = await WalletService.getWalletByUserId(userId);
+
+      // Log action
+      await AdminService.logAction({
+        admin_id: req.user?.id as any,
+        action: 'wallet_credited',
+        entity_type: 'Wallet',
+        entity_id: walletBefore._id,
+        old_value: { balance: oldBalance },
+        new_value: { balance: walletAfter?.balance },
+        ip_address: req.ip
+      });
+
+      return ApiResponse.success(res, { wallet: walletAfter }, 'Wallet credited successfully');
+    } catch (error: any) {
+      return ApiResponse.error(res, error.message, 500);
+    }
+  }
 }

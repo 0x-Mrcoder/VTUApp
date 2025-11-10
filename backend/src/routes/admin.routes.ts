@@ -15,6 +15,9 @@ router.put('/users/:id/status', authMiddleware, AdminController.updateUserStatus
 router.put('/users/:id', authMiddleware, AdminController.updateUser);
 router.delete('/users/:id', authMiddleware, AdminController.deleteUser);
 
+// Wallet management
+router.post('/wallet/credit', authMiddleware, AdminController.creditUserWallet);
+
 // Audit logs
 router.get('/audit-logs', authMiddleware, AdminController.getAuditLogs);
 router.delete('/audit-logs/:id', authMiddleware, AdminController.deleteAuditLog);
