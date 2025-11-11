@@ -1350,3 +1350,7 @@
 {"level":"info","message":"192.168.43.125 - 690c7de84d4df744806907b2 [11/Nov/2025:00:34:41 +0000] \"GET /api/transactions?page=1&limit=5 HTTP/1.1\" 304 - \"-\" \"okhttp/4.12.0\" 20.059 ms","timestamp":"2025-11-11 01:34:41"}
 {"environment":"development","level":"info","message":"🚀 VTU App Backend Starting...","nodeVersion":"v22.18.0","timestamp":"2025-11-11 13:02:53"}
 {"level":"info","message":"MongoDB connected successfully","timestamp":"2025-11-11 13:02:53"}
+{"environment":"development","level":"info","message":"🚀 VTU App Backend Starting...","nodeVersion":"v22.18.0","timestamp":"2025-11-11 14:48:22"}
+{"level":"info","message":"MongoDB connected successfully","timestamp":"2025-11-11 14:48:23"}
+{"body":{"email":"swallern@gmail.com","password":"***"},"headers":{"contentType":"application/json","origin":"http://localhost:5173"},"ip":"127.0.0.1","level":"info","message":"📥 Incoming Request","method":"POST","path":"/api/v1/admin/login","query":{},"timestamp":"2025-11-11 14:57:46","url":"/api/v1/admin/login","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36","userId":"anonymous"}
+{"level":"info","message":"127.0.0.1 - anonymous [11/Nov/2025:13:57:46 +0000] \"POST /api/v1/admin/login HTTP/1.1\" 404 158 \"http://localhost:5173/\" \"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36\" 7.325 ms","timestamp":"2025-11-11 14:57:46"}
