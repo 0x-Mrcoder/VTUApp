@@ -4,6 +4,7 @@ import { useMutation } from '@tanstack/react-query';
 import { login as loginApi } from '../api/adminApi';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
+import { useToast } from '../hooks/ToastContext';
 
 type LoginForm = {
   email: string;
@@ -14,6 +15,7 @@ const Login: React.FC = () => {
   const { register, handleSubmit, formState: { errors } } = useForm<LoginForm>();
   const navigate = useNavigate();
   const auth = useAuth();
+  const toast = useToast();
 
   const mutation = useMutation({
     mutationFn: (data: LoginForm) => loginApi(data),
@@ -24,7 +26,7 @@ const Login: React.FC = () => {
       }
     },
     onError: () => {
-      alert('Login failed. Please check your credentials.');
+      toast.showError('Login failed. Please check your credentials.');
     },
   });
 

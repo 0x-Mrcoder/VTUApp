@@ -81,3 +81,5 @@
 {"duration":"1272ms","ip":"127.0.0.1","level":"warn","message":"📤 Response Warning","method":"POST","statusCode":400,"timestamp":"2025-11-10 23:51:04","url":"/api/billpayment/data","userId":"690c7de84d4df744806907b2"}
 {"duration":"945ms","ip":"127.0.0.1","level":"warn","message":"📤 Response Warning","method":"POST","statusCode":400,"timestamp":"2025-11-10 23:53:19","url":"/api/billpayment/data","userId":"690c7de84d4df744806907b2"}
 {"duration":"2ms","ip":"192.168.43.125","level":"warn","message":"📤 Response Warning","method":"GET","statusCode":401,"timestamp":"2025-11-10 23:57:06","url":"/api/users/profile","userId":"anonymous"}
+{"duration":"314ms","ip":"192.168.43.125","level":"warn","message":"📤 Response Warning","method":"POST","statusCode":401,"timestamp":"2025-11-11 01:06:39","url":"/api/auth/login","userId":"anonymous"}
+{"duration":"2ms","ip":"192.168.43.125","level":"warn","message":"📤 Response Warning","method":"GET","statusCode":401,"timestamp":"2025-11-11 01:08:04","url":"/api/users/profile","userId":"anonymous"}

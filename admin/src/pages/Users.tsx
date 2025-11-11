@@ -4,6 +4,11 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 
 import Sidebar from '../components/Sidebar';
 import Topbar from '../components/Topbar';
+import UserViewModal from '../components/UserViewModal';
+import UserEditModal from '../components/UserEditModal';
+import UserStatusModal from '../components/UserStatusModal';
+import UserDeleteModal from '../components/UserDeleteModal';
+import { getUsers, updateUserStatus, deleteUser, updateUser } from '../api/adminApi';
 
 const Users: React.FC = () => {
   const [page, setPage] = useState(1);
@@ -22,7 +27,7 @@ const Users: React.FC = () => {
   const [statusUser, setStatusUser] = useState<any | null>(null);
   const [deleteUserObj, setDeleteUserObj] = useState<any | null>(null);
   const statusMutation = useMutation({
-    mutationFn: (status: string) => updateUserStatus(statusUser.id, status).then(res => res.data),
+    mutationFn: (status: string) => updateUserStatus(statusUser.id, status).then((res: any) => res.data),
     onSuccess: () => {
       setStatusUser(null);
       queryClient.invalidateQueries({ queryKey: ['users'] });
@@ -30,7 +35,7 @@ const Users: React.FC = () => {
   });
 
   const deleteMutation = useMutation({
-    mutationFn: () => deleteUser(deleteUserObj.id).then(res => res.data),
+    mutationFn: () => deleteUser(deleteUserObj.id).then((res: any) => res.data),
     onSuccess: () => {
       setDeleteUserObj(null);
       queryClient.invalidateQueries({ queryKey: ['users'] });
@@ -39,7 +44,7 @@ const Users: React.FC = () => {
 
   const queryClient = useQueryClient();
   const editMutation = useMutation({
-    mutationFn: (data: any) => updateUser(editUser.id, data).then(res => res.data),
+    mutationFn: (data: any) => updateUser(editUser.id, data).then((res: any) => res.data),
     onSuccess: () => {
       setEditUser(null);
       queryClient.invalidateQueries({ queryKey: ['users'] });
