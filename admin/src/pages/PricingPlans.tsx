@@ -1,6 +1,12 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import React, { useState } from 'react';
-import { bulkImportPricingPlans, createPricingPlan, deletePricingPlan, getPricingPlans, updatePricingPlan } from '../api/adminApi';
+import {
+  bulkImportPricingPlans,
+  createPricingPlan,
+  deletePricingPlan,
+  getPricingPlans,
+  updatePricingPlan,
+} from '../api/adminApi';
 import PricingBulkImportModal from '../components/PricingBulkImportModal';
 import PricingDeleteModal from '../components/PricingDeleteModal';
 import PricingEditModal from '../components/PricingEditModal';
@@ -12,7 +18,7 @@ const PROVIDERS = [
   { id: 1, name: 'MTN' },
   { id: 2, name: 'Glo' },
   { id: 3, name: 'Airtel' },
-  { id: 4, name: '9mobile' }
+  { id: 4, name: '9mobile' },
 ];
 
 const TYPES = ['AIRTIME', 'DATA'];
@@ -35,7 +41,7 @@ const PricingPlans: React.FC = () => {
     page,
     limit,
     ...(providerId && { providerId: parseInt(providerId) }),
-    ...(type && { type })
+    ...(type && { type }),
   };
 
   const { data, status } = useQuery({
@@ -47,7 +53,8 @@ const PricingPlans: React.FC = () => {
   const total = data?.total || 0;
 
   const editMutation = useMutation({
-    mutationFn: (formData: any) => updatePricingPlan(editPlan.id || editPlan._id, formData).then((res: any) => res.data),
+    mutationFn: (formData: any) =>
+      updatePricingPlan(editPlan.id || editPlan._id, formData).then((res: any) => res.data),
     onSuccess: () => {
       setEditPlan(null);
       queryClient.invalidateQueries({ queryKey: ['pricing-plans'] });
@@ -55,7 +62,8 @@ const PricingPlans: React.FC = () => {
   });
 
   const deleteMutation = useMutation({
-    mutationFn: () => deletePricingPlan(deletePlan.id || deletePlan._id).then((res: any) => res.data),
+    mutationFn: () =>
+      deletePricingPlan(deletePlan.id || deletePlan._id).then((res: any) => res.data),
     onSuccess: () => {
       setDeletePlan(null);
       queryClient.invalidateQueries({ queryKey: ['pricing-plans'] });
@@ -71,7 +79,8 @@ const PricingPlans: React.FC = () => {
   });
 
   const bulkImportMutation = useMutation({
-    mutationFn: (plansData: any[]) => bulkImportPricingPlans(plansData).then((res: any) => res.data),
+    mutationFn: (plansData: any[]) =>
+      bulkImportPricingPlans(plansData).then((res: any) => res.data),
     onSuccess: () => {
       setShowBulkImport(false);
       queryClient.invalidateQueries({ queryKey: ['pricing-plans'] });
@@ -79,83 +88,109 @@ const PricingPlans: React.FC = () => {
   });
 
   return (
-    <div className="flex h-screen bg-gray-100">
+    <div className="flex h-screen bg-slate-50">
       <Sidebar />
       <div className="flex-1 flex flex-col overflow-hidden">
         <Topbar />
-        <main className="flex-1 overflow-auto p-6">
+        <main className="flex-1 overflow-auto p-8">
           <div className="max-w-7xl mx-auto">
             {/* Header */}
-            <div className="flex justify-between items-center mb-6">
-              <h1 className="text-3xl font-bold text-gray-900">Pricing Plans</h1>
-              <div className="flex gap-2">
+            <div className="mb-8">
+              <div className="flex justify-between items-center mb-6">
+                <div>
+                  <h1 className="text-4xl font-bold text-slate-900 mb-2">Pricing Plans</h1>
+                  <p className="text-slate-600">Manage pricing for all providers and service types</p>
+                </div>
+                <div className="text-right">
+                  <p className="text-3xl font-bold text-purple-600">{total}</p>
+                  <p className="text-sm text-slate-600">Total Plans</p>
+                </div>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex gap-3 mb-6">
                 <button
                   onClick={() => setShowCreateModal(true)}
-                  className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition"
+                  className="flex items-center gap-2 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-6 py-2.5 rounded-lg transition-all shadow-md hover:shadow-lg font-medium"
                 >
-                  + Add Plan
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                  </svg>
+                  Add Plan
                 </button>
                 <button
                   onClick={() => setShowBulkImport(true)}
-                  className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg transition"
+                  className="flex items-center gap-2 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white px-6 py-2.5 rounded-lg transition-all shadow-md hover:shadow-lg font-medium"
                 >
-                  📤 Bulk Import
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10"
+                    />
+                  </svg>
+                  Bulk Import
                 </button>
               </div>
-            </div>
 
-            {/* Filters */}
-            <div className="bg-white rounded-lg shadow-md p-4 mb-6">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Provider</label>
-                  <select
-                    value={providerId}
-                    onChange={(e) => {
-                      setProviderId(e.target.value);
-                      setPage(1);
-                    }}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  >
-                    <option value="">All Providers</option>
-                    {PROVIDERS.map((p) => (
-                      <option key={p.id} value={p.id.toString()}>{p.name}</option>
-                    ))}
-                  </select>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Type</label>
-                  <select
-                    value={type}
-                    onChange={(e) => {
-                      setType(e.target.value);
-                      setPage(1);
-                    }}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  >
-                    <option value="">All Types</option>
-                    {TYPES.map((t) => (
-                      <option key={t} value={t}>{t}</option>
-                    ))}
-                  </select>
-                </div>
-                <div className="flex items-end">
-                  <button
-                    onClick={() => {
-                      setProviderId('');
-                      setType('');
-                      setPage(1);
-                    }}
-                    className="w-full bg-gray-300 hover:bg-gray-400 text-gray-800 px-4 py-2 rounded-lg transition"
-                  >
-                    Clear Filters
-                  </button>
+              {/* Filters */}
+              <div className="bg-white rounded-xl border border-slate-200 p-4 shadow-sm">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div>
+                    <label className="block text-sm font-semibold text-slate-700 mb-2">Provider</label>
+                    <select
+                      value={providerId}
+                      onChange={(e) => {
+                        setProviderId(e.target.value);
+                        setPage(1);
+                      }}
+                      className="w-full px-4 py-2.5 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-slate-900 font-medium"
+                    >
+                      <option value="">All Providers</option>
+                      {PROVIDERS.map((p) => (
+                        <option key={p.id} value={p.id.toString()}>
+                          {p.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-semibold text-slate-700 mb-2">Type</label>
+                    <select
+                      value={type}
+                      onChange={(e) => {
+                        setType(e.target.value);
+                        setPage(1);
+                      }}
+                      className="w-full px-4 py-2.5 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-slate-900 font-medium"
+                    >
+                      <option value="">All Types</option>
+                      {TYPES.map((t) => (
+                        <option key={t} value={t}>
+                          {t}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  <div className="flex items-end">
+                    <button
+                      onClick={() => {
+                        setProviderId('');
+                        setType('');
+                        setPage(1);
+                      }}
+                      className="w-full bg-slate-200 hover:bg-slate-300 text-slate-800 px-4 py-2.5 rounded-lg transition font-medium"
+                    >
+                      Clear Filters
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
 
             {/* Plans Table */}
-            <div className="bg-white rounded-lg shadow-md overflow-hidden">
+            <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
               {status === 'pending' && (
                 <div className="p-6 text-center text-gray-500">Loading plans...</div>
               )}
@@ -180,7 +215,9 @@ const PricingPlans: React.FC = () => {
                       <tbody className="divide-y divide-gray-200">
                         {plans.length === 0 && (
                           <tr>
-                            <td colSpan={7} className="px-6 py-4 text-center text-gray-500">No plans found.</td>
+                            <td colSpan={7} className="px-6 py-4 text-center text-gray-500">
+                              No plans found.
+                            </td>
                           </tr>
                         )}
                         {plans.map((plan: any) => (
@@ -188,22 +225,28 @@ const PricingPlans: React.FC = () => {
                             <td className="px-6 py-4 text-sm text-gray-900">{plan.name}</td>
                             <td className="px-6 py-4 text-sm text-gray-900">{plan.providerName}</td>
                             <td className="px-6 py-4 text-sm">
-                              <span className={`px-2 py-1 rounded text-xs font-semibold ${
-                                plan.type === 'AIRTIME' 
-                                  ? 'bg-blue-100 text-blue-800' 
-                                  : 'bg-purple-100 text-purple-800'
-                              }`}>
+                              <span
+                                className={`px-2 py-1 rounded text-xs font-semibold ${
+                                  plan.type === 'AIRTIME'
+                                    ? 'bg-blue-100 text-blue-800'
+                                    : 'bg-purple-100 text-purple-800'
+                                }`}
+                              >
                                 {plan.type}
                               </span>
                             </td>
-                            <td className="px-6 py-4 text-sm text-gray-900">₦{plan.price?.toLocaleString()}</td>
+                            <td className="px-6 py-4 text-sm text-gray-900">
+                              ₦{plan.price?.toLocaleString()}
+                            </td>
                             <td className="px-6 py-4 text-sm text-gray-900">{plan.discount || 0}%</td>
                             <td className="px-6 py-4 text-sm">
-                              <span className={`px-2 py-1 rounded text-xs font-semibold ${
-                                plan.active 
-                                  ? 'bg-green-100 text-green-800' 
-                                  : 'bg-red-100 text-red-800'
-                              }`}>
+                              <span
+                                className={`px-2 py-1 rounded text-xs font-semibold ${
+                                  plan.active
+                                    ? 'bg-green-100 text-green-800'
+                                    : 'bg-red-100 text-red-800'
+                                }`}
+                              >
                                 {plan.active ? 'Active' : 'Inactive'}
                               </span>
                             </td>
@@ -233,22 +276,22 @@ const PricingPlans: React.FC = () => {
                     </table>
                   </div>
 
-                  {/* Pagination Info */}
+                  {/* Pagination */}
                   <div className="bg-gray-50 border-t border-gray-200 px-6 py-4 flex justify-between items-center text-sm text-gray-600">
                     <span>Showing {plans.length} of {total} plans</span>
                     <div className="flex gap-2">
                       <button
-                        onClick={() => setPage(p => Math.max(1, p - 1))}
+                        onClick={() => setPage((p) => Math.max(1, p - 1))}
                         disabled={page === 1}
-                        className="px-3 py-1 bg-white border border-gray-300 rounded hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="px-3 py-1 bg-white border border-gray-300 rounded hover:bg-gray-50 disabled:opacity-50"
                       >
                         Previous
                       </button>
                       <span className="px-3 py-1">Page {page}</span>
                       <button
-                        onClick={() => setPage(p => p + 1)}
+                        onClick={() => setPage((p) => p + 1)}
                         disabled={plans.length < limit}
-                        className="px-3 py-1 bg-white border border-gray-300 rounded hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="px-3 py-1 bg-white border border-gray-300 rounded hover:bg-gray-50 disabled:opacity-50"
                       >
                         Next
                       </button>
@@ -260,9 +303,7 @@ const PricingPlans: React.FC = () => {
           </div>
 
           {/* Modals */}
-          {viewPlan && (
-            <PricingViewModal plan={viewPlan} onClose={() => setViewPlan(null)} />
-          )}
+          {viewPlan && <PricingViewModal plan={viewPlan} onClose={() => setViewPlan(null)} />}
           {editPlan && (
             <PricingEditModal
               plan={editPlan}
@@ -285,7 +326,7 @@ const PricingPlans: React.FC = () => {
               onClose={() => setShowCreateModal(false)}
               onSave={createMutation.mutate}
               isSaving={createMutation.status === 'pending'}
-              isCreate={true}
+              isCreate
             />
           )}
           {showBulkImport && (
