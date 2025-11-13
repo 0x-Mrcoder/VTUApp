@@ -2,6 +2,7 @@ import { useAlert } from '@/components/AlertContext';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
+import { userService } from '@/services/user.service';
 import {
     Alert,
     ScrollView,
@@ -51,6 +52,11 @@ export default function SecurityScreen() {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [isChangingPassword, setIsChangingPassword] = useState(false);
 
+  // Transaction PIN change state
+  const [currentPin, setCurrentPin] = useState('');
+  const [newPin, setNewPin] = useState('');
+  const [isUpdatingPin, setIsUpdatingPin] = useState(false);
+
   const handleChangePassword = async () => {
     if (!currentPassword || !newPassword || !confirmPassword) {
       showError('Please fill in all password fields');
@@ -70,17 +76,48 @@ export default function SecurityScreen() {
     setIsChangingPassword(true);
 
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
-      showSuccess('Password changed successfully!');
+      const res = await userService.updatePassword(currentPassword, newPassword);
+      if (res?.success) {
+        showSuccess('Password changed successfully!');
+      } else {
+        showError(res?.message || 'Failed to change password');
+        return;
+      }
       setCurrentPassword('');
       setNewPassword('');
       setConfirmPassword('');
     } catch (error) {
-      showError('Failed to change password. Please try again.');
+      const message = (error as any)?.message || 'Failed to change password. Please try again.';
+      showError(message);
     } finally {
       setIsChangingPassword(false);
+    }
+  };
+
+  const handleUpdatePin = async () => {
+    if (!/^\d{4}$/.test(currentPin) || !/^\d{4}$/.test(newPin)) {
+      showError('PIN must be exactly 4 digits');
+      return;
+    }
+    if (currentPin === newPin) {
+      showError('New PIN must be different from current PIN');
+      return;
+    }
+
+    setIsUpdatingPin(true);
+    try {
+      const res = await userService.updateTransactionPin(currentPin, newPin);
+      if (res?.success) {
+        showSuccess('Transaction PIN updated successfully');
+        setCurrentPin('');
+        setNewPin('');
+      } else {
+        showError(res?.message || 'Failed to update transaction PIN');
+      }
+    } catch (e: any) {
+      showError(e?.message || 'Failed to update transaction PIN');
+    } finally {
+      setIsUpdatingPin(false);
     }
   };
 
@@ -201,18 +238,6 @@ export default function SecurityScreen() {
             disabled={isChangingPassword}
           >
             <Text style={styles.changePasswordButtonText}>
-              {isChangingPassword ? 'Changing Password...' : 'Change Password'}
-            </Text>
-          </TouchableOpacity>
-        </View>
-
-        {/* Security Settings */}
-        <View style={[styles.section, { backgroundColor: cardBgColor }]}>
-          <Text style={[styles.sectionTitle, { color: textColor }]}>Security Settings</Text>
-          
-          <View style={styles.settingItem}>
-            <View style={styles.settingInfo}>
-              <Ionicons name="shield-checkmark" size={24} color={theme.primary} />
               <View style={styles.settingTextContainer}>
                 <Text style={[styles.settingTitle, { color: textColor }]}>Two-Factor Authentication</Text>
                 <Text style={[styles.settingDescription, { color: textBodyColor }]}>

@@ -82,7 +82,7 @@ export const AuthProvider = ({ children }) => {
       let errorMessage = error.message || 'Login failed. Please try again.';
       
       // Handle network errors specifically
-      if (error.message.includes('Network Error') || error.message.includes('timeout')) {
+      if (error?.message && (error.message.includes('Network Error') || error.message.includes('timeout'))) {
         errorMessage = 'Unable to connect to the server. Please check your internet connection.';
       }
       
@@ -90,6 +90,8 @@ export const AuthProvider = ({ children }) => {
         success: false, 
         message: errorMessage
       };
+    } finally {
+      setIsLoading(false);
     }
   };
 

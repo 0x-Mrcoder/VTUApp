@@ -1,5 +1,6 @@
 import { MaterialIcons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
+import { useTheme } from "../components/ThemeContext";
 import { useCallback, useEffect, useState } from "react";
 import {
   ActivityIndicator,
@@ -18,6 +19,7 @@ import { useAuth } from "../context/AuthContext";
 
 const LoginScreen = () => {
   const { login, isAuthenticated } = useAuth();
+  const { isDark } = useTheme();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -98,8 +100,23 @@ const LoginScreen = () => {
     }
   };
 
+  const theme = {
+    primary: "#0A2540",
+    accent: "#FF9F43",
+    backgroundLight: "#F8F9FA",
+    backgroundDark: "#111921",
+    textHeadings: "#1E293B",
+    textBody: "#475569",
+  };
+
+  const bgColor = isDark ? theme.backgroundDark : theme.backgroundLight;
+  const textColor = isDark ? "#FFFFFF" : theme.textHeadings;
+  const textBodyColor = isDark ? "#9CA3AF" : theme.textBody;
+  const cardBg = isDark ? "#1F2937" : "#FFFFFF";
+  const borderColor = isDark ? "#374151" : "#334155";
+
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: bgColor }]}>
       <CustomAlert
         visible={alert.visible}
         message={alert.message}
@@ -120,18 +137,18 @@ const LoginScreen = () => {
               source={require("../assets/images/ibdatalogo.png")}
               style={styles.logo}
             />
-            <Text style={styles.title}>Welcome Back</Text>
-            <Text style={styles.subtitle}>Sign in to access your account</Text>
+            <Text style={[styles.title, { color: textColor }]}>Welcome Back</Text>
+            <Text style={[styles.subtitle, { color: textBodyColor }]}>Sign in to access your account</Text>
           </View>
 
           <View style={styles.formContainer}>
             <View style={styles.inputContainer}>
-              <Text style={styles.inputLabel}>Email</Text>
-              <View style={styles.inputWrapper}>
+              <Text style={[styles.inputLabel, { color: textColor }]}>Email</Text>
+              <View style={[styles.inputWrapper, { backgroundColor: cardBg, borderColor }] }>
                 <TextInput
-                  style={styles.input}
+                  style={[styles.input, { color: textColor }]}
                   placeholder="Enter your email address"
-                  placeholderTextColor="#9CA3AF"
+                  placeholderTextColor={textBodyColor}
                   value={email}
                   onChangeText={setEmail}
                   keyboardType="email-address"
@@ -143,12 +160,12 @@ const LoginScreen = () => {
             </View>
 
             <View style={styles.inputContainer}>
-              <Text style={styles.inputLabel}>Password</Text>
-              <View style={styles.inputWrapper}>
+              <Text style={[styles.inputLabel, { color: textColor }]}>Password</Text>
+              <View style={[styles.inputWrapper, { backgroundColor: cardBg, borderColor }] }>
                 <TextInput
-                  style={styles.input}
+                  style={[styles.input, { color: textColor }]}
                   placeholder="Enter your password"
-                  placeholderTextColor="#9CA3AF"
+                  placeholderTextColor={textBodyColor}
                   value={password}
                   onChangeText={setPassword}
                   secureTextEntry={!showPassword}
@@ -161,7 +178,7 @@ const LoginScreen = () => {
                   <MaterialIcons
                     name={showPassword ? "visibility-off" : "visibility"}
                     size={20}
-                    color="#9CA3AF"
+                    color={textBodyColor}
                   />
                 </TouchableOpacity>
               </View>
@@ -189,15 +206,15 @@ const LoginScreen = () => {
                 <TouchableOpacity
                   onPress={() => router.push("/forgot-password")}
                 >
-                  <Text style={styles.forgotPassword}>Forgot Password?</Text>
+                  <Text style={[styles.forgotPassword, { color: isDark ? theme.accent : theme.primary }]}>Forgot Password?</Text>
                 </TouchableOpacity>
               </View>
             </View>
 
             <View style={styles.signupContainer}>
-              <Text style={styles.signupText}>Don't have an account? </Text>
+              <Text style={[styles.signupText, { color: textBodyColor }]}>Don't have an account? </Text>
               <TouchableOpacity onPress={() => router.push("/signup")}>
-                <Text style={styles.signupLink}>Sign Up</Text>
+                <Text style={[styles.signupLink, { color: isDark ? theme.accent : theme.primary }]}>Sign Up</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -205,7 +222,8 @@ const LoginScreen = () => {
       </KeyboardAvoidingView>
     </View>
   );
-};
+}
+;
 
 export default LoginScreen;
 

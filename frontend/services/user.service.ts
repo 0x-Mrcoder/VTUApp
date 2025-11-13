@@ -25,6 +25,30 @@ export const userService = {
   },
 
   /**
+   * Set user's 4-digit transaction PIN
+   */
+  setTransactionPin: async (pin: string): Promise<any> => {
+    try {
+      const response = await api.post('/users/transaction-pin', { pin });
+      return response.data;
+    } catch (error: any) {
+      throw error.response?.data || { success: false, message: 'Failed to set transaction PIN' };
+    }
+  },
+
+  /**
+   * Update user's 4-digit transaction PIN
+   */
+  updateTransactionPin: async (current_pin: string, new_pin: string): Promise<any> => {
+    try {
+      const response = await api.put('/users/transaction-pin', { current_pin, new_pin });
+      return response.data;
+    } catch (error: any) {
+      throw error.response?.data || { success: false, message: 'Failed to update transaction PIN' };
+    }
+  },
+
+  /**
    * Update user profile
    */
   updateProfile: async (data: UserUpdateData): Promise<any> => {

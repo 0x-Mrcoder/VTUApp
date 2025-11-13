@@ -15,6 +15,7 @@ import {
   View,
 } from "react-native";
 import { authService } from "../services/auth.service";
+import { useTheme } from "../components/ThemeContext";
 
 const SignupScreen = () => {
   const [email, setEmail] = useState("");
@@ -27,6 +28,22 @@ const SignupScreen = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
+  const { isDark } = useTheme();
+
+  const theme = {
+    primary: "#0A2540",
+    accent: "#FF9F43",
+    backgroundLight: "#F8F9FA",
+    backgroundDark: "#111921",
+    textHeadings: "#1E293B",
+    textBody: "#475569",
+  };
+
+  const bgColor = isDark ? theme.backgroundDark : theme.backgroundLight;
+  const textColor = isDark ? "#FFFFFF" : theme.textHeadings;
+  const textBodyColor = isDark ? "#9CA3AF" : theme.textBody;
+  const cardBg = isDark ? "#1F2937" : "#FFFFFF";
+  const borderColor = isDark ? "#374151" : "#334155";
 
   const handleSignup = async () => {
     // Validation
@@ -77,16 +94,16 @@ const SignupScreen = () => {
 
       if (response.success) {
         Alert.alert(
-          "🎉 Welcome to Connecta!",
-          `Hi ${first_name}! Your account has been created successfully. You can now access all features.`,
+          "🎉 Account Created",
+          `Hi ${first_name}! Please set your 4-digit transaction PIN to continue.`,
           [
             {
-              text: "Go to Dashboard",
-              onPress: () => router.replace("/(tabs)"),
+              text: "Set PIN Now",
+              onPress: () => router.replace("/set-pin"),
             },
             {
-              text: "Go to Login",
-              onPress: () => router.replace("/login"),
+              text: "Later",
+              onPress: () => router.replace("/(tabs)"),
               style: "cancel",
             },
           ]
@@ -104,7 +121,7 @@ const SignupScreen = () => {
 
   return (
     <KeyboardAvoidingView
-      style={styles.container}
+      style={[styles.container, { backgroundColor: bgColor }]}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
       <ScrollView
@@ -116,20 +133,20 @@ const SignupScreen = () => {
             source={require("../assets/images/ibdatalogo.png")}
             style={styles.logo}
           />
-          <Text style={styles.title}>Create an Account</Text>
-          <Text style={styles.subtitle}>
+          <Text style={[styles.title, { color: textColor }]}>Create an Account</Text>
+          <Text style={[styles.subtitle, { color: textBodyColor }] }>
             Fill in your details to get started
           </Text>
         </View>
 
         <View style={styles.formContainer}>
           <View style={styles.inputContainer}>
-            <Text style={styles.inputLabel}>First Name</Text>
-            <View style={styles.inputWrapper}>
+            <Text style={[styles.inputLabel, { color: textColor }]}>First Name</Text>
+            <View style={[styles.inputWrapper, { backgroundColor: cardBg, borderColor }] }>
               <TextInput
-                style={styles.input}
+                style={[styles.input, { color: textColor }]}
                 placeholder="Enter your first name"
-                placeholderTextColor="#9CA3AF"
+                placeholderTextColor={textBodyColor}
                 value={first_name}
                 onChangeText={setFirstName}
                 autoCapitalize="words"
@@ -139,12 +156,12 @@ const SignupScreen = () => {
           </View>
 
           <View style={styles.inputContainer}>
-            <Text style={styles.inputLabel}>Last Name</Text>
-            <View style={styles.inputWrapper}>
+            <Text style={[styles.inputLabel, { color: textColor }]}>Last Name</Text>
+            <View style={[styles.inputWrapper, { backgroundColor: cardBg, borderColor }] }>
               <TextInput
-                style={styles.input}
+                style={[styles.input, { color: textColor }]}
                 placeholder="Enter your last name"
-                placeholderTextColor="#9CA3AF"
+                placeholderTextColor={textBodyColor}
                 value={last_name}
                 onChangeText={setLastName}
                 autoCapitalize="words"
@@ -154,12 +171,12 @@ const SignupScreen = () => {
           </View>
 
           <View style={styles.inputContainer}>
-            <Text style={styles.inputLabel}>Email Address</Text>
-            <View style={styles.inputWrapper}>
+            <Text style={[styles.inputLabel, { color: textColor }]}>Email Address</Text>
+            <View style={[styles.inputWrapper, { backgroundColor: cardBg, borderColor }] }>
               <TextInput
-                style={styles.input}
+                style={[styles.input, { color: textColor }]}
                 placeholder="Enter your email address"
-                placeholderTextColor="#9CA3AF"
+                placeholderTextColor={textBodyColor}
                 value={email}
                 onChangeText={setEmail}
                 keyboardType="email-address"
@@ -171,13 +188,13 @@ const SignupScreen = () => {
           </View>
 
           <View style={styles.inputContainer}>
-            <Text style={styles.inputLabel}>Phone Number</Text>
-            <View style={styles.inputWrapper}>
-              <Text style={styles.countryCode}>+234</Text>
+            <Text style={[styles.inputLabel, { color: textColor }]}>Phone Number</Text>
+            <View style={[styles.inputWrapper, { backgroundColor: cardBg, borderColor }] }>
+              <Text style={[styles.countryCode, { color: textColor }]}>+234</Text>
               <TextInput
-                style={[styles.input, { marginLeft: 8 }]}
+                style={[styles.input, { marginLeft: 8, color: textColor }]}
                 placeholder="Enter your phone number"
-                placeholderTextColor="#9CA3AF"
+                placeholderTextColor={textBodyColor}
                 value={phone_number}
                 onChangeText={setPhoneNumber}
                 keyboardType="phone-pad"
@@ -188,12 +205,12 @@ const SignupScreen = () => {
           </View>
 
           <View style={styles.inputContainer}>
-            <Text style={styles.inputLabel}>Password</Text>
-            <View style={styles.inputWrapper}>
+            <Text style={[styles.inputLabel, { color: textColor }]}>Password</Text>
+            <View style={[styles.inputWrapper, { backgroundColor: cardBg, borderColor }] }>
               <TextInput
-                style={styles.input}
+                style={[styles.input, { color: textColor }]}
                 placeholder="Create a password"
-                placeholderTextColor="#9CA3AF"
+                placeholderTextColor={textBodyColor}
                 value={password}
                 onChangeText={setPassword}
                 secureTextEntry={!showPassword}
@@ -206,19 +223,19 @@ const SignupScreen = () => {
                 <MaterialIcons
                   name={showPassword ? "visibility-off" : "visibility"}
                   size={20}
-                  color="#9CA3AF"
+                  color={textBodyColor}
                 />
               </TouchableOpacity>
             </View>
           </View>
 
           <View style={styles.inputContainer}>
-            <Text style={styles.inputLabel}>Confirm Password</Text>
-            <View style={styles.inputWrapper}>
+            <Text style={[styles.inputLabel, { color: textColor }]}>Confirm Password</Text>
+            <View style={[styles.inputWrapper, { backgroundColor: cardBg, borderColor }] }>
               <TextInput
-                style={styles.input}
+                style={[styles.input, { color: textColor }]}
                 placeholder="Confirm your password"
-                placeholderTextColor="#9CA3AF"
+                placeholderTextColor={textBodyColor}
                 value={confirmPassword}
                 onChangeText={setConfirmPassword}
                 secureTextEntry={!showPassword}
@@ -283,13 +300,13 @@ const SignupScreen = () => {
           </View>
 
           <View style={styles.loginContainer}>
-            <Text style={styles.loginText}>Already have an account? </Text>
+            <Text style={[styles.loginText, { color: textBodyColor }]}>Already have an account? </Text>
             <TouchableOpacity onPress={() => router.push("/login")}>
-              <Text style={styles.loginLink}>Log In</Text>
+              <Text style={[styles.loginLink, { color: isDark ? theme.accent : theme.primary }]}>Log In</Text>
             </TouchableOpacity>
           </View>
 
-          <Text style={styles.termsText}>
+          <Text style={[styles.termsText, { color: textBodyColor }]}>
             By signing up, you agree to our{" "}
             <Text style={styles.linkText}>Terms of Service</Text> and{" "}
             <Text style={styles.linkText}>Privacy Policy</Text>.

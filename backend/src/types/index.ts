@@ -39,6 +39,7 @@ export interface IUser extends Document {
   updated_at: Date;
   nin?: string;
   bvn?: string;
+  transaction_pin?: string;
 }
 
 export interface IWallet extends Document {

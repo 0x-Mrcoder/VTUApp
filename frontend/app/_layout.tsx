@@ -49,6 +49,7 @@ function AuthLayout() {
       <Stack.Screen name="(tabs)" />
       <Stack.Screen name="login" />
       <Stack.Screen name="signup" />
+      <Stack.Screen name="set-pin" />
       <Stack.Screen name="notifications" />
       <Stack.Screen name="more" />
       <Stack.Screen name="buy-airtime" />

@@ -1,19 +1,19 @@
-import React, { useState } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  ScrollView,
-  TouchableOpacity,
-  TextInput,
-  useColorScheme,
-  Modal,
-  ActivityIndicator,
-} from 'react-native';
-import { useRouter } from 'expo-router';
-import { Ionicons } from '@expo/vector-icons';
-import { billPaymentService } from '@/services/billpayment.service';
 import { useAlert } from '@/components/AlertContext';
+import { billPaymentService } from '@/services/billpayment.service';
+import { Ionicons } from '@expo/vector-icons';
+import { useLocalSearchParams, useRouter } from 'expo-router';
+import React, { useEffect, useState } from 'react';
+import {
+  ActivityIndicator,
+  Modal,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  useColorScheme,
+  View,
+} from 'react-native';
 
 const theme = {
   primary: '#0A2540',
@@ -24,6 +24,7 @@ const theme = {
 
 export default function BuyAirtimeScreen() {
   const router = useRouter();
+  const params = useLocalSearchParams<{ phone?: string; amount?: string }>();
   const colorScheme = useColorScheme();
   const isDark = colorScheme === 'dark';
 
@@ -40,6 +41,7 @@ export default function BuyAirtimeScreen() {
   const [selectedNetwork, setSelectedNetwork] = useState<string | null>(null);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [pin, setPin] = useState('');
 
   const networks = [
     { id: 'mtn', name: 'MTN', color: '#FFCC00', icon: 'phone-portrait' },
@@ -50,9 +52,21 @@ export default function BuyAirtimeScreen() {
 
   const quickAmounts = [100, 200, 500, 1000, 2000, 5000];
 
+  useEffect(() => {
+    if (params?.phone && typeof params.phone === 'string') {
+      setPhoneNumber(params.phone);
+    }
+    if (params?.amount && typeof params.amount === 'string') {
+      const amt = Number(params.amount);
+      if (!Number.isNaN(amt) && amt > 0) {
+        setSelectedAmount(amt);
+      }
+    }
+  }, [params]);
+
   const handleBuyAirtime = async () => {
     // Validation
-    if (!phoneNumber || !selectedNetwork || (!selectedAmount && !customAmount)) {
+    if (!phoneNumber || !selectedNetwork || (!selectedAmount && !customAmount) || !pin) {
       showError('Please fill all required fields');
       return;
     }
@@ -75,6 +89,12 @@ export default function BuyAirtimeScreen() {
       return;
     }
 
+    // Validate 4-digit numeric PIN
+    if (!/^\d{4}$/.test(pin)) {
+      showError('Please enter your 4-digit transaction PIN');
+      return;
+    }
+
     setIsLoading(true);
 
     try {
@@ -84,6 +104,7 @@ export default function BuyAirtimeScreen() {
         amount: amount,
         airtime_type: 'VTU',
         ported_number: true,
+        pin,
       });
 
       if (response.success) {
@@ -93,6 +114,7 @@ export default function BuyAirtimeScreen() {
         setSelectedAmount(null);
         setCustomAmount('');
         setSelectedNetwork(null);
+        setPin('');
         // Navigate back after short delay
         setTimeout(() => {
           router.back();
@@ -230,7 +252,7 @@ export default function BuyAirtimeScreen() {
         {/* Custom Amount Input */}
         <View style={styles.section}>
           <Text style={[styles.sectionTitle, { color: textColor }]}>Or Enter Custom Amount</Text>
-          <View style={[styles.inputContainer, { backgroundColor: cardBgColor, borderColor }]}>
+          <View style={[styles.inputContainer, { backgroundColor: cardBgColor, borderColor }]}> 
             <Text style={[styles.currencySymbol, { color: textBodyColor }]}>₦</Text>
             <TextInput
               style={[styles.input, { color: textColor }]}
@@ -244,9 +266,27 @@ export default function BuyAirtimeScreen() {
               keyboardType="numeric"
             />
           </View>
-          <Text style={[styles.helperText, { color: textBodyColor }]}>
+          <Text style={[styles.helperText, { color: textBodyColor }]}> 
             Minimum: ₦50 • Maximum: ₦50,000
           </Text>
+        </View>
+
+        {/* Transaction PIN */}
+        <View style={styles.section}>
+          <Text style={[styles.sectionTitle, { color: textColor }]}>Transaction PIN</Text>
+          <View style={[styles.inputContainer, { backgroundColor: cardBgColor, borderColor }]}> 
+            <Ionicons name="lock-closed-outline" size={20} color={textBodyColor} style={styles.inputIcon} />
+            <TextInput
+              style={[styles.input, { color: textColor }]}
+              placeholder="Enter 4-digit PIN"
+              placeholderTextColor={textBodyColor}
+              value={pin}
+              onChangeText={(t) => setPin(t.replace(/\D/g, '').slice(0, 4))}
+              keyboardType="number-pad"
+              secureTextEntry
+              maxLength={4}
+            />
+          </View>
         </View>
 
         {/* Transaction Summary */}
@@ -256,7 +296,7 @@ export default function BuyAirtimeScreen() {
             
             <View style={styles.summaryRow}>
               <Text style={[styles.summaryLabel, { color: textBodyColor }]}>Network:</Text>
-              <Text style={[styles.summaryValue, { color: textColor }]}>
+              <Text style={[styles.summaryValue, { color: textColor }]}> 
                 {networks.find(n => n.id === selectedNetwork)?.name}
               </Text>
             </View>
@@ -268,7 +308,7 @@ export default function BuyAirtimeScreen() {
 
             <View style={styles.summaryRow}>
               <Text style={[styles.summaryLabel, { color: textBodyColor }]}>Amount:</Text>
-              <Text style={[styles.summaryValue, { color: textColor }]}>
+              <Text style={[styles.summaryValue, { color: textColor }]}> 
                 ₦{selectedAmount || customAmount}
               </Text>
             </View>
@@ -276,10 +316,10 @@ export default function BuyAirtimeScreen() {
             <View style={[styles.divider, { backgroundColor: borderColor }]} />
 
             <View style={styles.summaryRow}>
-              <Text style={[styles.summaryLabel, { color: textColor, fontWeight: '600' }]}>
+              <Text style={[styles.summaryLabel, { color: textColor, fontWeight: '600' }]}> 
                 Total:
               </Text>
-              <Text style={[styles.totalAmount, { color: theme.accent }]}>
+              <Text style={[styles.totalAmount, { color: theme.accent }]}> 
                 ₦{selectedAmount || customAmount}
               </Text>
             </View>
@@ -291,13 +331,13 @@ export default function BuyAirtimeScreen() {
           style={[
             styles.buyButton,
             {
-              backgroundColor: (!phoneNumber || !selectedNetwork || (!selectedAmount && !customAmount) || isLoading)
+              backgroundColor: (!phoneNumber || !selectedNetwork || (!selectedAmount && !customAmount) || !/^\d{4}$/.test(pin) || isLoading)
                 ? (isDark ? '#374151' : '#D1D5DB')
                 : theme.accent,
             },
           ]}
           onPress={handleBuyAirtime}
-          disabled={!phoneNumber || !selectedNetwork || (!selectedAmount && !customAmount) || isLoading}
+          disabled={!phoneNumber || !selectedNetwork || (!selectedAmount && !customAmount) || !/^\d{4}$/.test(pin) || isLoading}
           activeOpacity={0.8}
         >
           {isLoading ? (
@@ -310,7 +350,7 @@ export default function BuyAirtimeScreen() {
         </TouchableOpacity>
 
         {/* Recent Transactions Info */}
-        <View style={[styles.infoCard, { backgroundColor: isDark ? '#1C1C1E' : '#EFF6FF' }]}>
+        <View style={[styles.infoCard, { backgroundColor: isDark ? '#1C1C1E' : '#EFF6FF' }]}> 
           <Ionicons 
             name="information-circle-outline" 
             size={24} 

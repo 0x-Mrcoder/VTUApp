@@ -218,6 +218,23 @@ export default function HomeScreen() {
 
   const operators = ['MTN', 'Airtel', 'Glo', '9mobile', 'DSTV', 'GoTV'];
 
+  const handleQuickProceed = () => {
+    if (selectedTab !== 'airtime') {
+      Alert.alert('Info', 'Quick Top-up proceed currently supports Airtime.');
+      return;
+    }
+    const amountLabel = selectedAirtimeIndex !== null ? airtimeAmounts[selectedAirtimeIndex] : '';
+    const amount = amountLabel.replace(/[^\d]/g, '');
+    if (!phoneNumber || !amount) {
+      Alert.alert('Missing info', 'Enter phone number and select an amount.');
+      return;
+    }
+    router.push({
+      pathname: '/buy-airtime',
+      params: { phone: phoneNumber, amount },
+    } as any);
+  };
+
   return (
     <View style={[styles.container, { backgroundColor: bgColor }]}>
       <StatusBar barStyle={isDark ? 'light-content' : 'dark-content'} />
@@ -457,7 +474,10 @@ export default function HomeScreen() {
             </View>
 
             {/* Proceed Button */}
-            <TouchableOpacity style={[styles.proceedBtn, { backgroundColor: theme.primary }]}>
+            <TouchableOpacity 
+              style={[styles.proceedBtn, { backgroundColor: theme.primary }]}
+              onPress={handleQuickProceed}
+            > 
               <Text style={styles.proceedText}>Proceed</Text>
             </TouchableOpacity>
           </View>

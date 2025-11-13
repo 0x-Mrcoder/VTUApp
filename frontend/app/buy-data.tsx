@@ -40,6 +40,7 @@ export default function BuyDataScreen() {
   const [selectedNetwork, setSelectedNetwork] = useState<string | null>(null);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [pin, setPin] = useState('');
 
   const networks = [
     { id: 'mtn', name: 'MTN', color: '#FFCC00', icon: 'phone-portrait' },
@@ -93,7 +94,7 @@ export default function BuyDataScreen() {
 
   const handleBuyData = async () => {
     // Validation
-    if (!phoneNumber || !selectedNetwork || !selectedPlan) {
+    if (!phoneNumber || !selectedNetwork || !selectedPlan || !pin) {
       showError('Please fill all required fields');
       return;
     }
@@ -105,6 +106,12 @@ export default function BuyDataScreen() {
       return;
     }
 
+    // Validate 4-digit numeric PIN
+    if (!/^\d{4}$/.test(pin)) {
+      showError('Please enter your 4-digit transaction PIN');
+      return;
+    }
+
     setIsLoading(true);
 
     try {
@@ -113,6 +120,7 @@ export default function BuyDataScreen() {
         phone: cleanPhone,
         plan: selectedPlan.id.toString(),
         ported_number: true,
+        pin,
       });
 
       if (response.success) {
@@ -121,6 +129,7 @@ export default function BuyDataScreen() {
         setPhoneNumber('');
         setSelectedPlan(null);
         setSelectedNetwork(null);
+        setPin('');
         // Navigate back after short delay
         setTimeout(() => {
           router.back();
@@ -156,6 +165,23 @@ export default function BuyDataScreen() {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.scrollContent}
       >
+        {/* Transaction PIN */}
+        <View style={styles.section}>
+          <Text style={[styles.sectionTitle, { color: textColor }]}>Transaction PIN</Text>
+          <View style={[styles.inputContainer, { backgroundColor: cardBgColor, borderColor }]}> 
+            <Ionicons name="lock-closed-outline" size={20} color={textBodyColor} style={styles.inputIcon} />
+            <TextInput
+              style={[styles.input, { color: textColor }]}
+              placeholder="Enter 4-digit PIN"
+              placeholderTextColor={textBodyColor}
+              value={pin}
+              onChangeText={(t) => setPin(t.replace(/\D/g, '').slice(0, 4))}
+              keyboardType="number-pad"
+              secureTextEntry
+              maxLength={4}
+            />
+          </View>
+        </View>
         {/* Network Selection */}
         <View style={styles.section}>
           <Text style={[styles.sectionTitle, { color: textColor }]}>Select Network</Text>
@@ -288,7 +314,7 @@ export default function BuyDataScreen() {
 
         {/* Transaction Summary */}
         {selectedPlan && phoneNumber && selectedNetwork && (
-          <View style={[styles.summaryCard, { backgroundColor: cardBgColor }]}>
+          <View style={[styles.summaryCard, { backgroundColor: cardBgColor }]}> 
             <Text style={[styles.summaryTitle, { color: textColor }]}>Transaction Summary</Text>
             
             <View style={styles.summaryRow}>
@@ -335,13 +361,13 @@ export default function BuyDataScreen() {
           style={[
             styles.buyButton,
             {
-              backgroundColor: (!phoneNumber || !selectedNetwork || !selectedPlan || isLoading)
+              backgroundColor: (!phoneNumber || !selectedNetwork || !selectedPlan || !/^\d{4}$/.test(pin) || isLoading)
                 ? (isDark ? '#374151' : '#D1D5DB')
                 : theme.accent,
             },
           ]}
           onPress={handleBuyData}
-          disabled={!phoneNumber || !selectedNetwork || !selectedPlan || isLoading}
+          disabled={!phoneNumber || !selectedNetwork || !selectedPlan || !/^\d{4}$/.test(pin) || isLoading}
           activeOpacity={0.8}
         >
           {isLoading ? (
@@ -378,40 +404,40 @@ export default function BuyDataScreen() {
               <Ionicons name="checkmark-circle" size={80} color={theme.success} />
             </View>
             
-            <Text style={[styles.successTitle, { color: isDark ? '#FFFFFF' : theme.textPrimary }]}>
+            <Text style={[styles.successTitle, { color: isDark ? '#FFFFFF' : theme.primary }]}>
               Data Purchase Successful!
             </Text>
             
             <View style={styles.successDetails}>
               <View style={styles.successDetailRow}>
-                <Text style={[styles.successLabel, { color: isDark ? textBodyColor : theme.textSecondary }]}>
+                <Text style={[styles.successLabel, { color: textBodyColor }]}>
                   Network:
                 </Text>
-                <Text style={[styles.successValue, { color: isDark ? '#FFFFFF' : theme.textPrimary }]}>
+                <Text style={[styles.successValue, { color: isDark ? '#FFFFFF' : theme.primary }]}>
                   {selectedNetwork?.toUpperCase()}
                 </Text>
               </View>
               
               <View style={styles.successDetailRow}>
-                <Text style={[styles.successLabel, { color: isDark ? textBodyColor : theme.textSecondary }]}>
+                <Text style={[styles.successLabel, { color: textBodyColor }]}>
                   Phone Number:
                 </Text>
-                <Text style={[styles.successValue, { color: isDark ? '#FFFFFF' : theme.textPrimary }]}>
+                <Text style={[styles.successValue, { color: isDark ? '#FFFFFF' : theme.primary }]}>
                   {phoneNumber}
                 </Text>
               </View>
               
               <View style={styles.successDetailRow}>
-                <Text style={[styles.successLabel, { color: isDark ? textBodyColor : theme.textSecondary }]}>
+                <Text style={[styles.successLabel, { color: textBodyColor }]}>
                   Data Plan:
                 </Text>
-                <Text style={[styles.successValue, { color: isDark ? '#FFFFFF' : theme.textPrimary }]}>
+                <Text style={[styles.successValue, { color: isDark ? '#FFFFFF' : theme.primary }]}>
                   {selectedPlan?.name}
                 </Text>
               </View>
               
               <View style={styles.successDetailRow}>
-                <Text style={[styles.successLabel, { color: isDark ? textBodyColor : theme.textSecondary }]}>
+                <Text style={[styles.successLabel, { color: textBodyColor }]}>
                   Amount:
                 </Text>
                 <Text style={[styles.successValue, { color: theme.success }]}>

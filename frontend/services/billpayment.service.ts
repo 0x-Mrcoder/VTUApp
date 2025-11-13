@@ -23,6 +23,7 @@ export interface AirtimePurchaseData {
   amount: number;
   airtime_type?: 'VTU' | 'SHARE_AND_SELL';
   ported_number?: boolean;
+  pin?: string; // 4-digit transaction pin
 }
 
 export interface DataPurchaseData {
@@ -30,6 +31,7 @@ export interface DataPurchaseData {
   phone: string;
   plan: string;
   ported_number?: boolean;
+  pin?: string; // 4-digit transaction pin
 }
 
 export interface BillPaymentResponse {

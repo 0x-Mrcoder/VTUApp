@@ -20,6 +20,7 @@ const userSchema = new Schema<IUser>({
   biometric_enabled: { type: Boolean, default: false },
   nin: { type: String },
   bvn: { type: String },
+  transaction_pin: { type: String, minlength: 4, maxlength: 4 },
   virtual_account: {
     account_number: { type: String },
     account_name: { type: String },

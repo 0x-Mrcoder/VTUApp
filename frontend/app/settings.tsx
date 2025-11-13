@@ -4,12 +4,12 @@ import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import React from 'react';
 import {
-    ScrollView,
-    StatusBar,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
+  ScrollView,
+  StatusBar,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from 'react-native';
 
 const theme = {
@@ -115,9 +115,9 @@ export default function SettingsScreen() {
         contentContainerStyle={styles.scrollContent}
       >
         {/* Theme Settings */}
-        <View style={[styles.section, { backgroundColor: cardBgColor }]}>
+        <View style={[styles.section, { backgroundColor: cardBgColor }]}> 
           <Text style={[styles.sectionTitle, { color: textColor }]}>Appearance</Text>
-          <Text style={[styles.sectionDescription, { color: textBodyColor }]}>
+          <Text style={[styles.sectionDescription, { color: textBodyColor }]}> 
             Choose how the app looks on your device
           </Text>
           
@@ -126,6 +126,28 @@ export default function SettingsScreen() {
               <ThemeOption key={option.id} option={option} />
             ))}
           </View>
+        </View>
+
+        <View style={[styles.section, { backgroundColor: cardBgColor }]}> 
+          <Text style={[styles.sectionTitle, { color: textColor }]}>Security</Text>
+          <Text style={[styles.sectionDescription, { color: textBodyColor }]}>Manage your security settings</Text>
+
+          <TouchableOpacity 
+            style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingVertical: 12 }}
+            onPress={() => router.push('/security')}
+            activeOpacity={0.7}
+          >
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <View style={{ width: 36, height: 36, borderRadius: 18, alignItems: 'center', justifyContent: 'center', backgroundColor: isDark ? '#0A254020' : '#0A254015' }}>
+                <Ionicons name="lock-closed-outline" size={20} color={theme.primary} />
+              </View>
+              <View style={{ marginLeft: 12 }}>
+                <Text style={{ color: textColor, fontSize: 16, fontWeight: '600' }}>Transaction PIN</Text>
+                <Text style={{ color: textBodyColor, fontSize: 13 }}>Set or update your 4-digit PIN</Text>
+              </View>
+            </View>
+            <Ionicons name="chevron-forward" size={18} color={textBodyColor} />
+          </TouchableOpacity>
         </View>
 
         <View style={{ height: 50 }} />
