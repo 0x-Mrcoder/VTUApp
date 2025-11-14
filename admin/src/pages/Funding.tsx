@@ -29,7 +29,7 @@ const Funding: React.FC = () => {
 
   // Accounts list
   const queryClient = useQueryClient();
-  const { data: accountsRes, status: accountsStatus } = useQuery({
+  const { data: accountsRes, status: accountsStatus, error: accountsError } = useQuery({
     queryKey: ['funding-accounts'],
     queryFn: async () => {
       const res = await getFundingAccounts();
@@ -160,12 +160,22 @@ const Funding: React.FC = () => {
                   </div>
                   <div>
                     <p className="text-slate-500">Instructions</p>
-                    <p className="font-semibold">{funding?.instructions || 'Transfer to this accoun'}</p>
+                    <p className="font-semibold">{funding?.instructions || 'Transfer to this account and notify support with your reference.'}</p>
                   </div>
                 </div>
               </div>
               {accountsStatus === 'pending' && <div className="text-gray-500">Loading accounts...</div>}
-              {accountsStatus === 'error' && <div className="text-red-500">Failed to load accounts.</div>}
+              {accountsStatus === 'error' && (
+                <div className="text-red-600 text-sm">
+                  <div className="font-medium">Failed to load accounts.</div>
+                  <div className="mt-1">
+                    {(() => {
+                      const err: any = accountsError;
+                      return err?.response?.data?.message || err?.message || 'An unexpected error occurred.';
+                    })()}
+                  </div>
+                </div>
+              )}
               {accountsStatus === 'success' && (
                 <div className="overflow-x-auto">
                   <table className="w-full">
