@@ -1,5 +1,6 @@
 import { useTheme } from '@/components/ThemeContext';
 import { authService } from '@/services/auth.service';
+import { billPaymentService } from '@/services/billpayment.service';
 import { Transaction, transactionService } from '@/services/transaction.service';
 import { userService } from '@/services/user.service';
 import { WalletData, walletService } from '@/services/wallet.service';
@@ -67,6 +68,7 @@ export default function HomeScreen() {
         loadUserProfile(),
         loadWalletData(),
         loadTransactions(),
+        loadDashPlans(),
       ]);
     } catch (error: any) {
       console.error('Error loading data:', error);
@@ -167,13 +169,35 @@ export default function HomeScreen() {
   const airtimeAmounts = ['₦100', '₦200', '₦500', '₦1000', '₦2000', '₦5000'];
   
   const dataPlans = [
-    { label: '500MB', price: '₦150', duration: '1 day' },
-    { label: '1GB', price: '₦300', duration: '1 day' },
-    { label: '2GB', price: '₦500', duration: '7 days' },
-    { label: '5GB', price: '₦1,500', duration: '30 days' },
-    { label: '10GB', price: '₦2,500', duration: '30 days' },
-    { label: '20GB', price: '₦5,000', duration: '30 days' },
   ];
+
+  // Dashboard data plans (fetched)
+  const [dashPlans, setDashPlans] = useState<Array<{ label: string; price: number; duration: string }>>([]);
+  const [dashPlansLoading, setDashPlansLoading] = useState(false);
+  const [dashPlansError, setDashPlansError] = useState<string | null>(null);
+
+  const loadDashPlans = async () => {
+    try {
+      setDashPlansLoading(true);
+      setDashPlansError(null);
+      const res = await billPaymentService.getDataPlans(); // no network => fetch all
+      if (res?.success && Array.isArray(res.data)) {
+        const mapped = res.data.map((p: any) => ({
+          label: p.plan_name || p.data_value || p.name || 'Plan',
+          price: Number(p.price || p.amount || 0),
+          duration: p.validity || p.duration || '',
+        })).slice(0, 6);
+        setDashPlans(mapped);
+      } else {
+        setDashPlans([]);
+      }
+    } catch (e: any) {
+      setDashPlansError(e?.message || 'Failed to load plans');
+      setDashPlans([]);
+    } finally {
+      setDashPlansLoading(false);
+    }
+  };
 
   const getTransactionIcon = (type: string) => {
     switch (type) {
@@ -424,7 +448,7 @@ export default function HomeScreen() {
                   </TouchableOpacity>
                 ))
               ) : (
-                dataPlans.map((plan, index) => (
+                (dashPlans.length ? dashPlans : []).map((plan, index) => (
                   <TouchableOpacity
                     key={index}
                     style={[
@@ -456,7 +480,7 @@ export default function HomeScreen() {
                           : theme.accent 
                       }
                     ]}>
-                      {plan.price}
+                      ₦{Number(plan.price || 0).toLocaleString()}
                     </Text>
                     <Text style={[
                       styles.planDuration, 

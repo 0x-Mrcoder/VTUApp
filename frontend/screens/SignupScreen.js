@@ -80,6 +80,7 @@ const SignupScreen = () => {
       return;
     }
 
+
     setIsLoading(true);
 
     try {
@@ -93,21 +94,9 @@ const SignupScreen = () => {
       });
 
       if (response.success) {
-        Alert.alert(
-          "🎉 Account Created",
-          `Hi ${first_name}! Please set your 4-digit transaction PIN to continue.`,
-          [
-            {
-              text: "Set PIN Now",
-              onPress: () => router.replace("/set-pin"),
-            },
-            {
-              text: "Later",
-              onPress: () => router.replace("/(tabs)"),
-              style: "cancel",
-            },
-          ]
-        );
+        Alert.alert("🎉 Account Created", `Welcome ${first_name}! Your account is ready.`, [
+          { text: "Continue", onPress: () => router.replace("/(tabs)") }
+        ]);
       }
     } catch (error) {
       Alert.alert(
@@ -243,6 +232,8 @@ const SignupScreen = () => {
               />
             </View>
           </View>
+
+          {/* Transaction PIN fields removed */}
 
           <View style={styles.inputContainer}>
             <Text style={styles.inputLabel}>Referral Code (Optional)</Text>

@@ -10,6 +10,10 @@ router.put('/profile', authMiddleware, UserController.updateProfile);
 router.delete('/profile', authMiddleware, UserController.deleteProfile);
 router.post('/kyc', authMiddleware, UserController.uploadKYC);
 
+// Transaction PIN
+router.post('/transaction-pin', authMiddleware, (req, res) => UserController.setTransactionPin(req, res));
+router.put('/transaction-pin', authMiddleware, (req, res) => UserController.updateTransactionPin(req, res));
+
 // Admin routes for user management
 router.get('/', authMiddleware, UserController.getAllUsers);
 router.get('/:id', authMiddleware, UserController.getUserById);

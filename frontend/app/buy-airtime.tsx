@@ -38,17 +38,21 @@ export default function BuyAirtimeScreen() {
   const [phoneNumber, setPhoneNumber] = useState('');
   const [selectedAmount, setSelectedAmount] = useState<number | null>(null);
   const [customAmount, setCustomAmount] = useState('');
-  const [selectedNetwork, setSelectedNetwork] = useState<string | null>(null);
+  const [selectedNetwork, setSelectedNetwork] = useState<string | null>(null); // code for API
+  const [selectedNetworkIndex, setSelectedNetworkIndex] = useState<number | null>(null); // for UI highlight
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [pin, setPin] = useState('');
 
-  const networks = [
+  // Networks from backend
+  const [networks, setNetworks] = useState<Array<{ id: string; name: string; color: string; icon: string }>>([
+    // Fallback defaults
     { id: 'mtn', name: 'MTN', color: '#FFCC00', icon: 'phone-portrait' },
     { id: 'glo', name: 'Glo', color: '#00A95C', icon: 'phone-portrait' },
     { id: 'airtel', name: 'Airtel', color: '#FF0000', icon: 'phone-portrait' },
     { id: '9mobile', name: '9mobile', color: '#00693E', icon: 'phone-portrait' },
-  ];
+  ]);
+  const [netLoading, setNetLoading] = useState(false);
+  const [netError, setNetError] = useState<string | null>(null);
 
   const quickAmounts = [100, 200, 500, 1000, 2000, 5000];
 
@@ -64,9 +68,42 @@ export default function BuyAirtimeScreen() {
     }
   }, [params]);
 
+  useEffect(() => {
+    const loadNetworks = async () => {
+      try {
+        setNetLoading(true);
+        setNetError(null);
+        const res = await billPaymentService.getNetworks();
+        if (res?.success && Array.isArray(res.data)) {
+          // Map backend fields to UI fields; guarantee unique, non-empty ids
+          const mapped = res.data.map((n: any, i: number) => {
+            const baseId = (n.network_code || n.network_id || n.network || n.name || '')
+              .toString()
+              .trim()
+              .toLowerCase()
+              .replace(/\s+/g, '-');
+            const id = baseId || `net-${i}`;
+            return {
+              id,
+              name: n.name || n.network || n.network_code || 'Network',
+              color: '#0A2540',
+              icon: 'phone-portrait',
+            };
+          });
+          if (mapped.length) setNetworks(mapped);
+        }
+      } catch (e: any) {
+        setNetError(e?.message || 'Failed to load networks');
+      } finally {
+        setNetLoading(false);
+      }
+    };
+    loadNetworks();
+  }, []);
+
   const handleBuyAirtime = async () => {
     // Validation
-    if (!phoneNumber || !selectedNetwork || (!selectedAmount && !customAmount) || !pin) {
+    if (!phoneNumber || !selectedNetwork || (!selectedAmount && !customAmount)) {
       showError('Please fill all required fields');
       return;
     }
@@ -89,12 +126,6 @@ export default function BuyAirtimeScreen() {
       return;
     }
 
-    // Validate 4-digit numeric PIN
-    if (!/^\d{4}$/.test(pin)) {
-      showError('Please enter your 4-digit transaction PIN');
-      return;
-    }
-
     setIsLoading(true);
 
     try {
@@ -104,7 +135,6 @@ export default function BuyAirtimeScreen() {
         amount: amount,
         airtime_type: 'VTU',
         ported_number: true,
-        pin,
       });
 
       if (response.success) {
@@ -114,7 +144,6 @@ export default function BuyAirtimeScreen() {
         setSelectedAmount(null);
         setCustomAmount('');
         setSelectedNetwork(null);
-        setPin('');
         // Navigate back after short delay
         setTimeout(() => {
           router.back();
@@ -151,19 +180,21 @@ export default function BuyAirtimeScreen() {
         {/* Network Selection */}
         <View style={styles.section}>
           <Text style={[styles.sectionTitle, { color: textColor }]}>Select Network</Text>
+          {netLoading && <Text style={{ color: textBodyColor, marginBottom: 8 }}>Loading networks...</Text>}
+          {netError && <Text style={{ color: theme.error, marginBottom: 8 }}>{netError}</Text>}
           <View style={styles.networksGrid}>
-            {networks.map((network) => (
+            {networks.map((network, idx) => (
               <TouchableOpacity
-                key={network.id}
+                key={network.id || idx}
                 style={[
                   styles.networkCard,
                   { 
                     backgroundColor: cardBgColor,
-                    borderColor: selectedNetwork === network.id ? network.color : borderColor,
+                    borderColor: selectedNetworkIndex === idx ? network.color : borderColor,
                     borderWidth: 2,
                   },
                 ]}
-                onPress={() => setSelectedNetwork(network.id)}
+                onPress={() => { setSelectedNetwork(network.id); setSelectedNetworkIndex(idx); }}
                 activeOpacity={0.7}
               >
                 <View
@@ -183,7 +214,7 @@ export default function BuyAirtimeScreen() {
                 <Text style={[styles.networkName, { color: textColor }]}>
                   {network.name}
                 </Text>
-                {selectedNetwork === network.id && (
+                {selectedNetworkIndex === idx && (
                   <View style={[styles.checkMark, { backgroundColor: network.color }]}>
                     <Ionicons name="checkmark" size={14} color="#FFFFFF" />
                   </View>
@@ -271,23 +302,7 @@ export default function BuyAirtimeScreen() {
           </Text>
         </View>
 
-        {/* Transaction PIN */}
-        <View style={styles.section}>
-          <Text style={[styles.sectionTitle, { color: textColor }]}>Transaction PIN</Text>
-          <View style={[styles.inputContainer, { backgroundColor: cardBgColor, borderColor }]}> 
-            <Ionicons name="lock-closed-outline" size={20} color={textBodyColor} style={styles.inputIcon} />
-            <TextInput
-              style={[styles.input, { color: textColor }]}
-              placeholder="Enter 4-digit PIN"
-              placeholderTextColor={textBodyColor}
-              value={pin}
-              onChangeText={(t) => setPin(t.replace(/\D/g, '').slice(0, 4))}
-              keyboardType="number-pad"
-              secureTextEntry
-              maxLength={4}
-            />
-          </View>
-        </View>
+        {/* Transaction PIN removed */}
 
         {/* Transaction Summary */}
         {(selectedAmount || customAmount) && phoneNumber && selectedNetwork && (
@@ -331,13 +346,13 @@ export default function BuyAirtimeScreen() {
           style={[
             styles.buyButton,
             {
-              backgroundColor: (!phoneNumber || !selectedNetwork || (!selectedAmount && !customAmount) || !/^\d{4}$/.test(pin) || isLoading)
+              backgroundColor: (!phoneNumber || !selectedNetwork || (!selectedAmount && !customAmount) || isLoading)
                 ? (isDark ? '#374151' : '#D1D5DB')
                 : theme.accent,
             },
           ]}
           onPress={handleBuyAirtime}
-          disabled={!phoneNumber || !selectedNetwork || (!selectedAmount && !customAmount) || !/^\d{4}$/.test(pin) || isLoading}
+          disabled={!phoneNumber || !selectedNetwork || (!selectedAmount && !customAmount) || isLoading}
           activeOpacity={0.8}
         >
           {isLoading ? (

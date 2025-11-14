@@ -1,8 +1,8 @@
 // controllers/billpayment.controller.ts
 import { NextFunction, Request, Response } from 'express';
-import { Transaction, User } from '../models/index.js';
-import topupmateService from '../services/topupmate.service.js';
+import { Transaction } from '../models/index.js';
 import providerRegistry from '../services/providerRegistry.service.js';
+import topupmateService from '../services/topupmate.service.js';
 import { WalletService } from '../services/wallet.service.js';
 import { AuthRequest } from '../types/index.js';
 import { normalizeNetwork } from '../utils/network.js';
@@ -77,17 +77,8 @@ export class BillPaymentController {
   // Purchase airtime
   async purchaseAirtime(req: AuthRequest, res: Response, next: NextFunction) {
     try {
-      const { network, phone, amount, airtime_type = 'VTU', ported_number = true, pin } = req.body;
+      const { network, phone, amount, airtime_type = 'VTU', ported_number = true } = req.body;
       const userId = req.user?.id;
-
-      // Validate 4-digit transaction pin against user
-      if (!pin || !/^\d{4}$/.test(String(pin))) {
-        return ApiResponse.error(res, 'Invalid or missing transaction PIN', 400);
-      }
-      const user = await User.findById(userId).select('transaction_pin');
-      if (!user || !user.transaction_pin || user.transaction_pin !== String(pin)) {
-        return ApiResponse.error(res, 'Incorrect transaction PIN', 400);
-      }
 
       // Normalize network input to provider ID
       const providerId = normalizeNetwork(network);
@@ -185,17 +176,8 @@ export class BillPaymentController {
   // Purchase data
   async purchaseData(req: AuthRequest, res: Response, next: NextFunction) {
     try {
-      const { network, phone, plan, ported_number = true, pin } = req.body;
+      const { network, phone, plan, ported_number = true } = req.body;
       const userId = req.user?.id;
-
-      // Validate 4-digit transaction pin against user
-      if (!pin || !/^\d{4}$/.test(String(pin))) {
-        return ApiResponse.error(res, 'Invalid or missing transaction PIN', 400);
-      }
-      const user = await User.findById(userId).select('transaction_pin');
-      if (!user || !user.transaction_pin || user.transaction_pin !== String(pin)) {
-        return ApiResponse.error(res, 'Incorrect transaction PIN', 400);
-      }
 
       // Normalize network input to provider ID
       const providerId = normalizeNetwork(network);

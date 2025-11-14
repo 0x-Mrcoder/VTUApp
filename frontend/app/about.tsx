@@ -38,7 +38,7 @@ export default function AboutScreen() {
     version: '1.0.0',
     buildNumber: '100',
     releaseDate: 'November 2024',
-    developer: 'VTU App Team'
+    developer: 'AmeeTech'
   };
 
   const legalLinks = [
@@ -172,18 +172,18 @@ export default function AboutScreen() {
           
           <View style={styles.infoRow}>
             <Text style={[styles.infoLabel, { color: textBodyColor }]}>Contact:</Text>
-            <TouchableOpacity onPress={() => Linking.openURL('mailto:info@vtuapp.com')}>
+            <TouchableOpacity onPress={() => Linking.openURL('mailto:aminuamee@yahoo.com')}>
               <Text style={[styles.infoValue, styles.linkText, { color: theme.primary }]}>
-                info@vtuapp.com
+                aminuamee@yahoo.com
               </Text>
             </TouchableOpacity>
           </View>
           
           <View style={styles.infoRow}>
             <Text style={[styles.infoLabel, { color: textBodyColor }]}>Website:</Text>
-            <TouchableOpacity onPress={() => Linking.openURL('https://vtuapp.com')}>
+            <TouchableOpacity onPress={() => Linking.openURL('https://www.ameetech.org.ng')}>
               <Text style={[styles.infoValue, styles.linkText, { color: theme.primary }]}>
-                www.vtuapp.com
+                www.ameetech.org.ng
               </Text>
             </TouchableOpacity>
           </View>

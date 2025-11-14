@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -37,10 +37,13 @@ export default function BuyDataScreen() {
   const { showSuccess, showError } = useAlert();
   const [phoneNumber, setPhoneNumber] = useState('');
   const [selectedPlan, setSelectedPlan] = useState<any>(null);
+  const [selectedPlanIndex, setSelectedPlanIndex] = useState<number | null>(null); // for UI highlight
   const [selectedNetwork, setSelectedNetwork] = useState<string | null>(null);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [pin, setPin] = useState('');
+  const [plans, setPlans] = useState<Array<{ id: string; data: string; validity: string; price: number }>>([]);
+  const [plansLoading, setPlansLoading] = useState(false);
+  const [plansError, setPlansError] = useState<string | null>(null);
 
   const networks = [
     { id: 'mtn', name: 'MTN', color: '#FFCC00', icon: 'phone-portrait' },
@@ -49,52 +52,38 @@ export default function BuyDataScreen() {
     { id: '9mobile', name: '9mobile', color: '#00693E', icon: 'phone-portrait' },
   ];
 
-  const dataPlans = {
-    mtn: [
-      { id: 1, data: '500MB', validity: '30 days', price: 500 },
-      { id: 2, data: '1GB', validity: '30 days', price: 1000 },
-      { id: 3, data: '2GB', validity: '30 days', price: 2000 },
-      { id: 4, data: '3GB', validity: '30 days', price: 3000 },
-      { id: 5, data: '5GB', validity: '30 days', price: 5000 },
-      { id: 6, data: '10GB', validity: '30 days', price: 10000 },
-      { id: 7, data: '15GB', validity: '30 days', price: 15000 },
-      { id: 8, data: '20GB', validity: '30 days', price: 20000 },
-    ],
-    glo: [
-      { id: 1, data: '500MB', validity: '14 days', price: 500 },
-      { id: 2, data: '1GB', validity: '30 days', price: 1000 },
-      { id: 3, data: '2GB', validity: '30 days', price: 2000 },
-      { id: 4, data: '3.5GB', validity: '30 days', price: 3000 },
-      { id: 5, data: '5.8GB', validity: '30 days', price: 5000 },
-      { id: 6, data: '10GB', validity: '30 days', price: 10000 },
-      { id: 7, data: '13.25GB', validity: '30 days', price: 13000 },
-      { id: 8, data: '18GB', validity: '30 days', price: 18000 },
-    ],
-    airtel: [
-      { id: 1, data: '750MB', validity: '14 days', price: 500 },
-      { id: 2, data: '1.5GB', validity: '30 days', price: 1000 },
-      { id: 3, data: '3GB', validity: '30 days', price: 2000 },
-      { id: 4, data: '4.5GB', validity: '30 days', price: 3000 },
-      { id: 5, data: '6GB', validity: '30 days', price: 5000 },
-      { id: 6, data: '11GB', validity: '30 days', price: 10000 },
-      { id: 7, data: '16GB', validity: '30 days', price: 15000 },
-      { id: 8, data: '22GB', validity: '30 days', price: 20000 },
-    ],
-    '9mobile': [
-      { id: 1, data: '650MB', validity: '7 days', price: 500 },
-      { id: 2, data: '1.5GB', validity: '30 days', price: 1000 },
-      { id: 3, data: '2.5GB', validity: '30 days', price: 2000 },
-      { id: 4, data: '4GB', validity: '30 days', price: 3000 },
-      { id: 5, data: '5.5GB', validity: '30 days', price: 5000 },
-      { id: 6, data: '11.5GB', validity: '30 days', price: 10000 },
-      { id: 7, data: '15GB', validity: '30 days', price: 15000 },
-      { id: 8, data: '27.5GB', validity: '30 days', price: 20000 },
-    ],
-  };
+  // Load plans when network changes
+  useEffect(() => {
+    const loadPlans = async () => {
+      if (!selectedNetwork) { setPlans([]); setPlansError(null); return; }
+      try {
+        setPlansLoading(true);
+        setPlansError(null);
+        const res = await billPaymentService.getDataPlans(selectedNetwork);
+        if (res?.success && Array.isArray(res.data)) {
+          const mapped = res.data.map((p: any, i: number) => ({
+            id: String(p.plan_id || p.id || p.plan || p.plan_name || `plan-${i}`),
+            data: p.plan_name || p.data_value || p.name || 'Plan',
+            validity: p.validity || p.duration || '',
+            price: Number(p.price || p.amount || 0),
+          }));
+          setPlans(mapped);
+        } else {
+          setPlans([]);
+        }
+      } catch (e: any) {
+        setPlansError(e?.message || 'Failed to load plans');
+        setPlans([]);
+      } finally {
+        setPlansLoading(false);
+      }
+    };
+    loadPlans();
+  }, [selectedNetwork]);
 
   const handleBuyData = async () => {
     // Validation
-    if (!phoneNumber || !selectedNetwork || !selectedPlan || !pin) {
+    if (!phoneNumber || !selectedNetwork || !selectedPlan) {
       showError('Please fill all required fields');
       return;
     }
@@ -106,12 +95,6 @@ export default function BuyDataScreen() {
       return;
     }
 
-    // Validate 4-digit numeric PIN
-    if (!/^\d{4}$/.test(pin)) {
-      showError('Please enter your 4-digit transaction PIN');
-      return;
-    }
-
     setIsLoading(true);
 
     try {
@@ -120,7 +103,6 @@ export default function BuyDataScreen() {
         phone: cleanPhone,
         plan: selectedPlan.id.toString(),
         ported_number: true,
-        pin,
       });
 
       if (response.success) {
@@ -129,7 +111,6 @@ export default function BuyDataScreen() {
         setPhoneNumber('');
         setSelectedPlan(null);
         setSelectedNetwork(null);
-        setPin('');
         // Navigate back after short delay
         setTimeout(() => {
           router.back();
@@ -144,7 +125,7 @@ export default function BuyDataScreen() {
     }
   };
 
-  const currentPlans = selectedNetwork ? dataPlans[selectedNetwork as keyof typeof dataPlans] : [];
+  const currentPlans = selectedNetwork ? plans : [];
 
   return (
     <View style={[styles.container, { backgroundColor: bgColor }]}>
@@ -165,23 +146,7 @@ export default function BuyDataScreen() {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.scrollContent}
       >
-        {/* Transaction PIN */}
-        <View style={styles.section}>
-          <Text style={[styles.sectionTitle, { color: textColor }]}>Transaction PIN</Text>
-          <View style={[styles.inputContainer, { backgroundColor: cardBgColor, borderColor }]}> 
-            <Ionicons name="lock-closed-outline" size={20} color={textBodyColor} style={styles.inputIcon} />
-            <TextInput
-              style={[styles.input, { color: textColor }]}
-              placeholder="Enter 4-digit PIN"
-              placeholderTextColor={textBodyColor}
-              value={pin}
-              onChangeText={(t) => setPin(t.replace(/\D/g, '').slice(0, 4))}
-              keyboardType="number-pad"
-              secureTextEntry
-              maxLength={4}
-            />
-          </View>
-        </View>
+        {/* Transaction PIN removed */}
         {/* Network Selection */}
         <View style={styles.section}>
           <Text style={[styles.sectionTitle, { color: textColor }]}>Select Network</Text>
@@ -251,35 +216,37 @@ export default function BuyDataScreen() {
         {selectedNetwork && (
           <View style={styles.section}>
             <Text style={[styles.sectionTitle, { color: textColor }]}>Select Data Plan</Text>
+            {plansLoading && <Text style={{ color: textBodyColor, marginBottom: 8 }}>Loading plans...</Text>}
+            {plansError && <Text style={{ color: theme.error, marginBottom: 8 }}>{plansError}</Text>}
             <View style={styles.plansGrid}>
-              {currentPlans.map((plan) => (
+              {currentPlans.map((plan, index) => (
                 <TouchableOpacity
-                  key={plan.id}
+                  key={plan.id || index}
                   style={[
                     styles.planCard,
                     {
-                      backgroundColor: selectedPlan?.id === plan.id 
+                      backgroundColor: selectedPlanIndex === index 
                         ? (isDark ? theme.primary : theme.primary)
                         : cardBgColor,
-                      borderColor: selectedPlan?.id === plan.id 
+                      borderColor: selectedPlanIndex === index 
                         ? theme.accent 
                         : borderColor,
                     },
                   ]}
-                  onPress={() => setSelectedPlan(plan)}
+                  onPress={() => { setSelectedPlan(plan); setSelectedPlanIndex(index); }}
                   activeOpacity={0.7}
                 >
                   <View style={styles.planHeader}>
                     <Ionicons 
                       name="wifi" 
                       size={20} 
-                      color={selectedPlan?.id === plan.id ? '#FFFFFF' : theme.accent} 
+                      color={selectedPlanIndex === index ? '#FFFFFF' : theme.accent} 
                     />
                     <Text
                       style={[
                         styles.planData,
                         {
-                          color: selectedPlan?.id === plan.id ? '#FFFFFF' : textColor,
+                          color: selectedPlanIndex === index ? '#FFFFFF' : textColor,
                         },
                       ]}
                     >
@@ -290,7 +257,7 @@ export default function BuyDataScreen() {
                     style={[
                       styles.planValidity,
                       {
-                        color: selectedPlan?.id === plan.id ? '#E5E7EB' : textBodyColor,
+                        color: selectedPlanIndex === index ? '#E5E7EB' : textBodyColor,
                       },
                     ]}
                   >
@@ -300,7 +267,7 @@ export default function BuyDataScreen() {
                     style={[
                       styles.planPrice,
                       {
-                        color: selectedPlan?.id === plan.id ? '#FFFFFF' : theme.accent,
+                        color: selectedPlanIndex === index ? '#FFFFFF' : theme.accent,
                       },
                     ]}
                   >
@@ -361,13 +328,13 @@ export default function BuyDataScreen() {
           style={[
             styles.buyButton,
             {
-              backgroundColor: (!phoneNumber || !selectedNetwork || !selectedPlan || !/^\d{4}$/.test(pin) || isLoading)
+              backgroundColor: (!phoneNumber || !selectedNetwork || !selectedPlan || isLoading)
                 ? (isDark ? '#374151' : '#D1D5DB')
                 : theme.accent,
             },
           ]}
           onPress={handleBuyData}
-          disabled={!phoneNumber || !selectedNetwork || !selectedPlan || !/^\d{4}$/.test(pin) || isLoading}
+          disabled={!phoneNumber || !selectedNetwork || !selectedPlan || isLoading}
           activeOpacity={0.8}
         >
           {isLoading ? (

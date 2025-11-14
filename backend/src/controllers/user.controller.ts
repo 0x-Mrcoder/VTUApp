@@ -3,6 +3,7 @@ import { Response } from 'express';
 import { User } from '../models/index.js';
 import { ApiResponse } from '../utils/response.js';
 import { AuthRequest } from '../types/index.js';
+import bcrypt from 'bcryptjs';
 
 export class UserController {
   static async getProfile(req: AuthRequest, res: Response) {

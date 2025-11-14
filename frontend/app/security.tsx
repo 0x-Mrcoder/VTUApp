@@ -1,19 +1,19 @@
 import { useAlert } from '@/components/AlertContext';
+import { userService } from '@/services/user.service';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
-import { userService } from '@/services/user.service';
 import {
-    Alert,
-    ScrollView,
-    StatusBar,
-    StyleSheet,
-    Switch,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    useColorScheme,
-    View,
+  Alert,
+  ScrollView,
+  StatusBar,
+  StyleSheet,
+  Switch,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  useColorScheme,
+  View,
 } from 'react-native';
 
 const theme = {
@@ -238,11 +238,17 @@ export default function SecurityScreen() {
             disabled={isChangingPassword}
           >
             <Text style={styles.changePasswordButtonText}>
+              {isChangingPassword ? 'Changing...' : 'Change Password'}
+            </Text>
+          </TouchableOpacity>
+
+          {/* Two-Factor Authentication */}
+          <View style={styles.settingItem}>
+            <View style={styles.settingInfo}>
+              <Ionicons name="shield-checkmark" size={24} color={theme.primary} />
               <View style={styles.settingTextContainer}>
                 <Text style={[styles.settingTitle, { color: textColor }]}>Two-Factor Authentication</Text>
-                <Text style={[styles.settingDescription, { color: textBodyColor }]}>
-                  Add an extra layer of security to your account
-                </Text>
+                <Text style={[styles.settingDescription, { color: textBodyColor }]}>Add an extra layer of security to your account</Text>
               </View>
             </View>
             <Switch
@@ -258,7 +264,7 @@ export default function SecurityScreen() {
               <Ionicons name="finger-print" size={24} color={theme.primary} />
               <View style={styles.settingTextContainer}>
                 <Text style={[styles.settingTitle, { color: textColor }]}>Biometric Login</Text>
-                <Text style={[styles.settingDescription, { color: textBodyColor }]}>
+                <Text style={[styles.settingDescription, { color: textBodyColor }]}> 
                   Use fingerprint or face recognition to sign in
                 </Text>
               </View>
@@ -318,6 +324,60 @@ export default function SecurityScreen() {
               </View>
             </View>
             <Ionicons name="chevron-forward" size={20} color={textBodyColor} />
+          </TouchableOpacity>
+        </View>
+
+        {/* Update Transaction PIN */}
+        <View style={[styles.section, { backgroundColor: cardBgColor }]}> 
+          <Text style={[styles.sectionTitle, { color: textColor }]}>Update Transaction PIN</Text>
+
+          <View style={styles.inputContainer}>
+            <Text style={[styles.inputLabel, { color: textBodyColor }]}>Current PIN</Text>
+            <TextInput
+              style={[styles.textInput, {
+                backgroundColor: inputBgColor,
+                borderColor: borderColor,
+                color: textColor
+              }]}
+              value={currentPin}
+              onChangeText={setCurrentPin}
+              placeholder="Enter current 4-digit PIN"
+              placeholderTextColor={textBodyColor}
+              keyboardType="number-pad"
+              secureTextEntry
+              maxLength={4}
+            />
+          </View>
+
+          <View style={styles.inputContainer}>
+            <Text style={[styles.inputLabel, { color: textBodyColor }]}>New PIN</Text>
+            <TextInput
+              style={[styles.textInput, {
+                backgroundColor: inputBgColor,
+                borderColor: borderColor,
+                color: textColor
+              }]}
+              value={newPin}
+              onChangeText={setNewPin}
+              placeholder="Enter new 4-digit PIN"
+              placeholderTextColor={textBodyColor}
+              keyboardType="number-pad"
+              secureTextEntry
+              maxLength={4}
+            />
+          </View>
+
+          <TouchableOpacity
+            style={[styles.changePasswordButton, {
+              backgroundColor: theme.primary,
+              opacity: isUpdatingPin ? 0.7 : 1
+            }]}
+            onPress={handleUpdatePin}
+            disabled={isUpdatingPin}
+          >
+            <Text style={styles.changePasswordButtonText}>
+              {isUpdatingPin ? 'Updating PIN...' : 'Update PIN'}
+            </Text>
           </TouchableOpacity>
         </View>
 
