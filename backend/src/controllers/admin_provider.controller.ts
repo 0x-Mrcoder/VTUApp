@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import ProviderConfig from '../models/provider.model.js';
+import providerRegistry from '../services/providerRegistry.service.js';
 import logger from '../utils/logger.js';
 import { ApiResponse } from '../utils/response.js';
 
@@ -133,6 +134,99 @@ export class AdminProviderController {
     } catch (error) {
       logger.error('Error updating provider env:', error);
       return ApiResponse.error(res, 'Failed to update provider env', 500);
+    }
+  }
+
+  // Test provider connection
+  static async testConnection(req: Request, res: Response) {
+    try {
+      const { code } = req.params;
+      const provider = await ProviderConfig.findOne({ code: code.toLowerCase() });
+
+      if (!provider) return ApiResponse.error(res, 'Provider not found', 404);
+
+      const client = providerRegistry.getClient(code.toLowerCase());
+      if (!client) return ApiResponse.error(res, 'Provider client not available', 404);
+
+      const results: any = { code, name: provider.name };
+
+      // Test wallet balance if available
+      if (client.getWalletBalance) {
+        try {
+          const balance = await client.getWalletBalance();
+          results.balance = balance;
+          results.balanceStatus = 'success';
+        } catch (error: any) {
+          results.balanceStatus = 'failed';
+          results.balanceError = error.response?.data?.message || error.message;
+        }
+      }
+
+      // Test get networks if available
+      if (client.getNetworks) {
+        try {
+          const networks = await client.getNetworks();
+          results.networks = networks;
+          results.networksStatus = 'success';
+        } catch (error: any) {
+          results.networksStatus = 'failed';
+          results.networksError = error.response?.data?.message || error.message;
+        }
+      }
+
+      logger.info(`Provider connection test: ${code}`, results);
+      return ApiResponse.success(res, 'Connection test completed', { test: results });
+    } catch (error: any) {
+      logger.error('Error testing provider connection:', error);
+      return ApiResponse.error(res, error.message || 'Failed to test provider connection', 500);
+    }
+  }
+
+  // Get provider data (networks, plans, balance)
+  static async getProviderData(req: Request, res: Response) {
+    try {
+      const { code } = req.params;
+      const { type } = req.query; // 'balance', 'networks', 'plans'
+
+      const provider = await ProviderConfig.findOne({ code: code.toLowerCase() });
+      if (!provider) return ApiResponse.error(res, 'Provider not found', 404);
+
+      const client = providerRegistry.getClient(code.toLowerCase());
+      if (!client) return ApiResponse.error(res, 'Provider client not available', 404);
+
+      let data: any = null;
+
+      switch (type) {
+        case 'balance':
+          if (!client.getWalletBalance) {
+            return ApiResponse.error(res, 'Balance not supported by this provider', 400);
+          }
+          data = await client.getWalletBalance();
+          break;
+
+        case 'networks':
+          if (!client.getNetworks) {
+            return ApiResponse.error(res, 'Networks not supported by this provider', 400);
+          }
+          data = await client.getNetworks();
+          break;
+
+        case 'plans':
+          if (!client.getDataPlans) {
+            return ApiResponse.error(res, 'Data plans not supported by this provider', 400);
+          }
+          data = await client.getDataPlans();
+          break;
+
+        default:
+          return ApiResponse.error(res, 'Invalid type. Use: balance, networks, or plans', 400);
+      }
+
+      logger.info(`Provider data retrieved: ${code} - ${type}`);
+      return ApiResponse.success(res, `${type} retrieved`, { data });
+    } catch (error: any) {
+      logger.error(`Error getting provider data (${req.query.type}):`, error);
+      return ApiResponse.error(res, error.response?.data?.message || error.message || 'Failed to get provider data', 500);
     }
   }
 }

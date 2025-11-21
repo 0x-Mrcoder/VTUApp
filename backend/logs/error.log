@@ -87,3 +87,51 @@
 {"error":{"message":"Transaction validation failed: plan_id: Cast to ObjectId failed for value \"70\" (type string) at path \"plan_id\" because of \"BSONError\"","name":"ValidationError","stack":"ValidationError: Transaction validation failed: plan_id: Cast to ObjectId failed for value \"70\" (type string) at path \"plan_id\" because of \"BSONError\"\n    at Document.invalidate (/home/amee/Desktop/VTUApp/backend/node_modules/mongoose/lib/document.js:3362:32)\n    at model.$set (/home/amee/Desktop/VTUApp/backend/node_modules/mongoose/lib/document.js:1484:12)\n    at model.$set (/home/amee/Desktop/VTUApp/backend/node_modules/mongoose/lib/document.js:1136:16)\n    at model.Document (/home/amee/Desktop/VTUApp/backend/node_modules/mongoose/lib/document.js:178:12)\n    at model.Model (/home/amee/Desktop/VTUApp/backend/node_modules/mongoose/lib/model.js:127:12)\n    at new model (/home/amee/Desktop/VTUApp/backend/node_modules/mongoose/lib/model.js:4845:15)\n    at /home/amee/Desktop/VTUApp/backend/node_modules/mongoose/lib/model.js:2775:20\n    at Array.map (<anonymous>)\n    at Function.create (/home/amee/Desktop/VTUApp/backend/node_modules/mongoose/lib/model.js:2763:34)\n    at purchaseData (/home/amee/Desktop/VTUApp/backend/src/controllers/billpayment.controller.ts:260:45)"},"ip":"192.168.43.202","level":"error","message":"💥 Error occurred","method":"POST","timestamp":"2025-11-16 16:58:56","url":"/api/billpayment/data","userAgent":"okhttp/4.12.0","userId":"690c7de84d4df744806907b2"}
 {"error":{"message":"Transaction validation failed: plan_id: Cast to ObjectId failed for value \"70\" (type string) at path \"plan_id\" because of \"BSONError\"","name":"ValidationError","stack":"ValidationError: Transaction validation failed: plan_id: Cast to ObjectId failed for value \"70\" (type string) at path \"plan_id\" because of \"BSONError\"\n    at Document.invalidate (/home/amee/Desktop/VTUApp/backend/node_modules/mongoose/lib/document.js:3362:32)\n    at model.$set (/home/amee/Desktop/VTUApp/backend/node_modules/mongoose/lib/document.js:1484:12)\n    at model.$set (/home/amee/Desktop/VTUApp/backend/node_modules/mongoose/lib/document.js:1136:16)\n    at model.Document (/home/amee/Desktop/VTUApp/backend/node_modules/mongoose/lib/document.js:178:12)\n    at model.Model (/home/amee/Desktop/VTUApp/backend/node_modules/mongoose/lib/model.js:127:12)\n    at new model (/home/amee/Desktop/VTUApp/backend/node_modules/mongoose/lib/model.js:4845:15)\n    at /home/amee/Desktop/VTUApp/backend/node_modules/mongoose/lib/model.js:2775:20\n    at Array.map (<anonymous>)\n    at Function.create (/home/amee/Desktop/VTUApp/backend/node_modules/mongoose/lib/model.js:2763:34)\n    at purchaseData (/home/amee/Desktop/VTUApp/backend/src/controllers/billpayment.controller.ts:260:45)"},"ip":"192.168.43.202","level":"error","message":"❌ Unhandled Error:","method":"POST","timestamp":"2025-11-16 16:58:56","url":"/api/billpayment/data"}
 {"duration":"1598ms","ip":"192.168.43.202","level":"error","message":"📤 Response Error","method":"POST","statusCode":500,"timestamp":"2025-11-16 16:58:56","url":"/api/billpayment/data","userId":"690c7de84d4df744806907b2"}
+2025-11-21 12:40:22 [ERROR]: SMEPlug getWalletBalance error: 
+2025-11-21 12:40:49 [ERROR]: SMEPlug getWalletBalance error: 
+2025-11-21 12:41:54 [ERROR]: SMEPlug getWalletBalance error: {"msg":"Invalid Authorization. Confirm your secret key"}
+2025-11-21 12:42:18 [ERROR]: SMEPlug getWalletBalance error: {"msg":"Invalid Authorization. Confirm your secret key"}
+2025-11-21 12:42:18 [ERROR]: SMEPlug getWalletBalance error: {"msg":"Invalid Authorization. Confirm your secret key"}
+2025-11-21 12:42:20 [ERROR]: SMEPlug getWalletBalance error: {"msg":"Invalid Authorization. Confirm your secret key"}
+2025-11-21 12:42:59 [ERROR]: SMEPlug getWalletBalance error: {"msg":"Invalid Authorization. Confirm your secret key"}
+2025-11-21 12:43:20 [ERROR]: SMEPlug getWalletBalance error: {"msg":"Invalid Authorization. Confirm your secret key"}
+2025-11-21 12:44:00 [ERROR]: SMEPlug getWalletBalance error: {"msg":"Invalid Authorization. Confirm your secret key"}
+2025-11-21 12:45:03 [ERROR]: SMEPlug getWalletBalance error: {"msg":"Invalid Authorization. Confirm your secret key"}
+2025-11-21 12:47:24 [ERROR]: SMEPlug getWalletBalance error: {"msg":"Invalid Authorization. Confirm your secret key"}
+2025-11-21 12:47:24 [ERROR]: SMEPlug getNetworks error: {"msg":"Invalid Authorization. Confirm your secret key"}
+2025-11-21 12:47:54 [ERROR]: SMEPlug getWalletBalance error: {"msg":"Invalid Authorization. Confirm your secret key"}
+2025-11-21 12:48:10 [ERROR]: SMEPlug getWalletBalance error: {"msg":"Invalid Authorization. Confirm your secret key"}
+2025-11-21 12:48:10 [ERROR]: SMEPlug getNetworks error: {"msg":"Invalid Authorization. Confirm your secret key"}
+2025-11-21 12:48:18 [ERROR]: SMEPlug getWalletBalance error: {"msg":"Invalid Authorization. Confirm your secret key"}
+2025-11-21 12:48:18 [ERROR]: SMEPlug getNetworks error: {"msg":"Invalid Authorization. Confirm your secret key"}
+2025-11-21 12:49:09 [ERROR]: SMEPlug getWalletBalance error: {"msg":"Invalid Authorization. Confirm your secret key"}
+2025-11-21 12:49:09 [ERROR]: SMEPlug getNetworks error: {"msg":"Invalid Authorization. Confirm your secret key"}
+2025-11-21 12:49:13 [ERROR]: SMEPlug getWalletBalance error: {"msg":"Invalid Authorization. Confirm your secret key"}
+2025-11-21 12:49:13 [ERROR]: SMEPlug getNetworks error: {"msg":"Invalid Authorization. Confirm your secret key"}
+2025-11-21 12:49:21 [ERROR]: SMEPlug getWalletBalance error: {"msg":"Invalid Authorization. Confirm your secret key"}
+2025-11-21 12:49:21 [ERROR]: SMEPlug getNetworks error: {"msg":"Invalid Authorization. Confirm your secret key"}
+2025-11-21 12:49:58 [ERROR]: SMEPlug getWalletBalance error: {"msg":"Invalid Authorization. Confirm your secret key"}
+2025-11-21 12:49:59 [ERROR]: SMEPlug getNetworks error: {"msg":"Invalid Authorization. Confirm your secret key"}
+2025-11-21 12:50:02 [ERROR]: SMEPlug getWalletBalance error: {"msg":"Invalid Authorization. Confirm your secret key"}
+2025-11-21 12:50:02 [ERROR]: SMEPlug getNetworks error: {"msg":"Invalid Authorization. Confirm your secret key"}
+2025-11-21 12:50:14 [ERROR]: SMEPlug getWalletBalance error: {"msg":"Invalid Authorization. Confirm your secret key"}
+2025-11-21 12:50:14 [ERROR]: SMEPlug getNetworks error: {"msg":"Invalid Authorization. Confirm your secret key"}
+2025-11-21 12:52:10 [ERROR]: SMEPlug getWalletBalance error: {"msg":"Invalid Authorization. Confirm your secret key"}
+2025-11-21 12:52:10 [ERROR]: SMEPlug getNetworks error: {"msg":"Invalid Authorization. Confirm your secret key"}
+2025-11-21 12:52:17 [ERROR]: SMEPlug getWalletBalance error: {"msg":"Invalid Authorization. Confirm your secret key"}
+2025-11-21 12:52:25 [ERROR]: SMEPlug getWalletBalance error: {"msg":"Invalid Authorization. Confirm your secret key"}
+2025-11-21 12:52:25 [ERROR]: SMEPlug getNetworks error: {"msg":"Invalid Authorization. Confirm your secret key"}
+2025-11-21 12:53:19 [ERROR]: SMEPlug getWalletBalance error: {"msg":"Invalid Authorization. Confirm your secret key"}
+2025-11-21 12:53:19 [ERROR]: SMEPlug getNetworks error: {"msg":"Invalid Authorization. Confirm your secret key"}
+2025-11-21 13:17:48 [ERROR]: SMEPlug getWalletBalance error: {"msg":"Invalid Authorization. Confirm your secret key"}
+2025-11-21 13:17:48 [ERROR]: SMEPlug getNetworks error: {"msg":"Invalid Authorization. Confirm your secret key"}
+2025-11-21 13:18:29 [ERROR]: SMEPlug getWalletBalance error: {"msg":"Invalid Authorization. Confirm your secret key"}
+2025-11-21 13:18:29 [ERROR]: SMEPlug getNetworks error: {"msg":"Invalid Authorization. Confirm your secret key"}
+2025-11-21 13:18:47 [ERROR]: SMEPlug getWalletBalance error: {"msg":"Invalid Authorization. Confirm your secret key"}
+2025-11-21 13:18:47 [ERROR]: SMEPlug getNetworks error: {"msg":"Invalid Authorization. Confirm your secret key"}
+2025-11-21 13:21:30 [ERROR]: SMEPlug getWalletBalance error: {"msg":"Invalid Authorization. Confirm your secret key"}
+2025-11-21 13:21:30 [ERROR]: SMEPlug getNetworks error: {"msg":"Invalid Authorization. Confirm your secret key"}
+2025-11-21 13:21:58 [ERROR]: SMEPlug getWalletBalance error: {"msg":"Invalid Authorization. Confirm your secret key"}
+2025-11-21 13:21:59 [ERROR]: SMEPlug getNetworks error: {"msg":"Invalid Authorization. Confirm your secret key"}
+2025-11-21 13:22:06 [ERROR]: SMEPlug getWalletBalance error: {"msg":"Invalid Authorization. Confirm your secret key"}
+2025-11-21 13:22:06 [ERROR]: SMEPlug getNetworks error: {"msg":"Invalid Authorization. Confirm your secret key"}

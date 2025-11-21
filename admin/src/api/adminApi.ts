@@ -53,6 +53,9 @@ export const updateProvider = (id: string, data: any) => api.put(`/providers/${i
 export const deleteProvider = (id: string) => api.delete(`/providers/${id}`);
 export const getProviderEnv = (id: string) => api.get(`/providers/${id}/env`);
 export const updateProviderEnv = (id: string, env: Record<string, string>) => api.put(`/providers/${id}/env`, { env });
+export const testProviderConnection = (code: string) => api.post(`/providers/test/${code}`);
+export const getProviderData = (code: string, type: 'balance' | 'networks' | 'plans') =>
+  api.get(`/providers/data/${code}`, { params: { type } });
 
 // Funding & Provider Balances
 export const getProviderBalances = () => api.get('/providers/balances');

@@ -1,9 +1,9 @@
 import { Router } from 'express';
 import { AdminController } from '../controllers/admin.controller.js';
-import AdminPricingController from '../controllers/admin_pricing.controller.js';
-import { authMiddleware } from '../middleware/auth.middleware.js';
-import AdminProviderController from '../controllers/admin_provider.controller.js';
 import AdminFundingController from '../controllers/admin_funding.controller.js';
+import AdminPricingController from '../controllers/admin_pricing.controller.js';
+import AdminProviderController from '../controllers/admin_provider.controller.js';
+import { authMiddleware } from '../middleware/auth.middleware.js';
 
 const router = Router();
 
@@ -43,6 +43,10 @@ router.post('/pricing/bulk-import', authMiddleware, AdminPricingController.bulkI
 
 // Provider balances (place BEFORE parameterized provider routes)
 router.get('/providers/balances', authMiddleware, AdminFundingController.getProviderBalances);
+
+// Provider testing routes (place BEFORE parameterized provider routes)
+router.post('/providers/test/:code', authMiddleware, AdminProviderController.testConnection);
+router.get('/providers/data/:code', authMiddleware, AdminProviderController.getProviderData);
 
 // Provider management
 router.get('/providers', authMiddleware, AdminProviderController.list);

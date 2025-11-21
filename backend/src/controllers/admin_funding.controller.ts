@@ -1,9 +1,9 @@
 import { Request, Response } from 'express';
-import ProviderConfig from '../models/provider.model.js';
-import { ApiResponse } from '../utils/response.js';
-import { providerRegistry } from '../services/providerRegistry.service.js';
 import { config } from '../config/bootstrap.js';
 import FundingAccount from '../models/funding_account.model.js';
+import ProviderConfig from '../models/provider.model.js';
+import { providerRegistry } from '../services/providerRegistry.service.js';
+import { ApiResponse } from '../utils/response.js';
 
 export class AdminFundingController {
   static async getProviderBalances(req: Request, res: Response) {
@@ -20,8 +20,20 @@ export class AdminFundingController {
           if (client && typeof client.getWalletBalance === 'function') {
             const resp = await client.getWalletBalance();
             if (resp && typeof resp === 'object') {
-              balance = typeof resp.balance === 'number' ? resp.balance : (typeof resp.available_balance === 'number' ? resp.available_balance : null);
-              currency = (resp.currency as string) || null;
+              // Try different possible balance field names from various providers
+              // Direct fields
+              balance = typeof resp.balance === 'number' ? resp.balance :
+                (typeof resp.available_balance === 'number' ? resp.available_balance : null);
+
+              // Nested in data object (common pattern)
+              if (balance === null && resp.data && typeof resp.data === 'object') {
+                balance = typeof resp.data.balance === 'number' ? resp.data.balance :
+                  (typeof resp.data.available_balance === 'number' ? resp.data.available_balance : null);
+                currency = (resp.data.currency as string) || null;
+              } else {
+                currency = (resp.currency as string) || null;
+              }
+
               raw = resp;
             }
             status = 'ok';
