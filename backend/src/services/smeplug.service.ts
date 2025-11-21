@@ -18,17 +18,41 @@ interface SMEPlugAirtimePurchase {
 
 class SMEPlugService {
   private api: AxiosInstance | null = null;
-  
+
+  private getNetworkId(network: string | number): number {
+    const net = String(network).toLowerCase();
+
+    // Map App IDs (from normalizeNetwork) to SME Plug IDs
+    // App: 1=MTN, 2=Airtel, 3=Glo, 4=9mobile
+    // SME: 1=MTN, 2=Airtel, 3=9mobile, 4=Glo
+    if (net === '1') return 1; // MTN
+    if (net === '2') return 2; // Airtel
+    if (net === '3') return 4; // Glo (App 3 -> SME 4)
+    if (net === '4') return 3; // 9mobile (App 4 -> SME 3)
+
+    const map: Record<string, number> = {
+      'mtn': 1,
+      'airtel': 2,
+      '9mobile': 3,
+      'etisalat': 3,
+      'glo': 4,
+      'globacom': 4
+    };
+    const id = map[net];
+    if (!id) throw new Error(`Unsupported network: ${network}`);
+    return id;
+  }
+
   private async ensureClient() {
     if (this.api) return this.api;
     const cfg = await ProviderConfig.findOne({ code: 'smeplug' });
     const baseURL = cfg?.base_url || 'https://smeplug.ng/api';
     const apiKey = (cfg?.metadata as any)?.env?.SMEPLUG_API_KEY || cfg?.api_key || '';
-    
+
     if (!apiKey) {
       throw new Error('SMEPlug API key not configured');
     }
-    
+
     this.api = axios.create({
       baseURL,
       headers: {
@@ -37,7 +61,7 @@ class SMEPlugService {
       },
       timeout: 30000,
     });
-    
+
     return this.api;
   }
 
@@ -93,16 +117,28 @@ class SMEPlugService {
    * Purchase airtime
    * POST /v1/airtime/purchase
    */
-  async purchaseAirtime(data: SMEPlugAirtimePurchase) {
+  async purchaseAirtime(data: any) {
     try {
       const api = await this.ensureClient();
-      const res = await api.post('/v1/airtime/purchase', data);
-      logger.info('SMEPlug airtime purchased', { 
-        phone: data.phone, 
-        amount: data.amount,
-        reference: res.data?.data?.reference 
+
+      // Map controller payload to SMEPlug payload
+      const payload: SMEPlugAirtimePurchase = {
+        network_id: this.getNetworkId(data.network),
+        amount: Number(data.amount),
+        phone: data.phone,
+        customer_reference: data.ref
+      };
+
+      const res = await api.post('/v1/airtime/purchase', payload);
+      logger.info('SMEPlug airtime purchased', {
+        phone: payload.phone,
+        amount: payload.amount,
+        reference: res.data?.data?.reference
       });
-      return res.data;
+      return {
+        status: 'success',
+        ...res.data
+      };
     } catch (error: any) {
       logger.error('SMEPlug purchaseAirtime error:', error.response?.data || error.message);
       throw error;
@@ -114,16 +150,28 @@ class SMEPlugService {
    * POST /v1/data/purchase
    * Payload: { network_id, plan_id, phone, customer_reference }
    */
-  async purchaseData(data: SMEPlugDataPurchase) {
+  async purchaseData(data: any) {
     try {
       const api = await this.ensureClient();
-      const res = await api.post('/v1/data/purchase', data);
-      logger.info('SMEPlug data purchased', { 
-        phone: data.phone, 
-        plan_id: data.plan_id,
-        reference: res.data?.data?.reference 
+
+      // Map controller payload to SMEPlug payload
+      const payload: SMEPlugDataPurchase = {
+        network_id: this.getNetworkId(data.network),
+        plan_id: Number(data.plan), // Controller sends plan ID
+        phone: data.phone,
+        customer_reference: data.ref
+      };
+
+      const res = await api.post('/v1/data/purchase', payload);
+      logger.info('SMEPlug data purchased', {
+        phone: payload.phone,
+        plan_id: payload.plan_id,
+        reference: res.data?.data?.reference
       });
-      return res.data;
+      return {
+        status: 'success',
+        ...res.data
+      };
     } catch (error: any) {
       logger.error('SMEPlug purchaseData error:', error.response?.data || error.message);
       throw error;

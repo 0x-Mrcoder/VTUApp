@@ -36,7 +36,7 @@ class TopupmateService {
         return config;
       },
       (error) => {
-        logger.error('TopupMate API Request Error:', error);
+        logger.error('TopupMate API Request Error:', error.message);
         return Promise.reject(error);
       }
     );
@@ -62,7 +62,7 @@ class TopupmateService {
       });
       return response.data;
     } catch (error: any) {
-      logger.error(`Error fetching ${service} data:`, error);
+      logger.error(`Error fetching ${service} data:`, error.message);
       throw new Error(`Failed to fetch ${service} data: ${error.message}`);
     }
   }
@@ -140,8 +140,9 @@ class TopupmateService {
       const response = await this.api.post('/airtime/', data);
       return response.data;
     } catch (error: any) {
-      logger.error('Error purchasing airtime:', error);
-      throw new Error(`Airtime purchase failed: ${error.message}`);
+      logger.error('Error purchasing airtime:', error.message, error.response?.data);
+      const msg = error.response?.data?.msg || error.message;
+      throw new Error(`Airtime purchase failed: ${msg}`);
     }
   }
 
@@ -157,8 +158,9 @@ class TopupmateService {
       const response = await this.api.post('/data/', data);
       return response.data;
     } catch (error: any) {
-      logger.error('Error purchasing data:', error);
-      throw new Error(`Data purchase failed: ${error.message}`);
+      logger.error('Error purchasing data:', error.message, error.response?.data);
+      const msg = error.response?.data?.msg || error.message;
+      throw new Error(`Data purchase failed: ${msg}`);
     }
   }
 
@@ -171,8 +173,9 @@ class TopupmateService {
       const response = await this.api.post('/cable/verify/', data);
       return response.data;
     } catch (error: any) {
-      logger.error('Error verifying cable account:', error);
-      throw new Error(`Cable verification failed: ${error.message}`);
+      logger.error('Error verifying cable account:', error.message, error.response?.data);
+      const msg = error.response?.data?.msg || error.message;
+      throw new Error(`Cable verification failed: ${msg}`);
     }
   }
 
@@ -189,8 +192,9 @@ class TopupmateService {
       const response = await this.api.post('/cabletv/', data);
       return response.data;
     } catch (error: any) {
-      logger.error('Error purchasing cable TV:', error);
-      throw new Error(`Cable TV purchase failed: ${error.message}`);
+      logger.error('Error purchasing cable TV:', error.message, error.response?.data);
+      const msg = error.response?.data?.msg || error.message;
+      throw new Error(`Cable TV purchase failed: ${msg}`);
     }
   }
 
@@ -204,8 +208,9 @@ class TopupmateService {
       const response = await this.api.post('/electricity/verify/', data);
       return response.data;
     } catch (error: any) {
-      logger.error('Error verifying electricity meter:', error);
-      throw new Error(`Meter verification failed: ${error.message}`);
+      logger.error('Error verifying electricity meter:', error.message, error.response?.data);
+      const msg = error.response?.data?.msg || error.message;
+      throw new Error(`Meter verification failed: ${msg}`);
     }
   }
 
@@ -222,8 +227,9 @@ class TopupmateService {
       const response = await this.api.post('/electricity/', data);
       return response.data;
     } catch (error: any) {
-      logger.error('Error purchasing electricity:', error);
-      throw new Error(`Electricity purchase failed: ${error.message}`);
+      logger.error('Error purchasing electricity:', error.message, error.response?.data);
+      const msg = error.response?.data?.msg || error.message;
+      throw new Error(`Electricity purchase failed: ${msg}`);
     }
   }
 
@@ -237,8 +243,9 @@ class TopupmateService {
       const response = await this.api.post('/exampin/', data);
       return response.data;
     } catch (error: any) {
-      logger.error('Error purchasing exam pin:', error);
-      throw new Error(`Exam pin purchase failed: ${error.message}`);
+      logger.error('Error purchasing exam pin:', error.message, error.response?.data);
+      const msg = error.response?.data?.msg || error.message;
+      throw new Error(`Exam pin purchase failed: ${msg}`);
     }
   }
 
@@ -254,8 +261,9 @@ class TopupmateService {
       const response = await this.api.post('/rechargepin/', data);
       return response.data;
     } catch (error: any) {
-      logger.error('Error purchasing recharge pin:', error);
-      throw new Error(`Recharge pin purchase failed: ${error.message}`);
+      logger.error('Error purchasing recharge pin:', error.message, error.response?.data);
+      const msg = error.response?.data?.msg || error.message;
+      throw new Error(`Recharge pin purchase failed: ${msg}`);
     }
   }
 
@@ -271,8 +279,9 @@ class TopupmateService {
       const response = await this.api.post('/datapin/', data);
       return response.data;
     } catch (error: any) {
-      logger.error('Error purchasing data pin:', error);
-      throw new Error(`Data pin purchase failed: ${error.message}`);
+      logger.error('Error purchasing data pin:', error.message, error.response?.data);
+      const msg = error.response?.data?.msg || error.message;
+      throw new Error(`Data pin purchase failed: ${msg}`);
     }
   }
 
@@ -284,7 +293,7 @@ class TopupmateService {
       });
       return response.data;
     } catch (error: any) {
-      logger.error('Error fetching transaction status:', error);
+      logger.error('Error fetching transaction status:', error.message);
       throw new Error(`Failed to fetch transaction status: ${error.message}`);
     }
   }

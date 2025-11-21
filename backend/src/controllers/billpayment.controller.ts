@@ -1,7 +1,7 @@
 // controllers/billpayment.controller.ts
 import { NextFunction, Request, Response } from 'express';
-import { Transaction, User } from '../models/index.js';
 import AirtimePlan from '../models/airtime_plan.model.js';
+import { Transaction, User } from '../models/index.js';
 import providerRegistry from '../services/providerRegistry.service.js';
 import topupmateService from '../services/topupmate.service.js';
 import { WalletService } from '../services/wallet.service.js';
@@ -165,26 +165,26 @@ export class BillPaymentController {
         const client = selected?.client || topupmateService;
         const result = await (client.purchaseAirtime
           ? client.purchaseAirtime({
-              network: String(providerId),
-              phone: String(phone),
-              ref,
-              airtime_type,
-              ported_number,
-              amount: String(amount),
-            })
+            network: String(providerId),
+            phone: String(phone),
+            ref,
+            airtime_type,
+            ported_number,
+            amount: String(amount),
+          })
           : topupmateService.purchaseAirtime({
-              network: String(providerId),
-              phone: String(phone),
-              ref,
-              airtime_type,
-              ported_number,
-              amount: String(amount),
-            }));
+            network: String(providerId),
+            phone: String(phone),
+            ref,
+            airtime_type,
+            ported_number,
+            amount: String(amount),
+          }));
 
         // Update transaction status
-        if (result.status === 'success') {
-          await Transaction.findByIdAndUpdate(transaction._id, { 
-            status: 'successful', 
+        if (result.status === 'success' || result.status === true || result.status === 'true') {
+          await Transaction.findByIdAndUpdate(transaction._id, {
+            status: 'successful',
             updated_at: new Date()
           });
           return ApiResponse.success(res, 'Airtime purchase successful', {
@@ -194,8 +194,8 @@ export class BillPaymentController {
         } else {
           // Refund user if failed
           await WalletService.credit(userId, parseFloat(amount), 'Airtime purchase refund');
-          await Transaction.findByIdAndUpdate(transaction._id, { 
-            status: 'failed', 
+          await Transaction.findByIdAndUpdate(transaction._id, {
+            status: 'failed',
             error_message: result.msg || 'Unknown error',
             updated_at: new Date()
           });
@@ -205,13 +205,14 @@ export class BillPaymentController {
       } catch (error: any) {
         // Refund user on error
         await WalletService.credit(userId, parseFloat(amount), 'Airtime purchase refund');
-        await Transaction.findByIdAndUpdate(transaction._id, { 
-          status: 'failed', 
+        await Transaction.findByIdAndUpdate(transaction._id, {
+          status: 'failed',
           error_message: error.message,
           updated_at: new Date()
         });
-        console.error('❌ Airtime purchase error:', error);
-        throw error;
+        console.error('❌ Airtime purchase error:', error.message, error.response?.data);
+        // Throw a clean error object to avoid circular reference issues in global error handler
+        throw new Error(error.response?.data?.message || error.message || 'Airtime purchase failed');
       }
     } catch (error) {
       next(error);
@@ -248,20 +249,20 @@ export class BillPaymentController {
       const selPlans = await providerRegistry.getPreferredProviderFor('data');
       const planClient = selPlans?.client || topupmateService;
       const plans = await (planClient.getDataPlans ? planClient.getDataPlans() : topupmateService.getDataPlans());
-      
+
       // Debug: Log plan structure and search criteria
       console.log('🔍 Data Purchase Debug:', {
         searchingForPlan: plan,
         searchingForPlanType: typeof plan,
         availablePlans: plans.response?.slice(0, 3).map((p: any) => ({ planid: p.planid, planidType: typeof p.planid }))
       });
-      
-      const selectedPlan = plans.response?.find((p: any) => 
-        String(p.planid) === String(plan) || 
+
+      const selectedPlan = plans.response?.find((p: any) =>
+        String(p.planid) === String(plan) ||
         Number(p.planid) === Number(plan) ||
         p.planid === plan
       );
-      
+
       if (!selectedPlan) {
         return ApiResponse.error(res, 'Invalid plan selected', 400);
       }
@@ -303,24 +304,24 @@ export class BillPaymentController {
         const client = selected?.client || topupmateService;
         const result = await (client.purchaseData
           ? client.purchaseData({
-              network: String(providerId),
-              phone: String(phone),
-              ref,
-              plan: String(plan),
-              ported_number,
-            })
+            network: String(providerId),
+            phone: String(phone),
+            ref,
+            plan: String(plan),
+            ported_number,
+          })
           : topupmateService.purchaseData({
-              network: String(providerId),
-              phone: String(phone),
-              ref,
-              plan: String(plan),
-              ported_number,
-            }));
+            network: String(providerId),
+            phone: String(phone),
+            ref,
+            plan: String(plan),
+            ported_number,
+          }));
 
         // Update transaction status
         if (result.status === 'success') {
-          await Transaction.findByIdAndUpdate(transaction._id, { 
-            status: 'successful', 
+          await Transaction.findByIdAndUpdate(transaction._id, {
+            status: 'successful',
             updated_at: new Date()
           });
           return ApiResponse.success(res, 'Data purchase successful', {
@@ -330,8 +331,8 @@ export class BillPaymentController {
         } else {
           // Refund user if failed
           await WalletService.credit(userId, amount, 'Data purchase refund');
-          await Transaction.findByIdAndUpdate(transaction._id, { 
-            status: 'failed', 
+          await Transaction.findByIdAndUpdate(transaction._id, {
+            status: 'failed',
             error_message: result.msg || 'Unknown error',
             updated_at: new Date()
           });
@@ -340,8 +341,8 @@ export class BillPaymentController {
       } catch (error: any) {
         // Refund user on error
         await WalletService.credit(userId, amount, 'Data purchase refund');
-        await Transaction.findByIdAndUpdate(transaction._id, { 
-          status: 'failed', 
+        await Transaction.findByIdAndUpdate(transaction._id, {
+          status: 'failed',
           error_message: error.message,
           updated_at: new Date()
         });
@@ -384,7 +385,7 @@ export class BillPaymentController {
       // Get plan details
       const plans = await topupmateService.getCableTVPlans();
       const selectedPlan = plans.response?.find((p: any) => p.id === plan);
-      
+
       if (!selectedPlan) {
         return ApiResponse.error(res, 'Invalid plan selected', 400);
       }
@@ -422,9 +423,9 @@ export class BillPaymentController {
 
         // Update transaction status
         if (result.status === 'success') {
-          await Transaction.findByIdAndUpdate(transaction._id, { 
-            status: 'completed', 
-            response: result 
+          await Transaction.findByIdAndUpdate(transaction._id, {
+            status: 'completed',
+            response: result
           });
           return ApiResponse.success(res, 'Cable TV purchase successful', {
             transaction,
@@ -433,18 +434,18 @@ export class BillPaymentController {
         } else {
           // Refund user if failed
           await WalletService.credit(userId, amount, 'Cable TV purchase refund');
-          await Transaction.findByIdAndUpdate(transaction._id, { 
-            status: 'failed', 
-            response: result 
+          await Transaction.findByIdAndUpdate(transaction._id, {
+            status: 'failed',
+            response: result
           });
           return ApiResponse.error(res, 'Cable TV purchase failed', 400);
         }
       } catch (error: any) {
         // Refund user on error
         await WalletService.credit(userId, amount, 'Cable TV purchase refund');
-        await Transaction.findByIdAndUpdate(transaction._id, { 
-          status: 'failed', 
-          response: { error: error.message } 
+        await Transaction.findByIdAndUpdate(transaction._id, {
+          status: 'failed',
+          response: { error: error.message }
         });
         throw error;
       }
@@ -513,9 +514,9 @@ export class BillPaymentController {
 
         // Update transaction status
         if (result.status === 'success') {
-          await Transaction.findByIdAndUpdate(transaction._id, { 
-            status: 'completed', 
-            response: result 
+          await Transaction.findByIdAndUpdate(transaction._id, {
+            status: 'completed',
+            response: result
           });
           return ApiResponse.success(res, 'Electricity purchase successful', {
             transaction,
@@ -525,18 +526,18 @@ export class BillPaymentController {
         } else {
           // Refund user if failed
           await WalletService.credit(userId, parseFloat(amount), 'Electricity purchase refund');
-          await Transaction.findByIdAndUpdate(transaction._id, { 
-            status: 'failed', 
-            response: result 
+          await Transaction.findByIdAndUpdate(transaction._id, {
+            status: 'failed',
+            response: result
           });
           return ApiResponse.error(res, 'Electricity purchase failed', 400);
         }
       } catch (error: any) {
         // Refund user on error
         await WalletService.credit(userId, parseFloat(amount), 'Electricity purchase refund');
-        await Transaction.findByIdAndUpdate(transaction._id, { 
-          status: 'failed', 
-          response: { error: error.message } 
+        await Transaction.findByIdAndUpdate(transaction._id, {
+          status: 'failed',
+          response: { error: error.message }
         });
         throw error;
       }
@@ -554,7 +555,7 @@ export class BillPaymentController {
       // Get provider details
       const providers = await topupmateService.getExamPinProviders();
       const selectedProvider = providers.response?.find((p: any) => p.id === provider);
-      
+
       if (!selectedProvider) {
         return ApiResponse.error(res, 'Invalid provider selected', 400);
       }
@@ -592,9 +593,9 @@ export class BillPaymentController {
 
         // Update transaction status
         if (result.status === 'success') {
-          await Transaction.findByIdAndUpdate(transaction._id, { 
-            status: 'completed', 
-            response: result 
+          await Transaction.findByIdAndUpdate(transaction._id, {
+            status: 'completed',
+            response: result
           });
           return ApiResponse.success(res, 'Exam pin purchase successful', {
             transaction,
@@ -604,18 +605,18 @@ export class BillPaymentController {
         } else {
           // Refund user if failed
           await WalletService.credit(userId, amount, 'Exam pin purchase refund');
-          await Transaction.findByIdAndUpdate(transaction._id, { 
-            status: 'failed', 
-            response: result 
+          await Transaction.findByIdAndUpdate(transaction._id, {
+            status: 'failed',
+            response: result
           });
           return ApiResponse.error(res, 'Exam pin purchase failed', 400);
         }
       } catch (error: any) {
         // Refund user on error
         await WalletService.credit(userId, amount, 'Exam pin purchase refund');
-        await Transaction.findByIdAndUpdate(transaction._id, { 
-          status: 'failed', 
-          response: { error: error.message } 
+        await Transaction.findByIdAndUpdate(transaction._id, {
+          status: 'failed',
+          response: { error: error.message }
         });
         throw error;
       }
