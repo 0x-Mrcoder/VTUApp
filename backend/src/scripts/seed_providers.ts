@@ -67,7 +67,7 @@ const PROVIDERS = [
     name: 'SME Plug',
     code: 'smeplug',
     base_url: 'https://smeplug.ng/api',
-    api_key: process.env.SMEPLUG_API_KEY || '5989493e4388a004dcc7319c79f9c9afea27c7498b478712b180b2446ec4951a',
+    api_key: process.env.SMEPLUG_API_KEY || 'acc5a5e0c43bcd66498b0bf68aa38f2bf3290019e09f7305f6d158106f09475f',
     secret_key: '',
     username: '',
     password: '',
@@ -76,7 +76,7 @@ const PROVIDERS = [
     supported_services: ['airtime','data'],
     metadata: {
       env: {
-        SMEPLUG_API_KEY: process.env.SMEPLUG_API_KEY || '5989493e4388a004dcc7319c79f9c9afea27c7498b478712b180b2446ec4951a'
+        SMEPLUG_API_KEY: process.env.SMEPLUG_API_KEY || 'acc5a5e0c43bcd66498b0bf68aa38f2bf3290019e09f7305f6d158106f09475f'
       }
     }
   }
