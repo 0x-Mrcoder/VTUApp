@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "nodemon --exec tsx src/server.ts",
     "build": "tsc",
-    "start": "npm run build && npm run init:admin && npm run seed:admin && npm run seed:providers && node dist/server.js",
+    "start": "npm run build && npm run init:admin && npm run seed:admin && npm run seed:providers && npm run seed:data-plans && node dist/server.js",
     "start:with-seed": "npm run build && npm run seed:pricing && npm run seed:providers && node dist/server.js",
     "test": "NODE_ENV=test jest --detectOpenHandles --forceExit",
     "test:watch": "NODE_ENV=test jest --watch --detectOpenHandles",
@@ -16,7 +16,10 @@
     "init:admin": "tsx src/scripts/init-admin.ts",
     "seed:pricing": "tsx src/scripts/seed_pricing.ts",
     "seed:providers": "tsx src/scripts/seed_providers.ts",
-    "seed:all": "npm run seed:pricing && npm run seed:providers"
+    "seed:data-plans": "tsx src/scripts/seed_mtn_data_plans.ts",
+    "seed:data-generic": "tsx src/scripts/seed_pricing.ts",
+    "seed:all": "npm run seed:providers && npm run seed:data-plans",
+    "verify:seed": "tsx src/scripts/verify_seed.ts"
   },
   "jest": {
     "preset": "ts-jest/presets/default-esm",

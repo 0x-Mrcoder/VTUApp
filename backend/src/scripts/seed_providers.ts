@@ -15,51 +15,12 @@ const PROVIDERS = [
     secret_key: '',
     username: '',
     password: '',
-    active: true,
-    priority: 1,
-    supported_services: ['airtime','data','cable','electricity','exampin'],
+    active: false,
+    priority: 2,
+    supported_services: ['airtime', 'data', 'cable', 'electricity', 'exampin'],
     metadata: {
       env: {
         TOPUPMATE_API_KEY: process.env.TOPUPMATE_API_KEY || ''
-      }
-    }
-  },
-  {
-    name: 'Payrant',
-    code: 'payrant',
-    base_url: process.env.PAYRANT_BASE_URL || 'https://api-core.payrant.com',
-    api_key: process.env.PAYRANT_API_KEY || '',
-    secret_key: process.env.PAYRANT_WEBHOOK_SECRET || '',
-    username: '',
-    password: '',
-    active: true,
-    priority: 1,
-    supported_services: [],
-    metadata: {
-      env: {
-        PAYRANT_API_KEY: process.env.PAYRANT_API_KEY || '',
-        PAYRANT_WEBHOOK_SECRET: process.env.PAYRANT_WEBHOOK_SECRET || '',
-        PAYRANT_BASE_URL: process.env.PAYRANT_BASE_URL || 'https://api-core.payrant.com'
-      }
-    }
-  },
-  {
-    name: 'VTpass',
-    code: 'vtpass',
-    base_url: 'https://api-service.vtpass.com/api',
-    api_key: process.env.VTPASS_API_KEY || '',
-    secret_key: process.env.VTPASS_SECRET || '',
-    username: process.env.VTPASS_USERNAME || '',
-    password: process.env.VTPASS_PASSWORD || '',
-    active: false,
-    priority: 2,
-    supported_services: ['airtime','data','cable','electricity'],
-    metadata: {
-      env: {
-        VTPASS_API_KEY: process.env.VTPASS_API_KEY || '',
-        VTPASS_SECRET: process.env.VTPASS_SECRET || '',
-        VTPASS_USERNAME: process.env.VTPASS_USERNAME || '',
-        VTPASS_PASSWORD: process.env.VTPASS_PASSWORD || ''
       }
     }
   },
@@ -71,9 +32,9 @@ const PROVIDERS = [
     secret_key: '',
     username: '',
     password: '',
-    active: false,
-    priority: 3,
-    supported_services: ['airtime','data'],
+    active: true,
+    priority: 1,
+    supported_services: ['airtime', 'data'],
     metadata: {
       env: {
         SMEPLUG_API_KEY: process.env.SMEPLUG_API_KEY || 'acc5a5e0c43bcd66498b0bf68aa38f2bf3290019e09f7305f6d158106f09475f'

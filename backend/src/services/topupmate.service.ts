@@ -1,6 +1,7 @@
 // services/topupmate.service.ts
 import axios, { AxiosInstance } from 'axios';
 import { config, logger } from '../config/bootstrap.js';
+import ProviderConfig from '../models/provider.model.js';
 
 interface TopupmateResponse {
   status: string;
@@ -10,20 +11,21 @@ interface TopupmateResponse {
 }
 
 class TopupmateService {
-  private api: AxiosInstance;
+  private api: AxiosInstance | null = null;
   private baseURL: string = 'https://connect.topupmate.com/api';
 
-  constructor() {
-    console.log('🔑 TopUpMate Config:', {
-      apiKey: config.topupmate.apiKey ? `${config.topupmate.apiKey.substring(0, 10)}...` : 'NOT SET',
-      baseUrl: config.topupmate.baseUrl
-    });
+  private async ensureClient() {
+    if (this.api) return this.api;
+
+    const cfg = await ProviderConfig.findOne({ code: 'topupmate' });
+    const baseURL = cfg?.base_url || this.baseURL;
+    const apiKey = cfg?.api_key || (cfg?.metadata as any)?.env?.TOPUPMATE_API_KEY || config.topupmate.apiKey || '';
 
     this.api = axios.create({
-      baseURL: this.baseURL,
+      baseURL,
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Token ${config.topupmate.apiKey}`,
+        'Authorization': `Token ${apiKey}`,
       },
       timeout: 30000,
     });
@@ -32,7 +34,6 @@ class TopupmateService {
     this.api.interceptors.request.use(
       (config) => {
         logger.info(`TopupMate API Request: ${config.method?.toUpperCase()} ${config.url}`);
-        console.log('📤 Authorization Header:', config.headers.Authorization ? `Token ${config.headers.Authorization.toString().substring(6, 20)}...` : 'MISSING');
         return config;
       },
       (error) => {
@@ -52,12 +53,15 @@ class TopupmateService {
         return Promise.reject(error);
       }
     );
+
+    return this.api;
   }
 
   // Get service data (networks, plans, etc.)
   async getServiceData(service: string): Promise<TopupmateResponse> {
     try {
-      const response = await this.api.get(`/services/`, {
+      const api = await this.ensureClient();
+      const response = await api.get(`/services/`, {
         params: { service },
       });
       return response.data;
@@ -137,7 +141,8 @@ class TopupmateService {
     amount: string;
   }): Promise<TopupmateResponse> {
     try {
-      const response = await this.api.post('/airtime/', data);
+      const api = await this.ensureClient();
+      const response = await api.post('/airtime/', data);
       return response.data;
     } catch (error: any) {
       logger.error('Error purchasing airtime:', error.message, error.response?.data);
@@ -155,7 +160,8 @@ class TopupmateService {
     ported_number: boolean;
   }): Promise<TopupmateResponse> {
     try {
-      const response = await this.api.post('/data/', data);
+      const api = await this.ensureClient();
+      const response = await api.post('/data/', data);
       return response.data;
     } catch (error: any) {
       logger.error('Error purchasing data:', error.message, error.response?.data);
@@ -170,7 +176,8 @@ class TopupmateService {
     iucnumber: string;
   }): Promise<TopupmateResponse> {
     try {
-      const response = await this.api.post('/cable/verify/', data);
+      const api = await this.ensureClient();
+      const response = await api.post('/cable/verify/', data);
       return response.data;
     } catch (error: any) {
       logger.error('Error verifying cable account:', error.message, error.response?.data);
@@ -189,7 +196,8 @@ class TopupmateService {
     phone: string;
   }): Promise<TopupmateResponse> {
     try {
-      const response = await this.api.post('/cabletv/', data);
+      const api = await this.ensureClient();
+      const response = await api.post('/cabletv/', data);
       return response.data;
     } catch (error: any) {
       logger.error('Error purchasing cable TV:', error.message, error.response?.data);
@@ -205,7 +213,8 @@ class TopupmateService {
     metertype: 'prepaid' | 'postpaid';
   }): Promise<TopupmateResponse> {
     try {
-      const response = await this.api.post('/electricity/verify/', data);
+      const api = await this.ensureClient();
+      const response = await api.post('/electricity/verify/', data);
       return response.data;
     } catch (error: any) {
       logger.error('Error verifying electricity meter:', error.message, error.response?.data);
@@ -224,7 +233,8 @@ class TopupmateService {
     ref: string;
   }): Promise<TopupmateResponse> {
     try {
-      const response = await this.api.post('/electricity/', data);
+      const api = await this.ensureClient();
+      const response = await api.post('/electricity/', data);
       return response.data;
     } catch (error: any) {
       logger.error('Error purchasing electricity:', error.message, error.response?.data);
@@ -240,7 +250,8 @@ class TopupmateService {
     ref: string;
   }): Promise<TopupmateResponse> {
     try {
-      const response = await this.api.post('/exampin/', data);
+      const api = await this.ensureClient();
+      const response = await api.post('/exampin/', data);
       return response.data;
     } catch (error: any) {
       logger.error('Error purchasing exam pin:', error.message, error.response?.data);
@@ -258,7 +269,8 @@ class TopupmateService {
     ref: string;
   }): Promise<TopupmateResponse> {
     try {
-      const response = await this.api.post('/rechargepin/', data);
+      const api = await this.ensureClient();
+      const response = await api.post('/rechargepin/', data);
       return response.data;
     } catch (error: any) {
       logger.error('Error purchasing recharge pin:', error.message, error.response?.data);
@@ -276,7 +288,8 @@ class TopupmateService {
     ref: string;
   }): Promise<TopupmateResponse> {
     try {
-      const response = await this.api.post('/datapin/', data);
+      const api = await this.ensureClient();
+      const response = await api.post('/datapin/', data);
       return response.data;
     } catch (error: any) {
       logger.error('Error purchasing data pin:', error.message, error.response?.data);
@@ -288,7 +301,8 @@ class TopupmateService {
   // Get transaction status
   async getTransactionStatus(reference: string): Promise<TopupmateResponse> {
     try {
-      const response = await this.api.get('/transaction/status/', {
+      const api = await this.ensureClient();
+      const response = await api.get('/transaction/status/', {
         params: { reference },
       });
       return response.data;
@@ -301,7 +315,8 @@ class TopupmateService {
   // Get wallet balance (account info)
   async getWalletBalance(): Promise<{ balance: number; currency?: string; name?: string; status?: string; raw?: any }> {
     try {
-      const response = await this.api.get('/user/');
+      const api = await this.ensureClient();
+      const response = await api.get('/user/');
       const data = response.data as any;
       const rawBalance = data?.balance ?? data?.response?.balance;
       const numeric = typeof rawBalance === 'number'

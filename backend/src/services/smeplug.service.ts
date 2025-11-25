@@ -47,7 +47,7 @@ class SMEPlugService {
     if (this.api) return this.api;
     const cfg = await ProviderConfig.findOne({ code: 'smeplug' });
     const baseURL = cfg?.base_url || 'https://smeplug.ng/api';
-    const apiKey = (cfg?.metadata as any)?.env?.SMEPLUG_API_KEY || cfg?.api_key || '';
+    const apiKey = cfg?.api_key || (cfg?.metadata as any)?.env?.SMEPLUG_API_KEY || '';
 
     if (!apiKey) {
       throw new Error('SMEPlug API key not configured');

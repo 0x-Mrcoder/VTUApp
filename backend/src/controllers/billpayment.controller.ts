@@ -245,29 +245,13 @@ export class BillPaymentController {
         return ApiResponse.error(res, 'Invalid network. Must be: mtn, airtel, glo, or 9mobile', 400);
       }
 
-      // Get plan details to determine amount
-      const selPlans = await providerRegistry.getPreferredProviderFor('data');
-      const planClient = selPlans?.client || topupmateService;
-      const plans = await (planClient.getDataPlans ? planClient.getDataPlans() : topupmateService.getDataPlans());
-
-      // Debug: Log plan structure and search criteria
-      console.log('🔍 Data Purchase Debug:', {
-        searchingForPlan: plan,
-        searchingForPlanType: typeof plan,
-        availablePlans: plans.response?.slice(0, 3).map((p: any) => ({ planid: p.planid, planidType: typeof p.planid }))
-      });
-
-      const selectedPlan = plans.response?.find((p: any) =>
-        String(p.planid) === String(plan) ||
-        Number(p.planid) === Number(plan) ||
-        p.planid === plan
-      );
-
-      if (!selectedPlan) {
+      // Get plan details from DB
+      const dbPlan = await AirtimePlan.findById(plan);
+      if (!dbPlan) {
         return ApiResponse.error(res, 'Invalid plan selected', 400);
       }
 
-      const amount = parseFloat(selectedPlan.price);
+      const amount = Number(dbPlan.price);
 
       // Validate user balance
       const wallet = await WalletService.getWalletByUserId(userId);
@@ -296,7 +280,7 @@ export class BillPaymentController {
         status: 'pending',
         destination_account: phone,
         description: `Data purchase - ${network.toUpperCase()} - ${phone}`,
-        plan_id: plan
+        plan_id: dbPlan._id
       });
 
       try {
@@ -307,19 +291,19 @@ export class BillPaymentController {
             network: String(providerId),
             phone: String(phone),
             ref,
-            plan: String(plan),
+            plan: String(dbPlan.externalPlanId || dbPlan.code), // Use external ID from DB
             ported_number,
           })
           : topupmateService.purchaseData({
             network: String(providerId),
             phone: String(phone),
             ref,
-            plan: String(plan),
+            plan: String(dbPlan.externalPlanId || dbPlan.code), // Use external ID from DB
             ported_number,
           }));
 
         // Update transaction status
-        if (result.status === 'success') {
+        if (result.status === 'success' || result.status === true || result.status === 'true') {
           await Transaction.findByIdAndUpdate(transaction._id, {
             status: 'successful',
             updated_at: new Date()
@@ -363,7 +347,7 @@ export class BillPaymentController {
         ? client.verifyCableAccount({ provider: String(provider), iucnumber: String(iucnumber) })
         : topupmateService.verifyCableAccount({ provider: String(provider), iucnumber: String(iucnumber) }));
 
-      if (result.status === 'success') {
+      if (result.status === 'success' || result.status === true || result.status === 'true') {
         return ApiResponse.success(res, 'Account verification successful', {
           customer_name: result.Customer_Name,
           iucnumber,
@@ -422,7 +406,7 @@ export class BillPaymentController {
           : topupmateService.purchaseCableTV({ provider, iucnumber, plan, ref, subtype, phone }));
 
         // Update transaction status
-        if (result.status === 'success') {
+        if (result.status === 'success' || result.status === true || result.status === 'true') {
           await Transaction.findByIdAndUpdate(transaction._id, {
             status: 'completed',
             response: result
@@ -464,7 +448,7 @@ export class BillPaymentController {
         ? client.verifyElectricityMeter({ provider, meternumber, metertype })
         : topupmateService.verifyElectricityMeter({ provider, meternumber, metertype }));
 
-      if (result.status === 'success') {
+      if (result.status === 'success' || result.status === true || result.status === 'true') {
         return ApiResponse.success(res, 'Meter verification successful', {
           customer_name: result.Customer_Name,
           meternumber,
@@ -513,7 +497,7 @@ export class BillPaymentController {
           : topupmateService.purchaseElectricity({ provider, meternumber, amount, metertype, phone, ref }));
 
         // Update transaction status
-        if (result.status === 'success') {
+        if (result.status === 'success' || result.status === true || result.status === 'true') {
           await Transaction.findByIdAndUpdate(transaction._id, {
             status: 'completed',
             response: result
@@ -592,7 +576,7 @@ export class BillPaymentController {
           : topupmateService.purchaseExamPin({ provider, quantity, ref }));
 
         // Update transaction status
-        if (result.status === 'success') {
+        if (result.status === 'success' || result.status === true || result.status === 'true') {
           await Transaction.findByIdAndUpdate(transaction._id, {
             status: 'completed',
             response: result
@@ -636,7 +620,7 @@ export class BillPaymentController {
         ? client.getTransactionStatus(reference)
         : topupmateService.getTransactionStatus(reference));
 
-      if (result.status === 'success') {
+      if (result.status === 'success' || result.status === true || result.status === 'true') {
         return ApiResponse.success(res, 'Transaction status retrieved', result.response);
       } else {
         return ApiResponse.error(res, 'Failed to retrieve transaction status', 400);

@@ -7,8 +7,8 @@ class VTpassService {
     if (this.api) return this.api;
     const cfg = await ProviderConfig.findOne({ code: 'vtpass' });
     const baseURL = cfg?.base_url || 'https://api-service.vtpass.com/api';
-    const apiKey = (cfg?.metadata as any)?.env?.VTPASS_API_KEY || cfg?.api_key || '';
-    const secret = (cfg?.metadata as any)?.env?.VTPASS_SECRET || cfg?.secret_key || '';
+    const apiKey = cfg?.api_key || (cfg?.metadata as any)?.env?.VTPASS_API_KEY || '';
+    const secret = cfg?.secret_key || (cfg?.metadata as any)?.env?.VTPASS_SECRET || '';
     this.api = axios.create({
       baseURL,
       headers: {

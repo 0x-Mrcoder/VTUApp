@@ -5504,3 +5504,453 @@
 {"level":"info","message":"MongoDB connected successfully","timestamp":"2025-11-21 16:02:17"}
 {"environment":"development","level":"info","message":"🚀 VTU App Backend Starting...","nodeVersion":"v22.18.0","timestamp":"2025-11-21 16:51:19"}
 {"level":"info","message":"MongoDB connected successfully","timestamp":"2025-11-21 16:51:19"}
+{"environment":"development","level":"info","message":"🚀 VTU App Backend Starting...","nodeVersion":"v22.18.0","timestamp":"2025-11-25 11:06:30"}
+{"level":"info","message":"MongoDB connected successfully","timestamp":"2025-11-25 11:06:30"}
+{"body":{"email":"admin@vtuapp.com","password":"***"},"headers":{"authorization":"Bearer ***","contentType":"application/json","origin":"http://localhost:5173"},"ip":"127.0.0.1","level":"info","message":"📥 Incoming Request","method":"POST","path":"/api/admin/login","query":{},"timestamp":"2025-11-25 11:06:41","url":"/api/admin/login","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36","userId":"anonymous"}
+{"duration":"603ms","ip":"127.0.0.1","level":"info","message":"📤 Response Success","method":"POST","statusCode":200,"timestamp":"2025-11-25 11:06:42","url":"/api/admin/login","userId":"anonymous"}
+{"level":"info","message":"127.0.0.1 - anonymous [25/Nov/2025:10:06:42 +0000] \"POST /api/admin/login HTTP/1.1\" 200 827 \"http://localhost:5173/\" \"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36\" 602.368 ms","timestamp":"2025-11-25 11:06:42"}
+{"headers":{"authorization":"Bearer ***","origin":"http://localhost:5173"},"ip":"127.0.0.1","level":"info","message":"📥 Incoming Request","method":"GET","path":"/api/admin/dashboard","query":{},"timestamp":"2025-11-25 11:06:42","url":"/api/admin/dashboard","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36","userId":"anonymous"}
+{"duration":"360ms","ip":"127.0.0.1","level":"info","message":"📤 Response Success","method":"GET","statusCode":200,"timestamp":"2025-11-25 11:06:42","url":"/api/admin/dashboard","userId":"6913575adc7e471b13d32a9e"}
+{"level":"info","message":"127.0.0.1 - 6913575adc7e471b13d32a9e [25/Nov/2025:10:06:42 +0000] \"GET /api/admin/dashboard HTTP/1.1\" 200 159 \"http://localhost:5173/\" \"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36\" 363.896 ms","timestamp":"2025-11-25 11:06:42"}
+{"headers":{"authorization":"Bearer ***","origin":"http://localhost:5173"},"ip":"127.0.0.1","level":"info","message":"📥 Incoming Request","method":"GET","path":"/api/admin/users","query":{"limit":"10","page":"1"},"timestamp":"2025-11-25 11:06:48","url":"/api/admin/users?page=1&limit=10","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36","userId":"anonymous"}
+{"duration":"143ms","ip":"127.0.0.1","level":"info","message":"📤 Response Success","method":"GET","statusCode":200,"timestamp":"2025-11-25 11:06:49","url":"/api/admin/users?page=1&limit=10","userId":"6913575adc7e471b13d32a9e"}
+{"level":"info","message":"127.0.0.1 - 6913575adc7e471b13d32a9e [25/Nov/2025:10:06:49 +0000] \"GET /api/admin/users?page=1&limit=10 HTTP/1.1\" 304 - \"http://localhost:5173/\" \"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36\" 141.707 ms","timestamp":"2025-11-25 11:06:49"}
+{"headers":{"authorization":"Bearer ***","origin":"http://localhost:5173"},"ip":"127.0.0.1","level":"info","message":"📥 Incoming Request","method":"GET","path":"/api/admin/pricing","query":{"limit":"10","page":"1"},"timestamp":"2025-11-25 11:06:54","url":"/api/admin/pricing?page=1&limit=10","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36","userId":"anonymous"}
+{"duration":"290ms","ip":"127.0.0.1","level":"info","message":"📤 Response Success","method":"GET","statusCode":200,"timestamp":"2025-11-25 11:06:54","url":"/api/admin/pricing?page=1&limit=10","userId":"6913575adc7e471b13d32a9e"}
+{"level":"info","message":"127.0.0.1 - 6913575adc7e471b13d32a9e [25/Nov/2025:10:06:54 +0000] \"GET /api/admin/pricing?page=1&limit=10 HTTP/1.1\" 304 - \"http://localhost:5173/\" \"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36\" 290.319 ms","timestamp":"2025-11-25 11:06:54"}
+{"body":{"active":false,"code":"MTN100","discount":0,"externalPlanId":"","name":"MTN ₦100 Airtime","price":100,"providerId":1,"providerName":"MTN","type":"AIRTIME"},"headers":{"authorization":"Bearer ***","contentType":"application/json","origin":"http://localhost:5173"},"ip":"127.0.0.1","level":"info","message":"📥 Incoming Request","method":"PUT","path":"/api/admin/pricing/6917348acf288446e9513a3f","query":{},"timestamp":"2025-11-25 11:07:30","url":"/api/admin/pricing/6917348acf288446e9513a3f","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36","userId":"anonymous"}
+2025-11-25 11:07:30 [INFO]: Plan updated: 6917348acf288446e9513a3f 
+{"duration":"390ms","ip":"127.0.0.1","level":"info","message":"📤 Response Success","method":"PUT","statusCode":200,"timestamp":"2025-11-25 11:07:30","url":"/api/admin/pricing/6917348acf288446e9513a3f","userId":"6913575adc7e471b13d32a9e"}
+{"level":"info","message":"127.0.0.1 - 6913575adc7e471b13d32a9e [25/Nov/2025:10:07:30 +0000] \"PUT /api/admin/pricing/6917348acf288446e9513a3f HTTP/1.1\" 200 350 \"http://localhost:5173/\" \"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36\" 389.534 ms","timestamp":"2025-11-25 11:07:30"}
+{"headers":{"authorization":"Bearer ***","origin":"http://localhost:5173"},"ip":"127.0.0.1","level":"info","message":"📥 Incoming Request","method":"GET","path":"/api/admin/pricing","query":{"limit":"10","page":"1"},"timestamp":"2025-11-25 11:07:30","url":"/api/admin/pricing?page=1&limit=10","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36","userId":"anonymous"}
+{"duration":"29ms","ip":"127.0.0.1","level":"info","message":"📤 Response Success","method":"GET","statusCode":200,"timestamp":"2025-11-25 11:07:30","url":"/api/admin/pricing?page=1&limit=10","userId":"6913575adc7e471b13d32a9e"}
+{"level":"info","message":"127.0.0.1 - 6913575adc7e471b13d32a9e [25/Nov/2025:10:07:30 +0000] \"GET /api/admin/pricing?page=1&limit=10 HTTP/1.1\" 200 13937 \"http://localhost:5173/\" \"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36\" 28.620 ms","timestamp":"2025-11-25 11:07:30"}
+{"headers":{"authorization":"Bearer ***","origin":"http://localhost:5173"},"ip":"127.0.0.1","level":"info","message":"📥 Incoming Request","method":"GET","path":"/api/admin/pricing","query":{"limit":"10","page":"1"},"timestamp":"2025-11-25 11:08:25","url":"/api/admin/pricing?page=1&limit=10","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36","userId":"anonymous"}
+{"duration":"30ms","ip":"127.0.0.1","level":"info","message":"📤 Response Success","method":"GET","statusCode":200,"timestamp":"2025-11-25 11:08:25","url":"/api/admin/pricing?page=1&limit=10","userId":"6913575adc7e471b13d32a9e"}
+{"level":"info","message":"127.0.0.1 - 6913575adc7e471b13d32a9e [25/Nov/2025:10:08:25 +0000] \"GET /api/admin/pricing?page=1&limit=10 HTTP/1.1\" 304 - \"http://localhost:5173/\" \"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36\" 29.314 ms","timestamp":"2025-11-25 11:08:25"}
+{"environment":"development","level":"info","message":"🚀 VTU App Backend Starting...","nodeVersion":"v22.18.0","timestamp":"2025-11-25 11:15:43"}
+{"level":"info","message":"MongoDB connected successfully","timestamp":"2025-11-25 11:15:43"}
+{"environment":"development","level":"info","message":"🚀 VTU App Backend Starting...","nodeVersion":"v22.18.0","timestamp":"2025-11-25 11:16:00"}
+{"level":"info","message":"MongoDB connected successfully","timestamp":"2025-11-25 11:16:00"}
+{"environment":"development","level":"info","message":"🚀 VTU App Backend Starting...","nodeVersion":"v22.18.0","timestamp":"2025-11-25 11:16:05"}
+{"level":"info","message":"MongoDB connected successfully","timestamp":"2025-11-25 11:16:05"}
+{"environment":"development","level":"info","message":"🚀 VTU App Backend Starting...","nodeVersion":"v22.18.0","timestamp":"2025-11-25 11:16:18"}
+{"level":"info","message":"MongoDB connected successfully","timestamp":"2025-11-25 11:16:18"}
+{"environment":"development","level":"info","message":"🚀 VTU App Backend Starting...","nodeVersion":"v22.18.0","timestamp":"2025-11-25 11:16:44"}
+{"level":"info","message":"MongoDB connected successfully","timestamp":"2025-11-25 11:16:44"}
+{"environment":"development","level":"info","message":"🚀 VTU App Backend Starting...","nodeVersion":"v22.18.0","timestamp":"2025-11-25 11:16:54"}
+{"level":"info","message":"MongoDB connected successfully","timestamp":"2025-11-25 11:16:54"}
+{"headers":{"authorization":"Bearer ***","origin":"http://localhost:5173"},"ip":"127.0.0.1","level":"info","message":"📥 Incoming Request","method":"GET","path":"/api/admin/pricing","query":{"limit":"10","page":"1"},"timestamp":"2025-11-25 11:17:42","url":"/api/admin/pricing?page=1&limit=10","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36","userId":"anonymous"}
+{"duration":"61ms","ip":"127.0.0.1","level":"info","message":"📤 Response Success","method":"GET","statusCode":200,"timestamp":"2025-11-25 11:17:42","url":"/api/admin/pricing?page=1&limit=10","userId":"6913575adc7e471b13d32a9e"}
+{"level":"info","message":"127.0.0.1 - 6913575adc7e471b13d32a9e [25/Nov/2025:10:17:42 +0000] \"GET /api/admin/pricing?page=1&limit=10 HTTP/1.1\" 304 - \"http://localhost:5173/\" \"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36\" 63.184 ms","timestamp":"2025-11-25 11:17:42"}
+{"environment":"development","level":"info","message":"🚀 VTU App Backend Starting...","nodeVersion":"v22.18.0","timestamp":"2025-11-25 11:41:33"}
+{"level":"info","message":"MongoDB connected successfully","timestamp":"2025-11-25 11:41:33"}
+{"environment":"development","level":"info","message":"🚀 VTU App Backend Starting...","nodeVersion":"v22.18.0","timestamp":"2025-11-25 11:41:59"}
+{"level":"info","message":"MongoDB connected successfully","timestamp":"2025-11-25 11:41:59"}
+{"headers":{"authorization":"Bearer ***","origin":"http://localhost:5173"},"ip":"127.0.0.1","level":"info","message":"📥 Incoming Request","method":"GET","path":"/api/admin/pricing","query":{"limit":"10","page":"1"},"timestamp":"2025-11-25 11:43:41","url":"/api/admin/pricing?page=1&limit=10","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36","userId":"anonymous"}
+{"duration":"272ms","ip":"127.0.0.1","level":"info","message":"📤 Response Success","method":"GET","statusCode":200,"timestamp":"2025-11-25 11:43:41","url":"/api/admin/pricing?page=1&limit=10","userId":"6913575adc7e471b13d32a9e"}
+{"level":"info","message":"127.0.0.1 - 6913575adc7e471b13d32a9e [25/Nov/2025:10:43:41 +0000] \"GET /api/admin/pricing?page=1&limit=10 HTTP/1.1\" 304 - \"http://localhost:5173/\" \"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36\" 292.183 ms","timestamp":"2025-11-25 11:43:41"}
+2025-11-25 11:43:42 [INFO]: Connected to MongoDB 
+2025-11-25 11:43:43 [INFO]: Cleared existing MTN data plans 
+2025-11-25 11:43:43 [INFO]: Inserted plan: 500MB SME (172) 
+2025-11-25 11:43:43 [INFO]: Inserted plan: 1GB SME (173) 
+2025-11-25 11:43:43 [INFO]: Inserted plan: 2GB SME (174) 
+2025-11-25 11:43:43 [INFO]: Inserted plan: 3GB SME (175) 
+2025-11-25 11:43:43 [INFO]: Inserted plan: 5GB SME (176) 
+2025-11-25 11:43:43 [INFO]: Inserted plan: 20MB Facebook Daily (Social/Gifting) (239) 
+2025-11-25 11:43:43 [INFO]: Inserted plan: 40MB WhatsApp Weekly (Social/Gifting) (247) 
+2025-11-25 11:43:43 [INFO]: Inserted plan: 40MB Facebook Weekly (Social/Gifting) (246) 
+2025-11-25 11:43:43 [INFO]: Inserted plan: 20MB WhatsApp Daily (Social/Gifting) (240) 
+2025-11-25 11:43:43 [INFO]: Inserted plan: 75MB Daily (Gifting) (6) 
+2025-11-25 11:43:43 [INFO]: Inserted plan: 40MB Ayoba Weekly (Social/Gifting) (248) 
+2025-11-25 11:43:43 [INFO]: Inserted plan: 200MB All Social Daily (Gifting) (265) 
+2025-11-25 11:43:43 [INFO]: Inserted plan: 100MB Daily (Gifting) (7) 
+2025-11-25 11:43:43 [INFO]: Inserted plan: 470MB All Social Weekly (Gifting) (266) 
+2025-11-25 11:43:43 [INFO]: Inserted plan: 120MB Facebook Monthly (Social/Gifting) (244) 
+2025-11-25 11:43:43 [INFO]: Inserted plan: 110MB Daily (Gifting) (230) 
+2025-11-25 11:43:43 [INFO]: Inserted plan: 1.2GB All Social Monthly (Gifting) (256) 
+2025-11-25 11:43:43 [INFO]: Inserted plan: 500MB Daily (Gifting) (264) 
+2025-11-25 11:43:43 [INFO]: Inserted plan: 2GB 2-Day Plan (227) 
+2025-11-25 11:43:43 [INFO]: Inserted plan: 1.5GB 2-Day Plan (231) 
+2025-11-25 11:43:43 [INFO]: Inserted plan: 3.2GB 2-Day Plan (229) 
+2025-11-25 11:43:43 [INFO]: Inserted plan: 7GB 2-Day Plan (445) 
+2025-11-25 11:43:44 [INFO]: Inserted plan: 500MB Weekly (258) 
+2025-11-25 11:43:44 [INFO]: Inserted plan: 1GB Weekly (15) 
+2025-11-25 11:43:44 [INFO]: Inserted plan: 1.2GB Pulse Weekly (238) 
+2025-11-25 11:43:44 [INFO]: Inserted plan: 1.5GB Weekly (16) 
+2025-11-25 11:43:44 [INFO]: Inserted plan: 3.5GB Weekly (261) 
+2025-11-25 11:43:44 [INFO]: Inserted plan: 6GB Weekly (17) 
+2025-11-25 11:43:44 [INFO]: Inserted plan: 7GB Monthly (21) 
+2025-11-25 11:43:44 [INFO]: Inserted plan: 20GB Monthly (25) 
+2025-11-25 11:43:44 [INFO]: Inserted plan: 25GB Monthly (26) 
+2025-11-25 11:43:44 [INFO]: Inserted plan: 30GB Monthly (120) 
+2025-11-25 11:43:44 [INFO]: Inserted plan: 36GB Monthly (27) 
+2025-11-25 11:43:44 [INFO]: Inserted plan: 40GB Postpaid (2 Months) (235) 
+2025-11-25 11:43:44 [INFO]: Inserted plan: 60GB Monthly (121) 
+2025-11-25 11:43:44 [INFO]: Inserted plan: 65GB Monthly (329) 
+2025-11-25 11:43:44 [INFO]: Inserted plan: 75GB Monthly (28) 
+2025-11-25 11:43:44 [INFO]: Inserted plan: 165GB Monthly (29) 
+2025-11-25 11:43:44 [INFO]: Inserted plan: 200GB (2 Months) (32) 
+2025-11-25 11:43:44 [INFO]: Inserted plan: 250GB Monthly (30) 
+2025-11-25 11:43:44 [INFO]: Inserted plan: 150MB TikTok Daily Plan [Social] [Gifting] (242) 
+2025-11-25 11:43:44 [INFO]: Inserted plan: 500MB Pulse Nightlife bundle [Social] [Gifting] (241) 
+2025-11-25 11:43:44 [INFO]: Inserted plan: 120MB WhatsApp Monthly Plan [Social] [Gifting] (245) 
+2025-11-25 11:43:44 [INFO]: Inserted plan: 200MB 2-Day Plan [Gifting] (9) 
+2025-11-25 11:43:44 [INFO]: Inserted plan: 250MB 2-Day Plan [Gifting] (10) 
+2025-11-25 11:43:44 [INFO]: Inserted plan: 230MB Daily Plan [Gifting] (237) 
+2025-11-25 11:43:44 [INFO]: Inserted plan: 4 hrs YouTube Buffet Daily Bundle [Social] [Gifting] (243) 
+2025-11-25 11:43:44 [INFO]: Inserted plan: 1GB IG/TT/YT Weekly Plan [Soclai] [Gifting] (249) 
+2025-11-25 11:43:44 [INFO]: Inserted plan: 2GB TikTok Weekly Plan [Social] [Gifting] (250) 
+2025-11-25 11:43:44 [INFO]: Inserted plan: 750MB + Free 1hr (YT/IG/TT) [Gifting] / 3 Days (8) 
+2025-11-25 11:43:44 [INFO]: Inserted plan: 750MB + Free 1hr (YT/IG/TT) [Gifting] (12) 
+2025-11-25 11:43:44 [INFO]: Inserted plan: 1GB+1.5mins Daily Plan [Gifting] (11) 
+2025-11-25 11:43:44 [INFO]: Inserted plan: XtraData 500 - 600MB - Weekly [Gifting] (269) 
+2025-11-25 11:43:44 [INFO]: Inserted plan: XtraData More 600 Daily [Gifting] (267) 
+2025-11-25 11:43:44 [INFO]: Inserted plan: 2.5GB 2-Day Plan [Gifting] (13) 
+2025-11-25 11:43:44 [INFO]: Inserted plan: XtraData More 1000 Daily [Gifting] (268) 
+2025-11-25 11:43:44 [INFO]: Inserted plan: 3.2GB 2-Day Plan [Gifting] (229) 
+2025-11-25 11:43:44 [INFO]: Inserted plan: XtraData 1500 - 1.8GB - Monthly [Gifting] (271) 
+2025-11-25 11:43:44 [INFO]: Inserted plan: 2GB+2mins Monthly Plan [Gifting] (18) 
+2025-11-25 11:43:44 [INFO]: Inserted plan: 2.7GB+2mins Monthly Plan [Gifting] (19) 
+2025-11-25 11:43:44 [INFO]: Inserted plan: XtraData More 2500 - 6GB - Weekly [Gifting] (270) 
+2025-11-25 11:43:44 [INFO]: Inserted plan: 3.5GB+5mins Monthly Plan [Gifting] (20) 
+2025-11-25 11:43:44 [INFO]: Inserted plan: XtraData 3000 - 5.5GB - Monthly [Gifting] (272) 
+2025-11-25 11:43:44 [INFO]: Inserted plan: 6.75GB Value Data Plan Monthly [Gifting] (232) 
+2025-11-25 11:43:44 [INFO]: Inserted plan: 11GB (Digital Bundle) - 7 Days (226) 
+2025-11-25 11:43:44 [INFO]: Inserted plan: 10GB + 10mins Monthly Plan [Gifting] (22) 
+2025-11-25 11:43:44 [INFO]: Inserted plan: 14.5GB Value Data Monthly Plan [Gifting] (233) 
+2025-11-25 11:43:44 [INFO]: Inserted plan: XtraData 5500 - 12.5GB - Monthly [Gifting] (274) 
+2025-11-25 11:43:44 [INFO]: Inserted plan: 12.5 Monthly Plan [Gifting] (23) 
+2025-11-25 11:43:44 [INFO]: Inserted plan: 16.5GB+10mins Monthly Plan [Gifting] (24) 
+2025-11-25 11:43:44 [INFO]: Inserted plan: 35GB Postpaid Monthly [Gifting] (234) 
+2025-11-25 11:43:44 [INFO]: Inserted plan: 30GB Monthly Broadband Plan - Monthly (120) 
+2025-11-25 11:43:44 [INFO]: Inserted plan: XtraData 11000 Monthly [Gifting] (275) 
+2025-11-25 11:43:44 [INFO]: Inserted plan: 60GB Monthly Broadband Plan - Monthly (121) 
+2025-11-25 11:43:44 [INFO]: Inserted plan: 65GB Monthly Plan (393) 
+2025-11-25 11:43:44 [INFO]: Inserted plan: 120GB Monthly Broadband Plan (412) 
+2025-11-25 11:43:44 [INFO]: Inserted plan: 90GB 2-Month [Gifting] (236) 
+2025-11-25 11:43:44 [INFO]: Inserted plan: Silver (150GB FUP Monthly Unlimited) Broadband - Monthly (123) 
+2025-11-25 11:43:44 [INFO]: Inserted plan: 200GB Monthly Broadband Plan (124) 
+2025-11-25 11:43:44 [INFO]: Inserted plan: 150GB 2-Month Plan [Gifting] (31) 
+2025-11-25 11:43:44 [INFO]: Inserted plan: Ruby (300GB FUP Monthly Unlimited) Broadband (125) 
+2025-11-25 11:43:44 [INFO]: Inserted plan: 450GB HyNetFlex - 3 Monthly (129) 
+2025-11-25 11:43:44 [INFO]: Inserted plan: 450GB 3-Month Broadband Plan (413) 
+2025-11-25 11:43:44 [INFO]: Inserted plan: 480GB 3-Month Plan (405) 
+2025-11-25 11:43:44 [INFO]: Inserted plan: 800GB Yearly Plan [Gifting] (263) 
+2025-11-25 11:43:44 [INFO]: Inserted plan: 1.5TB Yearly Broadband (414) 
+2025-11-25 11:43:44 [INFO]: Inserted plan: 25GB [Corporate] - 30 Days (133) 
+2025-11-25 11:43:44 [INFO]: Inserted plan: 30GB [Corporate] - 30 Days (134) 
+2025-11-25 11:43:44 [INFO]: Inserted plan: 50GB [Corporate] - 30 Days (135) 
+2025-11-25 11:43:44 [INFO]: Inserted plan: 500MB Share - Weekly (423) 
+2025-11-25 11:43:44 [INFO]: Inserted plan: 1GB Share - Weekly (424) 
+2025-11-25 11:43:44 [INFO]: Inserted plan: 50MB Share (169) 
+2025-11-25 11:43:44 [INFO]: Inserted plan: 2GB Share - Weekly (425) 
+2025-11-25 11:43:44 [INFO]: Inserted plan: 100MB Share (170) 
+2025-11-25 11:43:44 [INFO]: Inserted plan: 3GB Share - Weekly (426) 
+2025-11-25 11:43:44 [INFO]: Inserted plan: 200MB Share (171) 
+2025-11-25 11:43:44 [INFO]: Inserted plan: 5GB Share - Weekly (427) 
+2025-11-25 11:43:44 [INFO]: Inserted plan: 500MB Share (172) 
+2025-11-25 11:43:44 [INFO]: Inserted plan: 1GB Share (173) 
+2025-11-25 11:43:44 [INFO]: Inserted plan: 2GB Share (174) 
+2025-11-25 11:43:44 [INFO]: Inserted plan: 3GB Share (175) 
+2025-11-25 11:43:44 [INFO]: Inserted plan: 5GB Share (176) 
+2025-11-25 11:43:44 [INFO]: Inserted plan: 2.5GB - 1Day Plan [Gifting] (228) 
+2025-11-25 11:43:44 [INFO]: Inserted plan: 20GB Weekly Plan [Gifting] (262) 
+2025-11-25 11:43:44 [INFO]: Inserted plan: ThryveData 1500 (1.8GB + 35 minutes) - Gifting (259) 
+2025-11-25 11:43:44 [INFO]: Inserted plan: ThryveData 3000 5GB [Gifting] (260) 
+2025-11-25 11:43:44 [INFO]: Disconnected from MongoDB 
+{"headers":{"authorization":"Bearer ***","origin":"http://localhost:5173"},"ip":"127.0.0.1","level":"info","message":"📥 Incoming Request","method":"GET","path":"/api/admin/pricing","query":{"limit":"10","page":"1"},"timestamp":"2025-11-25 11:43:57","url":"/api/admin/pricing?page=1&limit=10","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36","userId":"anonymous"}
+{"duration":"406ms","ip":"127.0.0.1","level":"info","message":"📤 Response Success","method":"GET","statusCode":200,"timestamp":"2025-11-25 11:43:57","url":"/api/admin/pricing?page=1&limit=10","userId":"6913575adc7e471b13d32a9e"}
+{"level":"info","message":"127.0.0.1 - 6913575adc7e471b13d32a9e [25/Nov/2025:10:43:57 +0000] \"GET /api/admin/pricing?page=1&limit=10 HTTP/1.1\" 200 47012 \"http://localhost:5173/\" \"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36\" 408.639 ms","timestamp":"2025-11-25 11:43:57"}
+{"environment":"development","level":"info","message":"🚀 VTU App Backend Starting...","nodeVersion":"v22.18.0","timestamp":"2025-11-25 11:44:12"}
+{"level":"info","message":"MongoDB connected successfully","timestamp":"2025-11-25 11:44:12"}
+{"headers":{"authorization":"Bearer ***"},"ip":"192.168.43.28","level":"info","message":"📥 Incoming Request","method":"GET","path":"/api/users/profile","query":{},"timestamp":"2025-11-25 11:53:07","url":"/api/users/profile","userAgent":"okhttp/4.12.0","userId":"anonymous"}
+{"duration":"283ms","ip":"192.168.43.28","level":"warn","message":"📤 Response Warning","method":"GET","statusCode":404,"timestamp":"2025-11-25 11:53:08","url":"/api/users/profile","userId":"6910a8039ee6fac09d81f88f"}
+{"level":"info","message":"192.168.43.28 - 6910a8039ee6fac09d81f88f [25/Nov/2025:10:53:08 +0000] \"GET /api/users/profile HTTP/1.1\" 404 44 \"-\" \"okhttp/4.12.0\" 287.332 ms","timestamp":"2025-11-25 11:53:08"}
+{"headers":{"authorization":"Bearer ***"},"ip":"192.168.43.28","level":"info","message":"📥 Incoming Request","method":"GET","path":"/api/billpayment/data-plans","query":{},"timestamp":"2025-11-25 11:53:08","url":"/api/billpayment/data-plans","userAgent":"okhttp/4.12.0","userId":"anonymous"}
+{"headers":{"authorization":"Bearer ***"},"ip":"192.168.43.28","level":"info","message":"📥 Incoming Request","method":"GET","path":"/api/wallet","query":{},"timestamp":"2025-11-25 11:53:08","url":"/api/wallet","userAgent":"okhttp/4.12.0","userId":"anonymous"}
+{"headers":{"authorization":"Bearer ***"},"ip":"192.168.43.28","level":"info","message":"📥 Incoming Request","method":"GET","path":"/api/users/profile","query":{},"timestamp":"2025-11-25 11:53:08","url":"/api/users/profile","userAgent":"okhttp/4.12.0","userId":"anonymous"}
+{"headers":{"authorization":"Bearer ***"},"ip":"192.168.43.28","level":"info","message":"📥 Incoming Request","method":"GET","path":"/api/transactions","query":{"limit":"5","page":"1"},"timestamp":"2025-11-25 11:53:08","url":"/api/transactions?page=1&limit=5","userAgent":"okhttp/4.12.0","userId":"anonymous"}
+{"duration":"13ms","ip":"192.168.43.28","level":"warn","message":"📤 Response Warning","method":"GET","statusCode":404,"timestamp":"2025-11-25 11:53:08","url":"/api/users/profile","userId":"6910a8039ee6fac09d81f88f"}
+{"level":"info","message":"192.168.43.28 - 6910a8039ee6fac09d81f88f [25/Nov/2025:10:53:08 +0000] \"GET /api/users/profile HTTP/1.1\" 404 44 \"-\" \"okhttp/4.12.0\" 14.049 ms","timestamp":"2025-11-25 11:53:08"}
+{"duration":"186ms","ip":"192.168.43.28","level":"info","message":"📤 Response Success","method":"GET","statusCode":200,"timestamp":"2025-11-25 11:53:08","url":"/api/billpayment/data-plans","userId":"6910a8039ee6fac09d81f88f"}
+{"level":"info","message":"192.168.43.28 - 6910a8039ee6fac09d81f88f [25/Nov/2025:10:53:08 +0000] \"GET /api/billpayment/data-plans HTTP/1.1\" 200 10410 \"-\" \"okhttp/4.12.0\" 185.346 ms","timestamp":"2025-11-25 11:53:08"}
+{"duration":"204ms","ip":"192.168.43.28","level":"warn","message":"📤 Response Warning","method":"GET","statusCode":404,"timestamp":"2025-11-25 11:53:08","url":"/api/wallet","userId":"6910a8039ee6fac09d81f88f"}
+{"level":"info","message":"192.168.43.28 - 6910a8039ee6fac09d81f88f [25/Nov/2025:10:53:08 +0000] \"GET /api/wallet HTTP/1.1\" 404 46 \"-\" \"okhttp/4.12.0\" 204.850 ms","timestamp":"2025-11-25 11:53:08"}
+{"duration":"2547ms","ip":"192.168.43.28","level":"info","message":"📤 Response Success","method":"GET","statusCode":200,"timestamp":"2025-11-25 11:53:11","url":"/api/transactions?page=1&limit=5","userId":"6910a8039ee6fac09d81f88f"}
+{"level":"info","message":"192.168.43.28 - 6910a8039ee6fac09d81f88f [25/Nov/2025:10:53:11 +0000] \"GET /api/transactions?page=1&limit=5 HTTP/1.1\" 200 128 \"-\" \"okhttp/4.12.0\" 2547.467 ms","timestamp":"2025-11-25 11:53:11"}
+{"headers":{"authorization":"Bearer ***"},"ip":"192.168.43.28","level":"info","message":"📥 Incoming Request","method":"GET","path":"/api/users/profile","query":{},"timestamp":"2025-11-25 11:54:34","url":"/api/users/profile","userAgent":"okhttp/4.12.0","userId":"anonymous"}
+{"headers":{"authorization":"Bearer ***"},"ip":"192.168.43.28","level":"info","message":"📥 Incoming Request","method":"GET","path":"/api/wallet","query":{},"timestamp":"2025-11-25 11:54:34","url":"/api/wallet","userAgent":"okhttp/4.12.0","userId":"anonymous"}
+{"duration":"22ms","ip":"192.168.43.28","level":"warn","message":"📤 Response Warning","method":"GET","statusCode":404,"timestamp":"2025-11-25 11:54:34","url":"/api/users/profile","userId":"6910a8039ee6fac09d81f88f"}
+{"level":"info","message":"192.168.43.28 - 6910a8039ee6fac09d81f88f [25/Nov/2025:10:54:34 +0000] \"GET /api/users/profile HTTP/1.1\" 404 44 \"-\" \"okhttp/4.12.0\" 21.844 ms","timestamp":"2025-11-25 11:54:34"}
+{"duration":"17ms","ip":"192.168.43.28","level":"warn","message":"📤 Response Warning","method":"GET","statusCode":404,"timestamp":"2025-11-25 11:54:34","url":"/api/wallet","userId":"6910a8039ee6fac09d81f88f"}
+{"level":"info","message":"192.168.43.28 - 6910a8039ee6fac09d81f88f [25/Nov/2025:10:54:34 +0000] \"GET /api/wallet HTTP/1.1\" 404 46 \"-\" \"okhttp/4.12.0\" 17.790 ms","timestamp":"2025-11-25 11:54:34"}
+{"body":{"email":"aminu00015@gmail.com","password":"***"},"headers":{"contentType":"application/json"},"ip":"192.168.43.28","level":"info","message":"📥 Incoming Request","method":"POST","path":"/api/auth/login","query":{},"timestamp":"2025-11-25 11:54:52","url":"/api/auth/login","userAgent":"okhttp/4.12.0","userId":"anonymous"}
+{"duration":"61ms","ip":"192.168.43.28","level":"warn","message":"📤 Response Warning","method":"POST","statusCode":401,"timestamp":"2025-11-25 11:54:52","url":"/api/auth/login","userId":"anonymous"}
+{"level":"info","message":"192.168.43.28 - anonymous [25/Nov/2025:10:54:52 +0000] \"POST /api/auth/login HTTP/1.1\" 401 49 \"-\" \"okhttp/4.12.0\" 61.346 ms","timestamp":"2025-11-25 11:54:52"}
+{"headers":{},"ip":"192.168.43.28","level":"info","message":"📥 Incoming Request","method":"GET","path":"/api/users/profile","query":{},"timestamp":"2025-11-25 11:55:40","url":"/api/users/profile","userAgent":"okhttp/4.12.0","userId":"anonymous"}
+{"duration":"4ms","ip":"192.168.43.28","level":"warn","message":"📤 Response Warning","method":"GET","statusCode":401,"timestamp":"2025-11-25 11:55:40","url":"/api/users/profile","userId":"anonymous"}
+{"level":"info","message":"192.168.43.28 - anonymous [25/Nov/2025:10:55:40 +0000] \"GET /api/users/profile HTTP/1.1\" 401 47 \"-\" \"okhttp/4.12.0\" 4.375 ms","timestamp":"2025-11-25 11:55:40"}
+{"body":{"email":"aminumuhammadhadejia@gmail.com","password":"***"},"headers":{"contentType":"application/json"},"ip":"192.168.43.28","level":"info","message":"📥 Incoming Request","method":"POST","path":"/api/auth/login","query":{},"timestamp":"2025-11-25 11:55:55","url":"/api/auth/login","userAgent":"okhttp/4.12.0","userId":"anonymous"}
+{"duration":"188ms","ip":"192.168.43.28","level":"info","message":"📤 Response Success","method":"POST","statusCode":200,"timestamp":"2025-11-25 11:55:55","url":"/api/auth/login","userId":"anonymous"}
+{"level":"info","message":"192.168.43.28 - anonymous [25/Nov/2025:10:55:55 +0000] \"POST /api/auth/login HTTP/1.1\" 200 996 \"-\" \"okhttp/4.12.0\" 186.246 ms","timestamp":"2025-11-25 11:55:55"}
+{"headers":{"authorization":"Bearer ***"},"ip":"192.168.43.28","level":"info","message":"📥 Incoming Request","method":"GET","path":"/api/users/profile","query":{},"timestamp":"2025-11-25 11:55:55","url":"/api/users/profile","userAgent":"okhttp/4.12.0","userId":"anonymous"}
+{"duration":"18ms","ip":"192.168.43.28","level":"info","message":"📤 Response Success","method":"GET","statusCode":200,"timestamp":"2025-11-25 11:55:55","url":"/api/users/profile","userId":"690c7de84d4df744806907b2"}
+{"level":"info","message":"192.168.43.28 - 690c7de84d4df744806907b2 [25/Nov/2025:10:55:55 +0000] \"GET /api/users/profile HTTP/1.1\" 200 740 \"-\" \"okhttp/4.12.0\" 19.068 ms","timestamp":"2025-11-25 11:55:55"}
+{"headers":{"authorization":"Bearer ***"},"ip":"192.168.43.28","level":"info","message":"📥 Incoming Request","method":"GET","path":"/api/billpayment/data-plans","query":{},"timestamp":"2025-11-25 11:55:56","url":"/api/billpayment/data-plans","userAgent":"okhttp/4.12.0","userId":"anonymous"}
+{"duration":"46ms","ip":"192.168.43.28","level":"info","message":"📤 Response Success","method":"GET","statusCode":200,"timestamp":"2025-11-25 11:55:56","url":"/api/billpayment/data-plans","userId":"690c7de84d4df744806907b2"}
+{"level":"info","message":"192.168.43.28 - 690c7de84d4df744806907b2 [25/Nov/2025:10:55:56 +0000] \"GET /api/billpayment/data-plans HTTP/1.1\" 304 - \"-\" \"okhttp/4.12.0\" 45.855 ms","timestamp":"2025-11-25 11:55:56"}
+{"headers":{"authorization":"Bearer ***"},"ip":"192.168.43.28","level":"info","message":"📥 Incoming Request","method":"GET","path":"/api/users/profile","query":{},"timestamp":"2025-11-25 11:55:56","url":"/api/users/profile","userAgent":"okhttp/4.12.0","userId":"anonymous"}
+{"headers":{"authorization":"Bearer ***"},"ip":"192.168.43.28","level":"info","message":"📥 Incoming Request","method":"GET","path":"/api/wallet","query":{},"timestamp":"2025-11-25 11:55:56","url":"/api/wallet","userAgent":"okhttp/4.12.0","userId":"anonymous"}
+{"duration":"14ms","ip":"192.168.43.28","level":"info","message":"📤 Response Success","method":"GET","statusCode":200,"timestamp":"2025-11-25 11:55:56","url":"/api/users/profile","userId":"690c7de84d4df744806907b2"}
+{"level":"info","message":"192.168.43.28 - 690c7de84d4df744806907b2 [25/Nov/2025:10:55:56 +0000] \"GET /api/users/profile HTTP/1.1\" 304 - \"-\" \"okhttp/4.12.0\" 13.272 ms","timestamp":"2025-11-25 11:55:56"}
+{"headers":{"authorization":"Bearer ***"},"ip":"192.168.43.28","level":"info","message":"📥 Incoming Request","method":"GET","path":"/api/transactions","query":{"limit":"5","page":"1"},"timestamp":"2025-11-25 11:55:56","url":"/api/transactions?page=1&limit=5","userAgent":"okhttp/4.12.0","userId":"anonymous"}
+{"duration":"22ms","ip":"192.168.43.28","level":"info","message":"📤 Response Success","method":"GET","statusCode":200,"timestamp":"2025-11-25 11:55:56","url":"/api/transactions?page=1&limit=5","userId":"690c7de84d4df744806907b2"}
+{"level":"info","message":"192.168.43.28 - 690c7de84d4df744806907b2 [25/Nov/2025:10:55:56 +0000] \"GET /api/transactions?page=1&limit=5 HTTP/1.1\" 200 2534 \"-\" \"okhttp/4.12.0\" 22.578 ms","timestamp":"2025-11-25 11:55:56"}
+{"duration":"59ms","ip":"192.168.43.28","level":"info","message":"📤 Response Success","method":"GET","statusCode":200,"timestamp":"2025-11-25 11:55:56","url":"/api/wallet","userId":"690c7de84d4df744806907b2"}
+{"level":"info","message":"192.168.43.28 - 690c7de84d4df744806907b2 [25/Nov/2025:10:55:56 +0000] \"GET /api/wallet HTTP/1.1\" 200 307 \"-\" \"okhttp/4.12.0\" 59.385 ms","timestamp":"2025-11-25 11:55:56"}
+{"headers":{"authorization":"Bearer ***"},"ip":"192.168.43.28","level":"info","message":"📥 Incoming Request","method":"GET","path":"/api/billpayment/data-plans","query":{"network":"mtn"},"timestamp":"2025-11-25 11:56:11","url":"/api/billpayment/data-plans?network=mtn","userAgent":"okhttp/4.12.0","userId":"anonymous"}
+{"duration":"48ms","ip":"192.168.43.28","level":"info","message":"📤 Response Success","method":"GET","statusCode":200,"timestamp":"2025-11-25 11:56:12","url":"/api/billpayment/data-plans?network=mtn","userId":"690c7de84d4df744806907b2"}
+{"level":"info","message":"192.168.43.28 - 690c7de84d4df744806907b2 [25/Nov/2025:10:56:12 +0000] \"GET /api/billpayment/data-plans?network=mtn HTTP/1.1\" 200 7176 \"-\" \"okhttp/4.12.0\" 48.382 ms","timestamp":"2025-11-25 11:56:12"}
+{"body":{"network":"mtn","phone":"08100015498","pin":"1414","plan":"6925885fa4bbeed93fad1d7a","ported_number":true},"headers":{"authorization":"Bearer ***","contentType":"application/json"},"ip":"192.168.43.28","level":"info","message":"📥 Incoming Request","method":"POST","path":"/api/billpayment/data","query":{},"timestamp":"2025-11-25 11:57:24","url":"/api/billpayment/data","userAgent":"okhttp/4.12.0","userId":"anonymous"}
+{"duration":"170ms","ip":"192.168.43.28","level":"warn","message":"📤 Response Warning","method":"POST","statusCode":400,"timestamp":"2025-11-25 11:57:24","url":"/api/billpayment/data","userId":"690c7de84d4df744806907b2"}
+{"level":"info","message":"192.168.43.28 - 690c7de84d4df744806907b2 [25/Nov/2025:10:57:24 +0000] \"POST /api/billpayment/data HTTP/1.1\" 400 55 \"-\" \"okhttp/4.12.0\" 169.149 ms","timestamp":"2025-11-25 11:57:24"}
+{"body":{"network":"mtn","phone":"08100015498","pin":"1234","plan":"6925885fa4bbeed93fad1d7a","ported_number":true},"headers":{"authorization":"Bearer ***","contentType":"application/json"},"ip":"192.168.43.28","level":"info","message":"📥 Incoming Request","method":"POST","path":"/api/billpayment/data","query":{},"timestamp":"2025-11-25 11:57:40","url":"/api/billpayment/data","userAgent":"okhttp/4.12.0","userId":"anonymous"}
+2025-11-25 11:57:42 [INFO]: SMEPlug data purchased {"phone":"08100015498","plan_id":173,"reference":"ac290b64434843c6d589"}
+{"duration":"1850ms","ip":"192.168.43.28","level":"warn","message":"📤 Response Warning","method":"POST","statusCode":400,"timestamp":"2025-11-25 11:57:42","url":"/api/billpayment/data","userId":"690c7de84d4df744806907b2"}
+{"level":"info","message":"192.168.43.28 - 690c7de84d4df744806907b2 [25/Nov/2025:10:57:42 +0000] \"POST /api/billpayment/data HTTP/1.1\" 400 50 \"-\" \"okhttp/4.12.0\" 1848.644 ms","timestamp":"2025-11-25 11:57:42"}
+{"headers":{"authorization":"Bearer ***","origin":"http://localhost:5173"},"ip":"127.0.0.1","level":"info","message":"📥 Incoming Request","method":"GET","path":"/api/admin/pricing","query":{"limit":"10","page":"1"},"timestamp":"2025-11-25 11:58:02","url":"/api/admin/pricing?page=1&limit=10","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36","userId":"anonymous"}
+{"duration":"56ms","ip":"127.0.0.1","level":"info","message":"📤 Response Success","method":"GET","statusCode":200,"timestamp":"2025-11-25 11:58:02","url":"/api/admin/pricing?page=1&limit=10","userId":"6913575adc7e471b13d32a9e"}
+{"level":"info","message":"127.0.0.1 - 6913575adc7e471b13d32a9e [25/Nov/2025:10:58:02 +0000] \"GET /api/admin/pricing?page=1&limit=10 HTTP/1.1\" 304 - \"http://localhost:5173/\" \"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36\" 57.197 ms","timestamp":"2025-11-25 11:58:02"}
+{"headers":{"authorization":"Bearer ***","origin":"http://localhost:5173"},"ip":"127.0.0.1","level":"info","message":"📥 Incoming Request","method":"GET","path":"/api/admin/providers/balances","query":{},"timestamp":"2025-11-25 11:58:05","url":"/api/admin/providers/balances","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36","userId":"anonymous"}
+{"headers":{"authorization":"Bearer ***","origin":"http://localhost:5173"},"ip":"127.0.0.1","level":"info","message":"📥 Incoming Request","method":"GET","path":"/api/admin/funding/info","query":{},"timestamp":"2025-11-25 11:58:05","url":"/api/admin/funding/info","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36","userId":"anonymous"}
+{"headers":{"authorization":"Bearer ***","origin":"http://localhost:5173"},"ip":"127.0.0.1","level":"info","message":"📥 Incoming Request","method":"GET","path":"/api/admin/funding/accounts","query":{},"timestamp":"2025-11-25 11:58:05","url":"/api/admin/funding/accounts","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36","userId":"anonymous"}
+{"duration":"109ms","ip":"127.0.0.1","level":"info","message":"📤 Response Success","method":"GET","statusCode":200,"timestamp":"2025-11-25 11:58:05","url":"/api/admin/funding/accounts","userId":"6913575adc7e471b13d32a9e"}
+{"level":"info","message":"127.0.0.1 - 6913575adc7e471b13d32a9e [25/Nov/2025:10:58:05 +0000] \"GET /api/admin/funding/accounts HTTP/1.1\" 304 - \"http://localhost:5173/\" \"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36\" 108.816 ms","timestamp":"2025-11-25 11:58:05"}
+{"duration":"124ms","ip":"127.0.0.1","level":"info","message":"📤 Response Success","method":"GET","statusCode":200,"timestamp":"2025-11-25 11:58:05","url":"/api/admin/funding/info","userId":"6913575adc7e471b13d32a9e"}
+{"level":"info","message":"127.0.0.1 - 6913575adc7e471b13d32a9e [25/Nov/2025:10:58:05 +0000] \"GET /api/admin/funding/info HTTP/1.1\" 304 - \"http://localhost:5173/\" \"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36\" 126.033 ms","timestamp":"2025-11-25 11:58:05"}
+2025-11-25 11:58:05 [INFO]: SMEPlug wallet balance retrieved {"balance":{"balance":11}}
+{"level":"info","message":"TopupMate API Request: GET /user/","timestamp":"2025-11-25 11:58:05"}
+{"balance":"32.47","level":"info","message":"TopupMate API Response: 200","name":"Muhammad Aminu","status":"success","timestamp":"2025-11-25 11:58:07"}
+{"duration":"2462ms","ip":"127.0.0.1","level":"info","message":"📤 Response Success","method":"GET","statusCode":200,"timestamp":"2025-11-25 11:58:07","url":"/api/admin/providers/balances","userId":"6913575adc7e471b13d32a9e"}
+{"level":"info","message":"127.0.0.1 - 6913575adc7e471b13d32a9e [25/Nov/2025:10:58:07 +0000] \"GET /api/admin/providers/balances HTTP/1.1\" 200 585 \"http://localhost:5173/\" \"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36\" 2460.461 ms","timestamp":"2025-11-25 11:58:07"}
+{"headers":{"authorization":"Bearer ***","origin":"http://localhost:5173"},"ip":"127.0.0.1","level":"info","message":"📥 Incoming Request","method":"GET","path":"/api/admin/providers","query":{},"timestamp":"2025-11-25 11:59:27","url":"/api/admin/providers","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36","userId":"anonymous"}
+{"duration":"19ms","ip":"127.0.0.1","level":"info","message":"📤 Response Success","method":"GET","statusCode":200,"timestamp":"2025-11-25 11:59:27","url":"/api/admin/providers","userId":"6913575adc7e471b13d32a9e"}
+{"level":"info","message":"127.0.0.1 - 6913575adc7e471b13d32a9e [25/Nov/2025:10:59:27 +0000] \"GET /api/admin/providers HTTP/1.1\" 304 - \"http://localhost:5173/\" \"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36\" 16.961 ms","timestamp":"2025-11-25 11:59:27"}
+{"headers":{"authorization":"Bearer ***","origin":"http://localhost:5173"},"ip":"127.0.0.1","level":"info","message":"📥 Incoming Request","method":"DELETE","path":"/api/admin/providers/69205938615c0d4c114442d9","query":{},"timestamp":"2025-11-25 11:59:30","url":"/api/admin/providers/69205938615c0d4c114442d9","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36","userId":"anonymous"}
+2025-11-25 11:59:30 [INFO]: Provider deleted: 69205938615c0d4c114442d9 
+{"duration":"95ms","ip":"127.0.0.1","level":"info","message":"📤 Response Success","method":"DELETE","statusCode":200,"timestamp":"2025-11-25 11:59:30","url":"/api/admin/providers/69205938615c0d4c114442d9","userId":"6913575adc7e471b13d32a9e"}
+{"level":"info","message":"127.0.0.1 - 6913575adc7e471b13d32a9e [25/Nov/2025:10:59:30 +0000] \"DELETE /api/admin/providers/69205938615c0d4c114442d9 HTTP/1.1\" 200 515 \"http://localhost:5173/\" \"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36\" 96.976 ms","timestamp":"2025-11-25 11:59:30"}
+{"headers":{"authorization":"Bearer ***","origin":"http://localhost:5173"},"ip":"127.0.0.1","level":"info","message":"📥 Incoming Request","method":"GET","path":"/api/admin/providers","query":{},"timestamp":"2025-11-25 11:59:30","url":"/api/admin/providers","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36","userId":"anonymous"}
+{"duration":"12ms","ip":"127.0.0.1","level":"info","message":"📤 Response Success","method":"GET","statusCode":200,"timestamp":"2025-11-25 11:59:30","url":"/api/admin/providers","userId":"6913575adc7e471b13d32a9e"}
+{"level":"info","message":"127.0.0.1 - 6913575adc7e471b13d32a9e [25/Nov/2025:10:59:30 +0000] \"GET /api/admin/providers HTTP/1.1\" 200 1082 \"http://localhost:5173/\" \"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36\" 12.297 ms","timestamp":"2025-11-25 11:59:30"}
+{"headers":{"authorization":"Bearer ***","origin":"http://localhost:5173"},"ip":"127.0.0.1","level":"info","message":"📥 Incoming Request","method":"DELETE","path":"/api/admin/providers/6920774542d409b75fb7737b","query":{},"timestamp":"2025-11-25 11:59:36","url":"/api/admin/providers/6920774542d409b75fb7737b","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36","userId":"anonymous"}
+2025-11-25 11:59:36 [INFO]: Provider deleted: 6920774542d409b75fb7737b 
+{"duration":"14ms","ip":"127.0.0.1","level":"info","message":"📤 Response Success","method":"DELETE","statusCode":200,"timestamp":"2025-11-25 11:59:36","url":"/api/admin/providers/6920774542d409b75fb7737b","userId":"6913575adc7e471b13d32a9e"}
+{"level":"info","message":"127.0.0.1 - 6913575adc7e471b13d32a9e [25/Nov/2025:10:59:36 +0000] \"DELETE /api/admin/providers/6920774542d409b75fb7737b HTTP/1.1\" 200 254 \"http://localhost:5173/\" \"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36\" 17.507 ms","timestamp":"2025-11-25 11:59:36"}
+{"headers":{"authorization":"Bearer ***","origin":"http://localhost:5173"},"ip":"127.0.0.1","level":"info","message":"📥 Incoming Request","method":"GET","path":"/api/admin/providers","query":{},"timestamp":"2025-11-25 11:59:36","url":"/api/admin/providers","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36","userId":"anonymous"}
+{"duration":"10ms","ip":"127.0.0.1","level":"info","message":"📤 Response Success","method":"GET","statusCode":200,"timestamp":"2025-11-25 11:59:36","url":"/api/admin/providers","userId":"6913575adc7e471b13d32a9e"}
+{"level":"info","message":"127.0.0.1 - 6913575adc7e471b13d32a9e [25/Nov/2025:10:59:36 +0000] \"GET /api/admin/providers HTTP/1.1\" 200 893 \"http://localhost:5173/\" \"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36\" 10.226 ms","timestamp":"2025-11-25 11:59:36"}
+{"body":{"__v":1,"_id":"6917348c5d954d626609a2d4","active":true,"api_key":"acc5a5e0c43bcd66498b0bf68aa38f2bf3290019e09f7305f6d158106f09475f","base_url":"https://smeplug.ng/api","code":"smeplug","createdAt":"2025-11-14T13:54:20.380Z","name":"SME Plug","password":"","priority":1,"secret_key":"","supported_services":["airtime","data"],"updatedAt":"2025-11-21T14:39:27.184Z","username":""},"headers":{"authorization":"Bearer ***","contentType":"application/json","origin":"http://localhost:5173"},"ip":"127.0.0.1","level":"info","message":"📥 Incoming Request","method":"PUT","path":"/api/admin/providers/6917348c5d954d626609a2d4","query":{},"timestamp":"2025-11-25 11:59:42","url":"/api/admin/providers/6917348c5d954d626609a2d4","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36","userId":"anonymous"}
+2025-11-25 11:59:42 [INFO]: Provider updated: 6917348c5d954d626609a2d4 
+{"duration":"50ms","ip":"127.0.0.1","level":"info","message":"📤 Response Success","method":"PUT","statusCode":200,"timestamp":"2025-11-25 11:59:42","url":"/api/admin/providers/6917348c5d954d626609a2d4","userId":"6913575adc7e471b13d32a9e"}
+{"level":"info","message":"127.0.0.1 - 6913575adc7e471b13d32a9e [25/Nov/2025:10:59:42 +0000] \"PUT /api/admin/providers/6917348c5d954d626609a2d4 HTTP/1.1\" 200 445 \"http://localhost:5173/\" \"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36\" 48.859 ms","timestamp":"2025-11-25 11:59:42"}
+{"headers":{"authorization":"Bearer ***","origin":"http://localhost:5173"},"ip":"127.0.0.1","level":"info","message":"📥 Incoming Request","method":"GET","path":"/api/admin/providers","query":{},"timestamp":"2025-11-25 11:59:42","url":"/api/admin/providers","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36","userId":"anonymous"}
+{"duration":"6ms","ip":"127.0.0.1","level":"info","message":"📤 Response Success","method":"GET","statusCode":200,"timestamp":"2025-11-25 11:59:42","url":"/api/admin/providers","userId":"6913575adc7e471b13d32a9e"}
+{"level":"info","message":"127.0.0.1 - 6913575adc7e471b13d32a9e [25/Nov/2025:10:59:42 +0000] \"GET /api/admin/providers HTTP/1.1\" 200 893 \"http://localhost:5173/\" \"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36\" 6.078 ms","timestamp":"2025-11-25 11:59:42"}
+{"headers":{"authorization":"Bearer ***","origin":"http://localhost:5173"},"ip":"127.0.0.1","level":"info","message":"📥 Incoming Request","method":"GET","path":"/api/admin/providers/balances","query":{},"timestamp":"2025-11-25 11:59:45","url":"/api/admin/providers/balances","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36","userId":"anonymous"}
+{"headers":{"authorization":"Bearer ***","origin":"http://localhost:5173"},"ip":"127.0.0.1","level":"info","message":"📥 Incoming Request","method":"GET","path":"/api/admin/funding/info","query":{},"timestamp":"2025-11-25 11:59:45","url":"/api/admin/funding/info","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36","userId":"anonymous"}
+{"headers":{"authorization":"Bearer ***","origin":"http://localhost:5173"},"ip":"127.0.0.1","level":"info","message":"📥 Incoming Request","method":"GET","path":"/api/admin/funding/accounts","query":{},"timestamp":"2025-11-25 11:59:45","url":"/api/admin/funding/accounts","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36","userId":"anonymous"}
+{"duration":"18ms","ip":"127.0.0.1","level":"info","message":"📤 Response Success","method":"GET","statusCode":200,"timestamp":"2025-11-25 11:59:45","url":"/api/admin/funding/info","userId":"6913575adc7e471b13d32a9e"}
+{"level":"info","message":"127.0.0.1 - 6913575adc7e471b13d32a9e [25/Nov/2025:10:59:45 +0000] \"GET /api/admin/funding/info HTTP/1.1\" 304 - \"http://localhost:5173/\" \"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36\" 17.602 ms","timestamp":"2025-11-25 11:59:45"}
+{"duration":"16ms","ip":"127.0.0.1","level":"info","message":"📤 Response Success","method":"GET","statusCode":200,"timestamp":"2025-11-25 11:59:45","url":"/api/admin/funding/accounts","userId":"6913575adc7e471b13d32a9e"}
+{"level":"info","message":"127.0.0.1 - 6913575adc7e471b13d32a9e [25/Nov/2025:10:59:45 +0000] \"GET /api/admin/funding/accounts HTTP/1.1\" 304 - \"http://localhost:5173/\" \"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36\" 17.807 ms","timestamp":"2025-11-25 11:59:45"}
+2025-11-25 11:59:46 [INFO]: SMEPlug wallet balance retrieved {"balance":{"balance":11}}
+{"level":"info","message":"TopupMate API Request: GET /user/","timestamp":"2025-11-25 11:59:46"}
+{"balance":"32.47","level":"info","message":"TopupMate API Response: 200","name":"Muhammad Aminu","status":"success","timestamp":"2025-11-25 11:59:47"}
+{"duration":"2025ms","ip":"127.0.0.1","level":"info","message":"📤 Response Success","method":"GET","statusCode":200,"timestamp":"2025-11-25 11:59:47","url":"/api/admin/providers/balances","userId":"6913575adc7e471b13d32a9e"}
+{"level":"info","message":"127.0.0.1 - 6913575adc7e471b13d32a9e [25/Nov/2025:10:59:47 +0000] \"GET /api/admin/providers/balances HTTP/1.1\" 200 424 \"http://localhost:5173/\" \"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36\" 2025.711 ms","timestamp":"2025-11-25 11:59:47"}
+{"headers":{"authorization":"Bearer ***","origin":"http://localhost:5173"},"ip":"127.0.0.1","level":"info","message":"📥 Incoming Request","method":"GET","path":"/api/admin/providers","query":{},"timestamp":"2025-11-25 11:59:54","url":"/api/admin/providers","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36","userId":"anonymous"}
+{"duration":"13ms","ip":"127.0.0.1","level":"info","message":"📤 Response Success","method":"GET","statusCode":200,"timestamp":"2025-11-25 11:59:54","url":"/api/admin/providers","userId":"6913575adc7e471b13d32a9e"}
+{"level":"info","message":"127.0.0.1 - 6913575adc7e471b13d32a9e [25/Nov/2025:10:59:54 +0000] \"GET /api/admin/providers HTTP/1.1\" 304 - \"http://localhost:5173/\" \"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36\" 11.825 ms","timestamp":"2025-11-25 11:59:54"}
+{"headers":{"authorization":"Bearer ***","origin":"http://localhost:5173"},"ip":"127.0.0.1","level":"info","message":"📥 Incoming Request","method":"GET","path":"/api/admin/providers/6917348c5d954d626609a2d4/env","query":{},"timestamp":"2025-11-25 11:59:58","url":"/api/admin/providers/6917348c5d954d626609a2d4/env","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36","userId":"anonymous"}
+{"duration":"15ms","ip":"127.0.0.1","level":"info","message":"📤 Response Success","method":"GET","statusCode":200,"timestamp":"2025-11-25 11:59:58","url":"/api/admin/providers/6917348c5d954d626609a2d4/env","userId":"6913575adc7e471b13d32a9e"}
+{"level":"info","message":"127.0.0.1 - 6913575adc7e471b13d32a9e [25/Nov/2025:10:59:58 +0000] \"GET /api/admin/providers/6917348c5d954d626609a2d4/env HTTP/1.1\" 200 69 \"http://localhost:5173/\" \"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36\" 14.386 ms","timestamp":"2025-11-25 11:59:58"}
+{"body":{"env":{"SMEPLUG_API_KEY":"acc5a5e0c43bcd66498b0bf68aa38f2bf3290019e09f7305f6d158106f09475f"}},"headers":{"authorization":"Bearer ***","contentType":"application/json","origin":"http://localhost:5173"},"ip":"127.0.0.1","level":"info","message":"📥 Incoming Request","method":"PUT","path":"/api/admin/providers/6917348c5d954d626609a2d4/env","query":{},"timestamp":"2025-11-25 12:00:22","url":"/api/admin/providers/6917348c5d954d626609a2d4/env","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36","userId":"anonymous"}
+{"duration":"44ms","ip":"127.0.0.1","level":"info","message":"📤 Response Success","method":"PUT","statusCode":200,"timestamp":"2025-11-25 12:00:22","url":"/api/admin/providers/6917348c5d954d626609a2d4/env","userId":"6913575adc7e471b13d32a9e"}
+{"level":"info","message":"127.0.0.1 - 6913575adc7e471b13d32a9e [25/Nov/2025:11:00:22 +0000] \"PUT /api/admin/providers/6917348c5d954d626609a2d4/env HTTP/1.1\" 200 151 \"http://localhost:5173/\" \"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36\" 44.963 ms","timestamp":"2025-11-25 12:00:22"}
+{"body":{},"headers":{"authorization":"Bearer ***","origin":"http://localhost:5173"},"ip":"127.0.0.1","level":"info","message":"📥 Incoming Request","method":"POST","path":"/api/admin/providers/test/smeplug","query":{},"timestamp":"2025-11-25 12:00:25","url":"/api/admin/providers/test/smeplug","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36","userId":"anonymous"}
+2025-11-25 12:00:27 [INFO]: SMEPlug wallet balance retrieved {"balance":{"balance":11}}
+2025-11-25 12:00:27 [INFO]: SMEPlug networks retrieved {"count":0}
+{"duration":"2338ms","ip":"127.0.0.1","level":"info","message":"📤 Response Success","method":"POST","statusCode":200,"timestamp":"2025-11-25 12:00:27","url":"/api/admin/providers/test/smeplug","userId":"6913575adc7e471b13d32a9e"}
+2025-11-25 12:00:27 [INFO]: Provider connection test: smeplug {"code":"smeplug","name":"SME Plug","balance":{"balance":11},"balanceStatus":"success","networks":{"status":true,"networks":{"1":"MTN","2":"Airtel","3":"9Mobile","4":"Glo"}},"networksStatus":"success"}
+{"level":"info","message":"127.0.0.1 - 6913575adc7e471b13d32a9e [25/Nov/2025:11:00:27 +0000] \"POST /api/admin/providers/test/smeplug HTTP/1.1\" 200 272 \"http://localhost:5173/\" \"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36\" 2338.447 ms","timestamp":"2025-11-25 12:00:27"}
+{"environment":"development","level":"info","message":"🚀 VTU App Backend Starting...","nodeVersion":"v22.18.0","timestamp":"2025-11-25 12:02:05"}
+{"level":"info","message":"MongoDB connected successfully","timestamp":"2025-11-25 12:02:05"}
+{"environment":"development","level":"info","message":"🚀 VTU App Backend Starting...","nodeVersion":"v22.18.0","timestamp":"2025-11-25 12:02:28"}
+{"level":"info","message":"MongoDB connected successfully","timestamp":"2025-11-25 12:02:28"}
+{"environment":"development","level":"info","message":"🚀 VTU App Backend Starting...","nodeVersion":"v22.18.0","timestamp":"2025-11-25 12:03:14"}
+{"level":"info","message":"MongoDB connected successfully","timestamp":"2025-11-25 12:03:14"}
+{"headers":{"authorization":"Bearer ***","origin":"http://localhost:5173"},"ip":"127.0.0.1","level":"info","message":"📥 Incoming Request","method":"GET","path":"/api/admin/providers","query":{},"timestamp":"2025-11-25 12:04:46","url":"/api/admin/providers","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36","userId":"anonymous"}
+{"duration":"48ms","ip":"127.0.0.1","level":"info","message":"📤 Response Success","method":"GET","statusCode":200,"timestamp":"2025-11-25 12:04:46","url":"/api/admin/providers","userId":"6913575adc7e471b13d32a9e"}
+{"level":"info","message":"127.0.0.1 - 6913575adc7e471b13d32a9e [25/Nov/2025:11:04:46 +0000] \"GET /api/admin/providers HTTP/1.1\" 200 907 \"http://localhost:5173/\" \"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36\" 45.062 ms","timestamp":"2025-11-25 12:04:46"}
+{"headers":{"authorization":"Bearer ***","origin":"http://localhost:5173"},"ip":"127.0.0.1","level":"info","message":"📥 Incoming Request","method":"GET","path":"/api/admin/providers","query":{},"timestamp":"2025-11-25 12:04:58","url":"/api/admin/providers","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36","userId":"anonymous"}
+{"duration":"16ms","ip":"127.0.0.1","level":"info","message":"📤 Response Success","method":"GET","statusCode":200,"timestamp":"2025-11-25 12:04:58","url":"/api/admin/providers","userId":"6913575adc7e471b13d32a9e"}
+{"level":"info","message":"127.0.0.1 - 6913575adc7e471b13d32a9e [25/Nov/2025:11:04:58 +0000] \"GET /api/admin/providers HTTP/1.1\" 304 - \"http://localhost:5173/\" \"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36\" 18.762 ms","timestamp":"2025-11-25 12:04:58"}
+{"body":{"__v":1,"_id":"6917348c5d954d626609a2d4","active":true,"api_key":"acc5a5e0c43bcd66498b0bf68aa38f2bf3290019e09f7305f6d158106f09475f","base_url":"https://smeplug.ng/api","code":"smeplug","createdAt":"2025-11-14T13:54:20.380Z","metadata":{},"name":"SME Plug","password":"","priority":1,"secret_key":"acc5a5e0c43bcd66498b0bf68aa38f2bf3290019e09f7305f6d158106f09475f","supported_services":["airtime","data"],"updatedAt":"2025-11-25T11:00:22.606Z","username":""},"headers":{"authorization":"Bearer ***","contentType":"application/json","origin":"http://localhost:5173"},"ip":"127.0.0.1","level":"info","message":"📥 Incoming Request","method":"PUT","path":"/api/admin/providers/6917348c5d954d626609a2d4","query":{},"timestamp":"2025-11-25 12:06:12","url":"/api/admin/providers/6917348c5d954d626609a2d4","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36","userId":"anonymous"}
+2025-11-25 12:06:12 [INFO]: Provider updated: 6917348c5d954d626609a2d4 
+{"duration":"48ms","ip":"127.0.0.1","level":"info","message":"📤 Response Success","method":"PUT","statusCode":200,"timestamp":"2025-11-25 12:06:12","url":"/api/admin/providers/6917348c5d954d626609a2d4","userId":"6913575adc7e471b13d32a9e"}
+{"level":"info","message":"127.0.0.1 - 6913575adc7e471b13d32a9e [25/Nov/2025:11:06:12 +0000] \"PUT /api/admin/providers/6917348c5d954d626609a2d4 HTTP/1.1\" 200 509 \"http://localhost:5173/\" \"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36\" 47.668 ms","timestamp":"2025-11-25 12:06:12"}
+{"headers":{"authorization":"Bearer ***","origin":"http://localhost:5173"},"ip":"127.0.0.1","level":"info","message":"📥 Incoming Request","method":"GET","path":"/api/admin/providers","query":{},"timestamp":"2025-11-25 12:06:13","url":"/api/admin/providers","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36","userId":"anonymous"}
+{"duration":"8ms","ip":"127.0.0.1","level":"info","message":"📤 Response Success","method":"GET","statusCode":200,"timestamp":"2025-11-25 12:06:13","url":"/api/admin/providers","userId":"6913575adc7e471b13d32a9e"}
+{"level":"info","message":"127.0.0.1 - 6913575adc7e471b13d32a9e [25/Nov/2025:11:06:13 +0000] \"GET /api/admin/providers HTTP/1.1\" 200 957 \"http://localhost:5173/\" \"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36\" 8.598 ms","timestamp":"2025-11-25 12:06:13"}
+{"headers":{"authorization":"Bearer ***","origin":"http://localhost:5173"},"ip":"127.0.0.1","level":"info","message":"📥 Incoming Request","method":"GET","path":"/api/admin/providers","query":{},"timestamp":"2025-11-25 12:06:15","url":"/api/admin/providers","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36","userId":"anonymous"}
+{"duration":"14ms","ip":"127.0.0.1","level":"info","message":"📤 Response Success","method":"GET","statusCode":200,"timestamp":"2025-11-25 12:06:15","url":"/api/admin/providers","userId":"6913575adc7e471b13d32a9e"}
+{"level":"info","message":"127.0.0.1 - 6913575adc7e471b13d32a9e [25/Nov/2025:11:06:15 +0000] \"GET /api/admin/providers HTTP/1.1\" 304 - \"http://localhost:5173/\" \"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36\" 14.620 ms","timestamp":"2025-11-25 12:06:15"}
+{"body":{},"headers":{"authorization":"Bearer ***","origin":"http://localhost:5173"},"ip":"127.0.0.1","level":"info","message":"📥 Incoming Request","method":"POST","path":"/api/admin/providers/test/smeplug","query":{},"timestamp":"2025-11-25 12:06:20","url":"/api/admin/providers/test/smeplug","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36","userId":"anonymous"}
+2025-11-25 12:06:22 [INFO]: SMEPlug wallet balance retrieved {"balance":{"balance":350}}
+2025-11-25 12:06:22 [INFO]: SMEPlug networks retrieved {"count":0}
+{"duration":"1894ms","ip":"127.0.0.1","level":"info","message":"📤 Response Success","method":"POST","statusCode":200,"timestamp":"2025-11-25 12:06:22","url":"/api/admin/providers/test/smeplug","userId":"6913575adc7e471b13d32a9e"}
+2025-11-25 12:06:22 [INFO]: Provider connection test: smeplug {"code":"smeplug","name":"SME Plug","balance":{"balance":350},"balanceStatus":"success","networks":{"status":true,"networks":{"1":"MTN","2":"Airtel","3":"9Mobile","4":"Glo"}},"networksStatus":"success"}
+{"level":"info","message":"127.0.0.1 - 6913575adc7e471b13d32a9e [25/Nov/2025:11:06:22 +0000] \"POST /api/admin/providers/test/smeplug HTTP/1.1\" 200 273 \"http://localhost:5173/\" \"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36\" 1893.567 ms","timestamp":"2025-11-25 12:06:22"}
+{"body":{"network":"mtn","phone":"08100015498","pin":"1234","plan":"6925885fa4bbeed93fad1d7a","ported_number":true},"headers":{"authorization":"Bearer ***","contentType":"application/json"},"ip":"192.168.43.28","level":"info","message":"📥 Incoming Request","method":"POST","path":"/api/billpayment/data","query":{},"timestamp":"2025-11-25 12:07:56","url":"/api/billpayment/data","userAgent":"okhttp/4.12.0","userId":"anonymous"}
+2025-11-25 12:07:59 [INFO]: SMEPlug data purchased {"phone":"08100015498","plan_id":173,"reference":"25958e7819128f81056a"}
+{"duration":"2698ms","ip":"192.168.43.28","level":"warn","message":"📤 Response Warning","method":"POST","statusCode":400,"timestamp":"2025-11-25 12:07:59","url":"/api/billpayment/data","userId":"690c7de84d4df744806907b2"}
+{"level":"info","message":"192.168.43.28 - 690c7de84d4df744806907b2 [25/Nov/2025:11:07:59 +0000] \"POST /api/billpayment/data HTTP/1.1\" 400 50 \"-\" \"okhttp/4.12.0\" 2698.538 ms","timestamp":"2025-11-25 12:07:59"}
+{"environment":"development","level":"info","message":"🚀 VTU App Backend Starting...","nodeVersion":"v22.18.0","timestamp":"2025-11-25 12:10:21"}
+{"level":"info","message":"MongoDB connected successfully","timestamp":"2025-11-25 12:10:22"}
+{"environment":"development","level":"info","message":"🚀 VTU App Backend Starting...","nodeVersion":"v22.18.0","timestamp":"2025-11-25 12:10:54"}
+{"level":"info","message":"MongoDB connected successfully","timestamp":"2025-11-25 12:10:54"}
+{"environment":"development","level":"info","message":"🚀 VTU App Backend Starting...","nodeVersion":"v22.18.0","timestamp":"2025-11-25 12:11:22"}
+{"level":"info","message":"MongoDB connected successfully","timestamp":"2025-11-25 12:11:22"}
+{"body":{"network":"mtn","phone":"08100015498","pin":"1234","plan":"6925885fa4bbeed93fad1d82","ported_number":true},"headers":{"authorization":"Bearer ***","contentType":"application/json"},"ip":"192.168.43.28","level":"info","message":"📥 Incoming Request","method":"POST","path":"/api/billpayment/data","query":{},"timestamp":"2025-11-25 12:13:23","url":"/api/billpayment/data","userAgent":"okhttp/4.12.0","userId":"anonymous"}
+2025-11-25 12:13:28 [INFO]: SMEPlug data purchased {"phone":"08100015498","plan_id":239,"reference":"ba18d4b5e93baa6f3a05"}
+{"duration":"5300ms","ip":"192.168.43.28","level":"info","message":"📤 Response Success","method":"POST","statusCode":200,"timestamp":"2025-11-25 12:13:28","url":"/api/billpayment/data","userId":"690c7de84d4df744806907b2"}
+{"level":"info","message":"192.168.43.28 - 690c7de84d4df744806907b2 [25/Nov/2025:11:13:28 +0000] \"POST /api/billpayment/data HTTP/1.1\" 200 1006 \"-\" \"okhttp/4.12.0\" 5303.816 ms","timestamp":"2025-11-25 12:13:28"}
+{"headers":{"authorization":"Bearer ***"},"ip":"192.168.43.28","level":"info","message":"📥 Incoming Request","method":"GET","path":"/api/users/profile","query":{},"timestamp":"2025-11-25 12:13:30","url":"/api/users/profile","userAgent":"okhttp/4.12.0","userId":"anonymous"}
+{"duration":"24ms","ip":"192.168.43.28","level":"info","message":"📤 Response Success","method":"GET","statusCode":200,"timestamp":"2025-11-25 12:13:30","url":"/api/users/profile","userId":"690c7de84d4df744806907b2"}
+{"level":"info","message":"192.168.43.28 - 690c7de84d4df744806907b2 [25/Nov/2025:11:13:30 +0000] \"GET /api/users/profile HTTP/1.1\" 304 - \"-\" \"okhttp/4.12.0\" 23.390 ms","timestamp":"2025-11-25 12:13:30"}
+{"headers":{"authorization":"Bearer ***"},"ip":"192.168.43.28","level":"info","message":"📥 Incoming Request","method":"GET","path":"/api/billpayment/data-plans","query":{},"timestamp":"2025-11-25 12:13:30","url":"/api/billpayment/data-plans","userAgent":"okhttp/4.12.0","userId":"anonymous"}
+{"duration":"44ms","ip":"192.168.43.28","level":"info","message":"📤 Response Success","method":"GET","statusCode":200,"timestamp":"2025-11-25 12:13:30","url":"/api/billpayment/data-plans","userId":"690c7de84d4df744806907b2"}
+{"level":"info","message":"192.168.43.28 - 690c7de84d4df744806907b2 [25/Nov/2025:11:13:30 +0000] \"GET /api/billpayment/data-plans HTTP/1.1\" 304 - \"-\" \"okhttp/4.12.0\" 43.930 ms","timestamp":"2025-11-25 12:13:30"}
+{"headers":{"authorization":"Bearer ***"},"ip":"192.168.43.28","level":"info","message":"📥 Incoming Request","method":"GET","path":"/api/transactions","query":{"limit":"5","page":"1"},"timestamp":"2025-11-25 12:13:30","url":"/api/transactions?page=1&limit=5","userAgent":"okhttp/4.12.0","userId":"anonymous"}
+{"headers":{"authorization":"Bearer ***"},"ip":"192.168.43.28","level":"info","message":"📥 Incoming Request","method":"GET","path":"/api/wallet","query":{},"timestamp":"2025-11-25 12:13:31","url":"/api/wallet","userAgent":"okhttp/4.12.0","userId":"anonymous"}
+{"duration":"8ms","ip":"192.168.43.28","level":"info","message":"📤 Response Success","method":"GET","statusCode":200,"timestamp":"2025-11-25 12:13:31","url":"/api/wallet","userId":"690c7de84d4df744806907b2"}
+{"level":"info","message":"192.168.43.28 - 690c7de84d4df744806907b2 [25/Nov/2025:11:13:31 +0000] \"GET /api/wallet HTTP/1.1\" 200 307 \"-\" \"okhttp/4.12.0\" 7.394 ms","timestamp":"2025-11-25 12:13:31"}
+{"duration":"79ms","ip":"192.168.43.28","level":"info","message":"📤 Response Success","method":"GET","statusCode":200,"timestamp":"2025-11-25 12:13:31","url":"/api/transactions?page=1&limit=5","userId":"690c7de84d4df744806907b2"}
+{"level":"info","message":"192.168.43.28 - 690c7de84d4df744806907b2 [25/Nov/2025:11:13:31 +0000] \"GET /api/transactions?page=1&limit=5 HTTP/1.1\" 200 2556 \"-\" \"okhttp/4.12.0\" 78.553 ms","timestamp":"2025-11-25 12:13:31"}
+2025-11-25 12:36:01 [INFO]: Connected to MongoDB 
+2025-11-25 12:36:01 [INFO]: Updated provider: topupmate 
+2025-11-25 12:36:01 [INFO]: Updated provider: smeplug 
+2025-11-25 12:36:01 [INFO]: Disconnected from MongoDB 
+2025-11-25 12:36:18 [INFO]: Connected to MongoDB 
+2025-11-25 12:36:18 [INFO]: Cleared existing MTN data plans 
+2025-11-25 12:36:18 [INFO]: Inserted plan: 500MB SME (172) 
+2025-11-25 12:36:18 [INFO]: Inserted plan: 1GB SME (173) 
+2025-11-25 12:36:18 [INFO]: Inserted plan: 2GB SME (174) 
+2025-11-25 12:36:18 [INFO]: Inserted plan: 3GB SME (175) 
+2025-11-25 12:36:18 [INFO]: Inserted plan: 5GB SME (176) 
+2025-11-25 12:36:18 [INFO]: Inserted plan: 20MB Facebook Daily (Social/Gifting) (239) 
+2025-11-25 12:36:18 [INFO]: Inserted plan: 40MB WhatsApp Weekly (Social/Gifting) (247) 
+2025-11-25 12:36:18 [INFO]: Inserted plan: 40MB Facebook Weekly (Social/Gifting) (246) 
+2025-11-25 12:36:18 [INFO]: Inserted plan: 20MB WhatsApp Daily (Social/Gifting) (240) 
+2025-11-25 12:36:18 [INFO]: Inserted plan: 75MB Daily (Gifting) (6) 
+2025-11-25 12:36:18 [INFO]: Inserted plan: 40MB Ayoba Weekly (Social/Gifting) (248) 
+2025-11-25 12:36:18 [INFO]: Inserted plan: 200MB All Social Daily (Gifting) (265) 
+2025-11-25 12:36:18 [INFO]: Inserted plan: 100MB Daily (Gifting) (7) 
+2025-11-25 12:36:18 [INFO]: Inserted plan: 470MB All Social Weekly (Gifting) (266) 
+2025-11-25 12:36:18 [INFO]: Inserted plan: 120MB Facebook Monthly (Social/Gifting) (244) 
+2025-11-25 12:36:18 [INFO]: Inserted plan: 110MB Daily (Gifting) (230) 
+2025-11-25 12:36:18 [INFO]: Inserted plan: 1.2GB All Social Monthly (Gifting) (256) 
+2025-11-25 12:36:18 [INFO]: Inserted plan: 500MB Daily (Gifting) (264) 
+2025-11-25 12:36:18 [INFO]: Inserted plan: 2GB 2-Day Plan (227) 
+2025-11-25 12:36:18 [INFO]: Inserted plan: 1.5GB 2-Day Plan (231) 
+2025-11-25 12:36:18 [INFO]: Inserted plan: 3.2GB 2-Day Plan (229) 
+2025-11-25 12:36:18 [INFO]: Inserted plan: 7GB 2-Day Plan (445) 
+2025-11-25 12:36:18 [INFO]: Inserted plan: 500MB Weekly (258) 
+2025-11-25 12:36:18 [INFO]: Inserted plan: 1GB Weekly (15) 
+2025-11-25 12:36:18 [INFO]: Inserted plan: 1.2GB Pulse Weekly (238) 
+2025-11-25 12:36:18 [INFO]: Inserted plan: 1.5GB Weekly (16) 
+2025-11-25 12:36:18 [INFO]: Inserted plan: 3.5GB Weekly (261) 
+2025-11-25 12:36:18 [INFO]: Inserted plan: 6GB Weekly (17) 
+2025-11-25 12:36:18 [INFO]: Inserted plan: 7GB Monthly (21) 
+2025-11-25 12:36:18 [INFO]: Inserted plan: 20GB Monthly (25) 
+2025-11-25 12:36:18 [INFO]: Inserted plan: 25GB Monthly (26) 
+2025-11-25 12:36:18 [INFO]: Inserted plan: 30GB Monthly (120) 
+2025-11-25 12:36:18 [INFO]: Inserted plan: 36GB Monthly (27) 
+2025-11-25 12:36:18 [INFO]: Inserted plan: 40GB Postpaid (2 Months) (235) 
+2025-11-25 12:36:18 [INFO]: Inserted plan: 60GB Monthly (121) 
+2025-11-25 12:36:18 [INFO]: Inserted plan: 65GB Monthly (329) 
+2025-11-25 12:36:18 [INFO]: Inserted plan: 75GB Monthly (28) 
+2025-11-25 12:36:18 [INFO]: Inserted plan: 165GB Monthly (29) 
+2025-11-25 12:36:18 [INFO]: Inserted plan: 200GB (2 Months) (32) 
+2025-11-25 12:36:18 [INFO]: Inserted plan: 250GB Monthly (30) 
+2025-11-25 12:36:18 [INFO]: Inserted plan: 150MB TikTok Daily Plan [Social] [Gifting] (242) 
+2025-11-25 12:36:18 [INFO]: Inserted plan: 500MB Pulse Nightlife bundle [Social] [Gifting] (241) 
+2025-11-25 12:36:18 [INFO]: Inserted plan: 120MB WhatsApp Monthly Plan [Social] [Gifting] (245) 
+2025-11-25 12:36:18 [INFO]: Inserted plan: 200MB 2-Day Plan [Gifting] (9) 
+2025-11-25 12:36:18 [INFO]: Inserted plan: 250MB 2-Day Plan [Gifting] (10) 
+2025-11-25 12:36:18 [INFO]: Inserted plan: 230MB Daily Plan [Gifting] (237) 
+2025-11-25 12:36:18 [INFO]: Inserted plan: 4 hrs YouTube Buffet Daily Bundle [Social] [Gifting] (243) 
+2025-11-25 12:36:18 [INFO]: Inserted plan: 1GB IG/TT/YT Weekly Plan [Soclai] [Gifting] (249) 
+2025-11-25 12:36:18 [INFO]: Inserted plan: 2GB TikTok Weekly Plan [Social] [Gifting] (250) 
+2025-11-25 12:36:18 [INFO]: Inserted plan: 750MB + Free 1hr (YT/IG/TT) [Gifting] / 3 Days (8) 
+2025-11-25 12:36:18 [INFO]: Inserted plan: 750MB + Free 1hr (YT/IG/TT) [Gifting] (12) 
+2025-11-25 12:36:18 [INFO]: Inserted plan: 1GB+1.5mins Daily Plan [Gifting] (11) 
+2025-11-25 12:36:18 [INFO]: Inserted plan: XtraData 500 - 600MB - Weekly [Gifting] (269) 
+2025-11-25 12:36:18 [INFO]: Inserted plan: XtraData More 600 Daily [Gifting] (267) 
+2025-11-25 12:36:18 [INFO]: Inserted plan: 2.5GB 2-Day Plan [Gifting] (13) 
+2025-11-25 12:36:18 [INFO]: Inserted plan: XtraData More 1000 Daily [Gifting] (268) 
+2025-11-25 12:36:18 [INFO]: Inserted plan: 3.2GB 2-Day Plan [Gifting] (229) 
+2025-11-25 12:36:18 [INFO]: Inserted plan: XtraData 1500 - 1.8GB - Monthly [Gifting] (271) 
+2025-11-25 12:36:18 [INFO]: Inserted plan: 2GB+2mins Monthly Plan [Gifting] (18) 
+2025-11-25 12:36:18 [INFO]: Inserted plan: 2.7GB+2mins Monthly Plan [Gifting] (19) 
+2025-11-25 12:36:18 [INFO]: Inserted plan: XtraData More 2500 - 6GB - Weekly [Gifting] (270) 
+2025-11-25 12:36:18 [INFO]: Inserted plan: 3.5GB+5mins Monthly Plan [Gifting] (20) 
+2025-11-25 12:36:18 [INFO]: Inserted plan: XtraData 3000 - 5.5GB - Monthly [Gifting] (272) 
+2025-11-25 12:36:18 [INFO]: Inserted plan: 6.75GB Value Data Plan Monthly [Gifting] (232) 
+2025-11-25 12:36:18 [INFO]: Inserted plan: 11GB (Digital Bundle) - 7 Days (226) 
+2025-11-25 12:36:18 [INFO]: Inserted plan: 10GB + 10mins Monthly Plan [Gifting] (22) 
+2025-11-25 12:36:18 [INFO]: Inserted plan: 14.5GB Value Data Monthly Plan [Gifting] (233) 
+2025-11-25 12:36:18 [INFO]: Inserted plan: XtraData 5500 - 12.5GB - Monthly [Gifting] (274) 
+2025-11-25 12:36:18 [INFO]: Inserted plan: 12.5 Monthly Plan [Gifting] (23) 
+2025-11-25 12:36:18 [INFO]: Inserted plan: 16.5GB+10mins Monthly Plan [Gifting] (24) 
+2025-11-25 12:36:18 [INFO]: Inserted plan: 35GB Postpaid Monthly [Gifting] (234) 
+2025-11-25 12:36:18 [INFO]: Inserted plan: 30GB Monthly Broadband Plan - Monthly (120) 
+2025-11-25 12:36:18 [INFO]: Inserted plan: XtraData 11000 Monthly [Gifting] (275) 
+2025-11-25 12:36:18 [INFO]: Inserted plan: 60GB Monthly Broadband Plan - Monthly (121) 
+2025-11-25 12:36:18 [INFO]: Inserted plan: 65GB Monthly Plan (393) 
+2025-11-25 12:36:18 [INFO]: Inserted plan: 120GB Monthly Broadband Plan (412) 
+2025-11-25 12:36:18 [INFO]: Inserted plan: 90GB 2-Month [Gifting] (236) 
+2025-11-25 12:36:18 [INFO]: Inserted plan: Silver (150GB FUP Monthly Unlimited) Broadband - Monthly (123) 
+2025-11-25 12:36:18 [INFO]: Inserted plan: 200GB Monthly Broadband Plan (124) 
+2025-11-25 12:36:18 [INFO]: Inserted plan: 150GB 2-Month Plan [Gifting] (31) 
+2025-11-25 12:36:18 [INFO]: Inserted plan: Ruby (300GB FUP Monthly Unlimited) Broadband (125) 
+2025-11-25 12:36:18 [INFO]: Inserted plan: 450GB HyNetFlex - 3 Monthly (129) 
+2025-11-25 12:36:18 [INFO]: Inserted plan: 450GB 3-Month Broadband Plan (413) 
+2025-11-25 12:36:18 [INFO]: Inserted plan: 480GB 3-Month Plan (405) 
+2025-11-25 12:36:18 [INFO]: Inserted plan: 800GB Yearly Plan [Gifting] (263) 
+2025-11-25 12:36:18 [INFO]: Inserted plan: 1.5TB Yearly Broadband (414) 
+2025-11-25 12:36:18 [INFO]: Inserted plan: 25GB [Corporate] - 30 Days (133) 
+2025-11-25 12:36:18 [INFO]: Inserted plan: 30GB [Corporate] - 30 Days (134) 
+2025-11-25 12:36:18 [INFO]: Inserted plan: 50GB [Corporate] - 30 Days (135) 
+2025-11-25 12:36:18 [INFO]: Inserted plan: 500MB Share - Weekly (423) 
+2025-11-25 12:36:18 [INFO]: Inserted plan: 1GB Share - Weekly (424) 
+2025-11-25 12:36:18 [INFO]: Inserted plan: 50MB Share (169) 
+2025-11-25 12:36:18 [INFO]: Inserted plan: 2GB Share - Weekly (425) 
+2025-11-25 12:36:18 [INFO]: Inserted plan: 100MB Share (170) 
+2025-11-25 12:36:18 [INFO]: Inserted plan: 3GB Share - Weekly (426) 
+2025-11-25 12:36:18 [INFO]: Inserted plan: 200MB Share (171) 
+2025-11-25 12:36:18 [INFO]: Inserted plan: 5GB Share - Weekly (427) 
+2025-11-25 12:36:18 [INFO]: Inserted plan: 500MB Share (172) 
+2025-11-25 12:36:18 [INFO]: Inserted plan: 1GB Share (173) 
+2025-11-25 12:36:18 [INFO]: Inserted plan: 2GB Share (174) 
+2025-11-25 12:36:18 [INFO]: Inserted plan: 3GB Share (175) 
+2025-11-25 12:36:18 [INFO]: Inserted plan: 5GB Share (176) 
+2025-11-25 12:36:18 [INFO]: Inserted plan: 2.5GB - 1Day Plan [Gifting] (228) 
+2025-11-25 12:36:18 [INFO]: Inserted plan: 20GB Weekly Plan [Gifting] (262) 
+2025-11-25 12:36:18 [INFO]: Inserted plan: ThryveData 1500 (1.8GB + 35 minutes) - Gifting (259) 
+2025-11-25 12:36:18 [INFO]: Inserted plan: ThryveData 3000 5GB [Gifting] (260) 
+2025-11-25 12:36:18 [INFO]: Disconnected from MongoDB 
+2025-11-25 12:37:32 [INFO]: Connected to MongoDB 
+2025-11-25 12:37:32 [INFO]: Disconnected from MongoDB 
