@@ -24,9 +24,13 @@ const app = express();
 
 // Enable CORS for all origins
 app.use(cors({
-  origin: "*",  // or your specific domain
-  methods: "GET,POST,PUT,DELETE,PATCH,OPTIONS",
-  allowedHeaders: "Content-Type, Authorization"
+  origin: true,  // Reflects the request origin, enabling credentials
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With", "Accept"],
+  exposedHeaders: ["Content-Length", "X-Request-Id"],
+  preflightContinue: false,
+  optionsSuccessStatus: 204
 }));
 
 app.use('/api/payment/webhook', express.raw({ type: 'application/json' }));
