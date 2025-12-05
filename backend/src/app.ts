@@ -13,8 +13,6 @@ import transactionsRoutes from "./routes/transactions.routes.js";
 import usersRoutes from "./routes/users.routes.js";
 import walletRoutes from "./routes/wallet.routes.js";
 
-
-
 // Import logging middleware
 import { logger } from "./config/bootstrap.js";
 import { detailedRequestLogger, errorLogger, requestLogger } from "./middleware/logger.middleware.js";
@@ -23,48 +21,6 @@ dotenv.config();
 
 const app = express();
 
-// CORS Configuration
-// const corsOptions = {
-//   origin: (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) => {
-//     // Allow requests with no origin (like mobile apps, curl, etc.)
-//     if (!origin) return callback(null, true);
-
-//     const allowedOrigins = [
-//       'http://localhost:19006', // Expo web
-//       'http://localhost:19000', // Expo dev client
-//       'http://localhost:3000',  // Common React dev server
-//       'http://10.0.2.2:19006',  // Android emulator
-//       'exp://10.0.2.2:19000',   // Expo dev client on Android
-//       'http://10.0.2.2:5000',   // Android emulator direct to backend
-//       'http://localhost:5001',   // Common alternative port
-//       'http://localhost:8081',   // React Native debugger
-//       'http://localhost:19002',  // Expo dev tools
-//       /^https?:\/\/.*\.exp\.direct$/,  // Expo tunnel URLs
-//       /^https?:\/\/.*\.exp\.app$/      // Expo production URLs
-//     ];
-
-//     if (allowedOrigins.includes(origin) || process.env.NODE_ENV === 'test') {
-//       return callback(null, true);
-//     }
-
-//     const msg = `The CORS policy for this site does not allow access from ${origin}`;
-//     console.error('CORS Error:', msg);
-//     return callback(new Error(msg), false);
-//   },
-//   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-//   allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
-//   credentials: true,
-//   optionsSuccessStatus: 200 // Some legacy browsers choke on 204
-// };
-
-// app.use(cors(corsOptions));
-
-// CORS is now handled by nginx reverse proxy
-// app.use(cors({
-//   origin: "*", // or restrict later to your Expo dev IP if you want
-// }));
-
-// For webhook routes, we need to capture the raw body for signature verification
 app.use('/api/payment/webhook', express.raw({ type: 'application/json' }));
 
 // Parse JSON for all other routes
