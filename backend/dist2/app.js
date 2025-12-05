@@ -17,16 +17,36 @@ import { logger } from "./config/bootstrap.js";
 import { detailedRequestLogger, errorLogger, requestLogger } from "./middleware/logger.middleware.js";
 dotenv.config();
 const app = express();
-// Enable CORS for all origins
+// CORS Configuration
+const allowedOrigins = [
+    'https://app.ibdata.com.ng',
+    'https://admin.ibdata.com.ng',
+    'http://localhost:3000',
+    'http://localhost:8081',
+    'exp://localhost:8081',
+];
 app.use(cors({
-    origin: true, // Reflects the request origin, enabling credentials
+    origin: (origin, callback) => {
+        // Allow requests with no origin (like mobile apps or curl requests)
+        if (!origin)
+            return callback(null, true);
+        // Check if the origin is in the allowed list
+        if (allowedOrigins.indexOf(origin) !== -1 || origin.startsWith('http://192.168.') || origin.startsWith('http://localhost')) {
+            callback(null, true);
+        }
+        else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With", "Accept"],
+    allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With", "Accept", "Origin"],
     exposedHeaders: ["Content-Length", "X-Request-Id"],
     preflightContinue: false,
     optionsSuccessStatus: 204
 }));
+// Handle OPTIONS requests explicitly
+app.options('*', cors());
 app.use('/api/payment/webhook', express.raw({ type: 'application/json' }));
 // Parse JSON for all other routes
 app.use(express.json());
