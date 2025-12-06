@@ -23,9 +23,7 @@ dotenv.config();
 const app = express();
 
 // CORS Configuration - Allow ALL origins
-app.use(cors({
-  origin: '*',  // Allow all origins
-}));
+app.use(cors()); // Allow all origins (default)
 
 app.use('/api/payment/webhook', express.raw({ type: 'application/json' }));
 
