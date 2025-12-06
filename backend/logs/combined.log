@@ -6200,3 +6200,6 @@
 {"headers":{"authorization":"Bearer ***"},"ip":"192.168.43.92","level":"info","message":"📥 Incoming Request","method":"GET","path":"/api/wallet","query":{},"timestamp":"2025-12-05 14:38:23","url":"/api/wallet","userAgent":"okhttp/4.12.0","userId":"anonymous"}
 {"duration":"8ms","ip":"192.168.43.92","level":"info","message":"📤 Response Success","method":"GET","statusCode":200,"timestamp":"2025-12-05 14:38:23","url":"/api/wallet","userId":"690c7de84d4df744806907b2"}
 {"level":"info","message":"192.168.43.92 - 690c7de84d4df744806907b2 [05/Dec/2025:13:38:23 +0000] \"GET /api/wallet HTTP/1.1\" 304 - \"-\" \"okhttp/4.12.0\" 8.501 ms","timestamp":"2025-12-05 14:38:23"}
+{"environment":"development","level":"info","message":"🚀 VTU App Backend Starting...","nodeVersion":"v22.18.0","timestamp":"2025-12-06 20:42:52"}
+{"level":"info","message":"MongoDB connected successfully","timestamp":"2025-12-06 20:42:52"}
+{"environment":"development","level":"info","message":"🚀 VTU App Backend Starting...","nodeVersion":"v22.18.0","timestamp":"2025-12-06 20:45:26"}
