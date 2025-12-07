@@ -92,7 +92,7 @@ export class PayrantService {
                 // Prepare request data with webhook URL
                 const requestData = {
                     ...data,
-                    webhookUrl: data.webhookUrl || `${process.env.BACKEND_URL || 'https://vtuapp-production.up.railway.app'}/api/payment/webhook/payrant`
+                    webhookUrl: data.webhookUrl || `${process.env.BACKEND_URL || 'https://api.ibdata.com.ng'}/api/payment/webhook/payrant`
                 };
                 console.log(`🔔 Webhook URL configured: ${requestData.webhookUrl}`);
                 // Make the API request with timeout and retry logic
@@ -217,7 +217,7 @@ export class PayrantService {
                 email: data.email,
                 amount: data.amount,
                 callback_url: data.callback_url || `${process.env.FRONTEND_URL}/payment/callback`,
-                webhook_url: data.webhook_url || `${process.env.BACKEND_URL || 'http://localhost:5000'}/api/payment/payrant/webhook`,
+                webhook_url: data.webhook_url || `${process.env.BACKEND_URL || 'https://api.ibdata.com.ng'}/api/payment/payrant/webhook`,
                 metadata: data.metadata || {},
             };
             // Validate configuration
@@ -394,7 +394,7 @@ export class PayrantService {
             console.log('💸 Initiating transfer:', data.amount, 'to', data.account_number);
             const response = await this.axiosInstance.post('/payout/transfer', {
                 ...data,
-                notify_url: data.notify_url || `${process.env.BACKEND_URL || 'http://192.168.43.204:5000'}/api/payment/payrant/transfer-webhook`,
+                notify_url: data.notify_url || `${process.env.BACKEND_URL || 'https://api.ibdata.com.ng'}/api/payment/payrant/transfer-webhook`,
             });
             if (response.data.status === 'success') {
                 console.log('✅ Transfer initiated:', response.data.data.reference);
