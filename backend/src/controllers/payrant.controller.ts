@@ -105,11 +105,11 @@ export class PayrantController {
       );
     } catch (error: any) {
       console.error('❌ Error creating virtual account:', error);
-      
+
       // Handle specific error cases
       let status = 500;
       let message = 'Failed to create virtual account';
-      
+
       if (error.message?.includes('already exists')) {
         status = 409; // Conflict
         message = 'Virtual account already exists for this user';
@@ -117,7 +117,7 @@ export class PayrantController {
         status = 400;
         message = error.response.data?.message || 'Invalid request data';
       }
-      
+
       return ApiResponse.error(res, message, status);
     }
   }
@@ -179,20 +179,26 @@ export class PayrantController {
    */
   static async handleWebhook(req: Request, res: Response) {
     const signature = req.headers['x-payrant-signature'] as string;
-    const payload = req.body as PayrantWebhookPayload;
 
     try {
-      // Verify webhook signature
+      // req.body is a Buffer because of express.raw() middleware in app.ts
+      const rawBody = req.body.toString('utf8');
+
+      // Verify webhook signature using the raw body string
       const isValid = payrantService.verifyWebhookSignature(
-        JSON.stringify(payload),
+        rawBody,
         signature
       );
 
       if (!isValid) {
         console.error('❌ Invalid webhook signature');
+        console.debug('Signature received:', signature);
+        // Don't log full body for security, but maybe length
+        console.debug('Body length:', rawBody.length);
         return res.status(401).json({ status: 'error', message: 'Invalid signature' });
       }
 
+      const payload = JSON.parse(rawBody) as PayrantWebhookPayload;
       console.log('🔔 Received Payrant webhook:', payload.event);
 
       // Handle different webhook events
@@ -223,7 +229,7 @@ export class PayrantController {
   private static async handleSuccessfulPayment(data: PayrantWebhookPayload['data']) {
     try {
       const { reference, amount, customer, metadata } = data;
-      
+
       // Find transaction by reference
       const transaction = await Transaction.findOne({ reference });
       if (!transaction) {

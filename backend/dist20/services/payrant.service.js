@@ -96,6 +96,8 @@ export class PayrantService {
                 };
                 console.log(`🔔 Webhook URL configured: ${requestData.webhookUrl}`);
                 // Make the API request with timeout and retry logic
+                console.log('📤 Request Payload:', JSON.stringify(requestData, null, 2));
+                console.log('🔑 Authorization Header:', `Bearer ${this.config.apiKey.substring(0, 10)}...`);
                 const response = await this.axiosInstance.post('/palmpay/', // Updated endpoint path to match documentation
                 requestData, {
                     timeout: 30000, // 30 seconds timeout
@@ -306,7 +308,12 @@ export class PayrantService {
             const hmac = crypto.createHmac('sha256', this.config.webhookSecret);
             const computedSignature = hmac.update(payloadString).digest('hex');
             // Compare the signatures in a timing-safe manner
-            const isValid = crypto.timingSafeEqual(Buffer.from(signature), Buffer.from(computedSignature));
+            const signatureBuffer = Buffer.from(signature);
+            const computedBuffer = Buffer.from(computedSignature);
+            if (signatureBuffer.length !== computedBuffer.length) {
+                return false;
+            }
+            const isValid = crypto.timingSafeEqual(signatureBuffer, computedBuffer);
             if (!isValid) {
                 console.error('❌ Invalid webhook signature');
                 console.debug('Expected:', computedSignature);

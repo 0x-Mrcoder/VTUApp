@@ -156,7 +156,7 @@ export class PayrantService {
       try {
         attempt++;
         console.log(`🏦 Attempt ${attempt}/${this.MAX_RETRIES}: Creating Payrant virtual account for:`, data.email);
-        
+
         // Validate document type
         if (!['nin', 'bvn'].includes(data.documentType.toLowerCase())) {
           throw new Error('Invalid document type. Must be either NIN or BVN');
@@ -173,16 +173,19 @@ export class PayrantService {
 
         const url = `${this.config.baseUrl}/palmpay/`;
         console.log(`🌐 Sending request to: ${url}`);
-        
+
         // Prepare request data with webhook URL
         const requestData = {
           ...data,
           webhookUrl: data.webhookUrl || `${process.env.BACKEND_URL || 'https://vtuapp-production.up.railway.app'}/api/payment/webhook/payrant`
         };
-        
+
         console.log(`🔔 Webhook URL configured: ${requestData.webhookUrl}`);
-        
+
         // Make the API request with timeout and retry logic
+        console.log('📤 Request Payload:', JSON.stringify(requestData, null, 2));
+        console.log('🔑 Authorization Header:', `Bearer ${this.config.apiKey.substring(0, 10)}...`);
+
         const response = await this.axiosInstance.post<VirtualAccountResponse>(
           '/palmpay/',  // Updated endpoint path to match documentation
           requestData,
@@ -243,7 +246,7 @@ export class PayrantService {
 
       } catch (error: any) {
         lastError = error;
-        
+
         // Log the error with attempt number
         console.error(`❌ Attempt ${attempt} failed:`, {
           message: error.message,
@@ -278,7 +281,7 @@ export class PayrantService {
   private async saveVirtualAccountToDatabase(userId: string, virtualAccountDetails: any) {
     try {
       const VirtualAccount = (await import('../models/VirtualAccount.js')).default;
-      
+
       const account = await VirtualAccount.findOneAndUpdate(
         { user: userId, provider: 'payrant' },
         {
@@ -287,13 +290,13 @@ export class PayrantService {
           $setOnInsert: { createdAt: new Date() },
           updatedAt: new Date()
         },
-        { 
-          upsert: true, 
+        {
+          upsert: true,
           new: true,
           setDefaultsOnInsert: true
         }
       );
-      
+
       console.log('💾 Virtual account saved to database:', account);
       return account;
     } catch (dbError: any) {
@@ -425,8 +428,8 @@ export class PayrantService {
       }
 
       // Convert payload to string if it's an object
-      const payloadString = typeof payload === 'string' 
-        ? payload 
+      const payloadString = typeof payload === 'string'
+        ? payload
         : JSON.stringify(payload);
 
       // Create HMAC SHA256 hash
@@ -434,9 +437,16 @@ export class PayrantService {
       const computedSignature = hmac.update(payloadString).digest('hex');
 
       // Compare the signatures in a timing-safe manner
+      const signatureBuffer = Buffer.from(signature);
+      const computedBuffer = Buffer.from(computedSignature);
+
+      if (signatureBuffer.length !== computedBuffer.length) {
+        return false;
+      }
+
       const isValid = crypto.timingSafeEqual(
-        Buffer.from(signature),
-        Buffer.from(computedSignature)
+        signatureBuffer,
+        computedBuffer
       );
 
       if (!isValid) {

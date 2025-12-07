@@ -120,14 +120,19 @@ export class PayrantController {
      */
     static async handleWebhook(req, res) {
         const signature = req.headers['x-payrant-signature'];
-        const payload = req.body;
         try {
-            // Verify webhook signature
-            const isValid = payrantService.verifyWebhookSignature(JSON.stringify(payload), signature);
+            // req.body is a Buffer because of express.raw() middleware in app.ts
+            const rawBody = req.body.toString('utf8');
+            // Verify webhook signature using the raw body string
+            const isValid = payrantService.verifyWebhookSignature(rawBody, signature);
             if (!isValid) {
                 console.error('❌ Invalid webhook signature');
+                console.debug('Signature received:', signature);
+                // Don't log full body for security, but maybe length
+                console.debug('Body length:', rawBody.length);
                 return res.status(401).json({ status: 'error', message: 'Invalid signature' });
             }
+            const payload = JSON.parse(rawBody);
             console.log('🔔 Received Payrant webhook:', payload.event);
             // Handle different webhook events
             switch (payload.event) {
