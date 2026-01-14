@@ -98,10 +98,17 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
     ip: req.ip
   });
 
+  // Log to console for immediate visibility
+  console.error('\n🔴 ERROR DETAILS:');
+  console.error('Message:', err.message);
+  console.error('Stack:', err.stack);
+  console.error('\n');
+
   res.status(500).json({
     success: false,
     message: "Internal Server Error",
-    error: process.env.NODE_ENV === 'development' ? err.message : 'An error occurred'
+    error: err.message, // Always show error message for debugging
+    ...(process.env.NODE_ENV === 'development' && { stack: err.stack })
   });
 });
 
