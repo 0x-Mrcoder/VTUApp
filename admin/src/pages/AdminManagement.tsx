@@ -21,7 +21,7 @@ const AdminManagement: React.FC = () => {
   const queryClient = useQueryClient();
 
   // Fetch Roles
-  const { data: rolesData, isLoading: isLoadingRoles } = useQuery({
+  const { data: rolesData } = useQuery({
     queryKey: ['admin-roles'],
     queryFn: () => getRoles().then((res: any) => res.data),
   });

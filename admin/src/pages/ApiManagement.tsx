@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { generateApiKey, getPricingPlans, getUsers, revokeApiKey, updatePricingPlan } from '../api/adminApi';
 import Sidebar from '../components/Sidebar';
 import Topbar from '../components/Topbar';
+import { getApiUrl } from '../config/api.config';
 import { useToast } from '../hooks/ToastContext';
 
 const ApiManagement: React.FC = () => {
@@ -16,6 +17,7 @@ const ApiManagement: React.FC = () => {
     const [testPhone, setTestPhone] = useState('');
     const [testAmount, setTestAmount] = useState('');
     const [testNetwork, setTestNetwork] = useState('1');
+    const [testPlan, setTestPlan] = useState('');
     const [testResult, setTestResult] = useState<any>(null);
     const [isTesting, setIsTesting] = useState(false);
     const [editingPrices, setEditingPrices] = useState<Record<string, number>>({});
@@ -75,8 +77,23 @@ const ApiManagement: React.FC = () => {
         e.preventDefault();
         setIsTesting(true);
         setTestResult(null);
+
+        if (!testPlan) {
+            setTestResult({ success: false, message: 'Please select a data plan' });
+            setIsTesting(false);
+            return;
+        }
+
+        // Map network number to network name
+        const networkMap: Record<string, string> = {
+            '1': 'mtn',
+            '2': 'airtel',
+            '3': 'glo',
+            '4': '9mobile'
+        };
+
         try {
-            const response = await fetch('https://api.ibdata.com.ng/api/billpayment/data', {
+            const response = await fetch(`${getApiUrl()}/billpayment/data`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -84,9 +101,9 @@ const ApiManagement: React.FC = () => {
                 },
                 body: JSON.stringify({
                     phone: testPhone,
-                    amount: testAmount,
-                    network: testNetwork,
-                    plan: '1', // Placeholder plan ID
+                    network: networkMap[testNetwork] || 'mtn',
+                    plan: testPlan,
+                    ported_number: true
                 }),
             });
             const data = await response.json();
@@ -117,7 +134,7 @@ const ApiManagement: React.FC = () => {
                         <div className="flex flex-wrap gap-1 bg-slate-200 p-1 rounded-xl mb-8 w-fit">
                             <button
                                 onClick={() => setActiveTab('keys')}
-                                className={`flex items-center gap-2 px-6 py-2.5 rounded-lg text-sm font-medium transition-all ${activeTab === 'keys' ? 'bg-white text-blue-600 shadow-sm' : 'text-slate-600 hover:text-slate-900'
+                                className={`flex items-center gap-2 px-6 py-2.5 rounded-lg text-sm font-medium transition-all \${activeTab === 'keys' ? 'bg-white text-blue-600 shadow-sm' : 'text-slate-600 hover:text-slate-900'
                                     }`}
                             >
                                 <Key className="w-4 h-4" />
@@ -125,7 +142,7 @@ const ApiManagement: React.FC = () => {
                             </button>
                             <button
                                 onClick={() => setActiveTab('pricing')}
-                                className={`flex items-center gap-2 px-6 py-2.5 rounded-lg text-sm font-medium transition-all ${activeTab === 'pricing' ? 'bg-white text-blue-600 shadow-sm' : 'text-slate-600 hover:text-slate-900'
+                                className={`flex items-center gap-2 px-6 py-2.5 rounded-lg text-sm font-medium transition-all \${activeTab === 'pricing' ? 'bg-white text-blue-600 shadow-sm' : 'text-slate-600 hover:text-slate-900'
                                     }`}
                             >
                                 <Tag className="w-4 h-4" />
@@ -133,7 +150,7 @@ const ApiManagement: React.FC = () => {
                             </button>
                             <button
                                 onClick={() => setActiveTab('docs')}
-                                className={`flex items-center gap-2 px-6 py-2.5 rounded-lg text-sm font-medium transition-all ${activeTab === 'docs' ? 'bg-white text-blue-600 shadow-sm' : 'text-slate-600 hover:text-slate-900'
+                                className={`flex items-center gap-2 px-6 py-2.5 rounded-lg text-sm font-medium transition-all \${activeTab === 'docs' ? 'bg-white text-blue-600 shadow-sm' : 'text-slate-600 hover:text-slate-900'
                                     }`}
                             >
                                 <Book className="w-4 h-4" />
@@ -141,7 +158,7 @@ const ApiManagement: React.FC = () => {
                             </button>
                             <button
                                 onClick={() => setActiveTab('test')}
-                                className={`flex items-center gap-2 px-6 py-2.5 rounded-lg text-sm font-medium transition-all ${activeTab === 'test' ? 'bg-white text-blue-600 shadow-sm' : 'text-slate-600 hover:text-slate-900'
+                                className={`flex items-center gap-2 px-6 py-2.5 rounded-lg text-sm font-medium transition-all \${activeTab === 'test' ? 'bg-white text-blue-600 shadow-sm' : 'text-slate-600 hover:text-slate-900'
                                     }`}
                             >
                                 <Terminal className="w-4 h-4" />
@@ -219,7 +236,7 @@ const ApiManagement: React.FC = () => {
                                                                         <code className="bg-slate-100 px-2 py-1 rounded text-xs text-slate-600 font-mono">
                                                                             {revealedKeys[user._id]
                                                                                 ? user.api_key
-                                                                                : `${user.api_key.substring(0, 8)}****************${user.api_key.slice(-4)}`}
+                                                                                : `\${user.api_key.substring(0, 8)}****************\${user.api_key.slice(-4)}`}
                                                                         </code>
                                                                         <button
                                                                             onClick={() => toggleReveal(user._id)}
@@ -391,7 +408,31 @@ const ApiManagement: React.FC = () => {
                                     <section className="mb-8">
                                         <h3 className="text-lg font-semibold text-slate-800 mb-3">Base URL</h3>
                                         <div className="bg-slate-900 rounded-lg p-4 text-slate-100 font-mono text-sm">
-                                            https://api.ibdata.com.ng/api
+                                            {getApiUrl()}
+                                        </div>
+                                    </section>
+
+                                    <section className="mb-8">
+                                        <h3 className="text-lg font-semibold text-slate-800 mb-3">Wallet Balance</h3>
+                                        <p className="text-slate-600 mb-4">Check your current wallet balance.</p>
+                                        <div className="bg-slate-50 border border-slate-200 rounded-xl overflow-hidden">
+                                            <div className="bg-slate-100 px-4 py-2 border-b border-slate-200 flex items-center justify-between">
+                                                <span className="text-xs font-bold text-blue-700">GET</span>
+                                                <span className="text-xs font-mono text-slate-600">/billpayment/balance</span>
+                                            </div>
+                                            <div className="p-4">
+                                                <p className="text-sm font-semibold mb-2">Sample Response:</p>
+                                                <pre className="text-xs bg-slate-900 text-slate-100 p-3 rounded-lg">
+                                                    {`{
+  "success": true,
+  "message": "Wallet balance retrieved successfully",
+  "data": {
+    "balance": 5000.50,
+    "currency": "NGN"
+  }
+}`}
+                                                </pre>
+                                            </div>
                                         </div>
                                     </section>
 
@@ -418,7 +459,7 @@ const ApiManagement: React.FC = () => {
 
                                     <section className="mb-8">
                                         <h3 className="text-lg font-semibold text-slate-800 mb-3">Fetch Data Plans</h3>
-                                        <p className="text-slate-600 mb-4">Retrieve available data plans. Pass `network` query param to filter, or omit it to fetch <strong>all plans at once</strong>.</p>
+                                        <p className="text-slate-600 mb-4">Retrieve available data plans. Pass \`network\` query param to filter, or omit it to fetch <strong>all plans at once</strong>.</p>
                                         <div className="bg-slate-50 border border-slate-200 rounded-xl overflow-hidden">
                                             <div className="bg-slate-100 px-4 py-2 border-b border-slate-200 flex items-center justify-between">
                                                 <span className="text-xs font-bold text-blue-700">GET</span>
@@ -475,6 +516,7 @@ const ApiManagement: React.FC = () => {
   "message": "Data purchase successful",
   "data": {
     "transaction": { ... },
+    "balance": 4850.00,
     "provider_response": { ... }
   }
 }`}
@@ -492,14 +534,16 @@ const ApiManagement: React.FC = () => {
                                                 <span className="text-xs font-mono text-slate-600">/billpayment/airtime</span>
                                             </div>
                                             <div className="p-4">
-                                                <p className="text-sm font-semibold mb-2">Request Body:</p>
-                                                <pre className="text-xs bg-slate-900 text-slate-100 p-3 rounded-lg mb-4">
+                                                <p className="text-sm font-semibold mb-2">Success Response:</p>
+                                                <pre className="text-xs bg-slate-900 text-slate-100 p-3 rounded-lg">
                                                     {`{
-  "phone": "08012345678",
-  "network": "mtn",
-  "amount": 100,
-  "airtime_type": "VTU", // Optional: VTU or Share
-  "ported_number": true // Optional, default true
+  "success": true,
+  "message": "Airtime purchase successful",
+  "data": {
+    "transaction": { ... },
+    "balance": 4900.00,
+    "provider_response": { ... }
+  }
 }`}
                                                 </pre>
                                             </div>
@@ -561,13 +605,16 @@ const ApiManagement: React.FC = () => {
                                                     <span className="text-xs font-mono text-slate-600">/billpayment/cable/purchase</span>
                                                 </div>
                                                 <div className="p-4">
+                                                    <p className="text-sm font-semibold mb-2">Success Response:</p>
                                                     <pre className="text-xs bg-slate-900 text-slate-100 p-3 rounded-lg">
                                                         {`{
-  "provider": "dstv",
-  "iucnumber": "1234567890",
-  "plan": "dstv-padi",
-  "subtype": "renew", // or "change"
-  "phone": "08012345678"
+  "success": true,
+  "message": "Cable TV purchase successful",
+  "data": {
+    "transaction": { ... },
+    "balance": 3500.00,
+    "provider_response": { ... }
+  }
 }`}
                                                     </pre>
                                                 </div>
@@ -605,13 +652,17 @@ const ApiManagement: React.FC = () => {
                                                     <span className="text-xs font-mono text-slate-600">/billpayment/electricity/purchase</span>
                                                 </div>
                                                 <div className="p-4">
+                                                    <p className="text-sm font-semibold mb-2">Success Response:</p>
                                                     <pre className="text-xs bg-slate-900 text-slate-100 p-3 rounded-lg">
                                                         {`{
-  "provider": "ikeja_electric",
-  "meternumber": "1234567890",
-  "metertype": "prepaid",
-  "amount": 1000,
-  "phone": "08012345678"
+  "success": true,
+  "message": "Electricity purchase successful",
+  "data": {
+    "transaction": { ... },
+    "balance": 2500.00,
+    "token": "1234-5678-9012-3456",
+    "provider_response": { ... }
+  }
 }`}
                                                     </pre>
                                                 </div>
@@ -687,6 +738,7 @@ const ApiManagement: React.FC = () => {
                                                         onChange={(e) => {
                                                             setTestNetwork(e.target.value);
                                                             setTestAmount(''); // Reset amount when network changes
+                                                            setTestPlan(''); // Reset plan when network changes
                                                         }}
                                                         className="w-full px-4 py-2.5 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
                                                     >
@@ -701,13 +753,16 @@ const ApiManagement: React.FC = () => {
                                             <div>
                                                 <label className="block text-sm font-medium text-slate-700 mb-1.5">Plan</label>
                                                 <select
+                                                    value={testPlan}
                                                     onChange={(e) => {
+                                                        setTestPlan(e.target.value);
                                                         const plan = plans.find((p: any) => p._id === e.target.value);
                                                         if (plan) {
                                                             const apiPrice = plan.price * (1 - (plan.api_discount || 0) / 100);
-                                                            setTestAmount(apiPrice.toString());
+                                                            setTestAmount(apiPrice.toFixed(2));
                                                         }
                                                     }}
+                                                    required
                                                     className="w-full px-4 py-2.5 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
                                                 >
                                                     <option value="">Select a plan</option>
@@ -715,7 +770,7 @@ const ApiManagement: React.FC = () => {
                                                         .filter((p: any) => p.providerId === parseInt(testNetwork) && p.type === 'DATA')
                                                         .map((p: any) => (
                                                             <option key={p._id} value={p._id}>
-                                                                {p.name} - ₦{p.price * (1 - (p.api_discount || 0) / 100)}
+                                                                {p.name} - ₦{(p.price * (1 - (p.api_discount || 0) / 100)).toFixed(2)}
                                                             </option>
                                                         ))}
                                                 </select>
@@ -749,9 +804,9 @@ const ApiManagement: React.FC = () => {
                                         </form>
 
                                         {testResult && (
-                                            <div className={`mt-8 p-6 rounded-2xl border ${testResult.success ? 'bg-green-50 border-green-200' : 'bg-red-50 border-red-200'
+                                            <div className={`mt-8 p-6 rounded-2xl border \${testResult.success ? 'bg-green-50 border-green-200' : 'bg-red-50 border-red-200'
                                                 }`}>
-                                                <h3 className={`text-sm font-bold mb-3 ${testResult.success ? 'text-green-800' : 'text-red-800'
+                                                <h3 className={`text-sm font-bold mb-3 \${testResult.success ? 'text-green-800' : 'text-red-800'
                                                     }`}>
                                                     API RESPONSE
                                                 </h3>

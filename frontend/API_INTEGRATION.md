@@ -54,6 +54,7 @@ Handles transaction operations:
 - **GET** `/transactions/:id` - Get specific transaction
 - **POST** `/billpayment/airtime` - Purchase airtime
 - **POST** `/billpayment/data` - Purchase data
+- **GET** `/billpayment/balance` - Get wallet balance (API Key only)
 
 #### Methods:
 - `getTransactions(page, limit)` - Fetch paginated transactions

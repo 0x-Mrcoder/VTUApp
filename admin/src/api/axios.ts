@@ -1,19 +1,7 @@
 import axios from 'axios';
+import { getAdminApiUrl, getApiUrl } from '../config/api.config';
 
-// const BASE_URL =
-//   import.meta.env.MODE === 'production'
-//     ? 'https://vtuapp-production.up.railway.app/api/admin'
-//     : 'http://localhost:5000/api/admin';
-
-
-// const BASE_URL = "http://localhost:5000/api/admin";
-// const BASE_URL = "http://13.62.46.174/api/admin";
-const BASE_URL = "https://api.ibdata.com.ng/api/admin";
-
-
-
-
-
+const BASE_URL = getAdminApiUrl();
 
 console.log('API Base URL:', BASE_URL);
 
@@ -49,8 +37,7 @@ api.interceptors.response.use(
 );
 
 // General API instance for non-admin endpoints
-// const API_BASE = "http://13.62.46.174/api/";
-const API_BASE = "https://api.ibdata.com.ng/api/";
+const API_BASE = getApiUrl();
 
 export const generalApi = axios.create({
   baseURL: API_BASE,
